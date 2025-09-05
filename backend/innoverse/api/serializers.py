@@ -1,28 +1,26 @@
 from rest_framework import serializers
-from .models import *
+from .models import Role, Volunteer, GiftStatus, EntryStatus
+
+
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = "__all__"
 
 
 class VolunteerSerializer(serializers.ModelSerializer):
-    role_name = serializers.CharField(source="role.role_name", read_only=True)
-
     class Meta:
         model = Volunteer
-        fields = ['id', 'username', 'v_name', 'email', 'role_name']
-
-
-
-
-
-
-
-
-class EntryRegisterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EntryStatus
-        fields = ['id', 'unique_id', 'datetime']
+        fields = "__all__"
 
 
 class GiftStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = GiftStatus
-        fields = ['id', 'unique_id', 'gift', 'datetime']
+        fields = "__all__"
+
+
+class EntryStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EntryStatus
+        fields = "__all__"

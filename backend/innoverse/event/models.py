@@ -20,14 +20,15 @@ class Gift(models.Model):
 
 
 class Competition(models.Model):
-    COMPETITION_TYPE = [
-        ('solo', 'Solo'),
-        ('team', 'Team'),
-    ]
-    competition_name = models.CharField(max_length=100, unique=True)
-    competition_type = models.CharField(max_length=10, choices=COMPETITION_TYPE)
+    competition = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
-        return f"{self.competition_name} ({self.competition_type})"
+        return self.competition
 
 
+
+class TeamCompetition(models.Model):
+    competition = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.competition
