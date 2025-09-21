@@ -9,7 +9,7 @@ class Participant(models.Model):
     email = models.EmailField(db_index=True)
     phone = models.CharField(max_length=20)
     age = models.IntegerField()
-    institution = models.CharField(max_length=200)
+    institution = models.CharField(max_length=200, db_index=True)
     institution_id = models.CharField(max_length=100)
     address = models.TextField(blank=True, null=True)
     payment_verified = models.BooleanField(default=False, db_index=True)
@@ -21,7 +21,7 @@ class Participant(models.Model):
 
 
 class Team(models.Model):
-    team_name = models.CharField(max_length=100, unique=True, db_index=True)
+    team_name = models.CharField(max_length=100, unique=True)
     payment_verified = models.BooleanField(default=False, db_index=True)
 
     def __str__(self):
@@ -32,11 +32,11 @@ class TeamParticipant(models.Model):
     f_name = models.CharField(max_length=100, db_index=True)
     l_name = models.CharField(max_length=100, db_index=True)
     email = models.EmailField(db_index=True)
-    phone = models.CharField(max_length=20)
+    phone = models.CharField(max_length=20, db_index=True)
     age = models.IntegerField()
-    institution = models.CharField(max_length=200)
+    institution = models.CharField(max_length=200, db_index=True)
     institution_id = models.CharField(max_length=100)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='members', db_index=True)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='members')
     is_leader = models.BooleanField(default=False, db_index=True)
 
     def __str__(self):
@@ -51,12 +51,12 @@ class TeamParticipant(models.Model):
 
 
 class Payment(models.Model):
-    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='payments', null=True, blank=True, db_index=True)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='payments', null=True, blank=True, db_index=True)
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='payments', null=True, blank=True)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='payments', null=True, blank=True)
     phone = models.CharField(max_length=20, db_index=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, db_index=True)
-    trx_id = models.CharField(max_length=100, unique=True, db_index=True)
-    datetime = models.DateTimeField(auto_now_add=True, db_index=True)
+    trx_id = models.CharField(max_length=100, unique=True)
+    datetime = models.DateTimeField(auto_now_add=True)
 
     def clean(self):
         if not self.participant and not self.team:
@@ -75,21 +75,21 @@ class Payment(models.Model):
 
 
 class Registration(models.Model):
-    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='registrations', db_index=True)
-    segment = models.ForeignKey(Segment, on_delete=models.CASCADE, related_name='segment_registrations', db_index=True)
-    datetime = models.DateTimeField(auto_now_add=True, db_index=True)
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='registrations')
+    segment = models.ForeignKey(Segment, on_delete=models.CASCADE, related_name='segment_registrations')
+    datetime = models.DateTimeField(auto_now_add=True)
 
 
 
 
 class CompetitionRegistration(models.Model):
-    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='competition_registrations', db_index=True)
-    competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name='competitions', db_index=True)
-    datetime = models.DateTimeField(auto_now_add=True, null=True, blank=True, db_index=True)
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='competition_registrations')
+    competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name='competitions')
+    datetime = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
 
 
 class TeamCompetitionRegistration(models.Model):
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='team_competition_registrations', db_index=True)
-    competition = models.ForeignKey(TeamCompetition, on_delete=models.CASCADE, related_name='team_competitions', db_index=True)
-    datetime = models.DateTimeField(auto_now_add=True, null=True, blank=True, db_index=True)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='team_competition_registrations')
+    competition = models.ForeignKey(TeamCompetition, on_delete=models.CASCADE, related_name='team_competitions')
+    datetime = models.DateTimeField(auto_now_add=True, null=True, blank=True)

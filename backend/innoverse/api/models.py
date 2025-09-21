@@ -6,15 +6,15 @@ from event.models import Gift
 
 
 class Role(models.Model):
-    role_name = models.CharField(max_length=50, unique=True, db_index=True)
+    role_name = models.CharField(max_length=50, unique=True)
     def __str__(self):
         return self.role_name
 
 
 class Volunteer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='volunteer_profile', db_index=True)
-    v_name = models.CharField(max_length=100, db_index=True)
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='volunteers', db_index=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='volunteer_profile')
+    v_name = models.CharField(max_length=100)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='volunteers')
 
     def __str__(self):
         return f"{self.v_name} ({self.role.role_name})"
@@ -26,11 +26,11 @@ class Volunteer(models.Model):
 
 
 class GiftStatus(models.Model):
-    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='gift_status', null=True, blank=True, db_index=True)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='gift_status', null=True, blank=True, db_index=True)
-    gift = models.ForeignKey(Gift, on_delete=models.CASCADE, db_index=True)
-    volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE, null=True, blank=True, db_index=True)
-    datetime = models.DateTimeField(auto_now_add=True, db_index=True)
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='gift_status', null=True, blank=True)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='gift_status', null=True, blank=True)
+    gift = models.ForeignKey(Gift, on_delete=models.CASCADE)
+    volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE, null=True, blank=True)
+    datetime = models.DateTimeField(auto_now_add=True)
 
     def clean(self):
         if not self.participant and not self.team:
@@ -46,10 +46,10 @@ class GiftStatus(models.Model):
 
 
 class EntryStatus(models.Model):
-    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='entry_status', null=True, blank=True, db_index=True)
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='entry_status', null=True, blank=True, db_index=True)
-    volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE, null=True, blank=True, db_index=True)
-    datetime = models.DateTimeField(auto_now_add=True, db_index=True)
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='entry_status', null=True, blank=True)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='entry_status', null=True, blank=True)
+    volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE, null=True, blank=True)
+    datetime = models.DateTimeField(auto_now_add=True)
 
     def clean(self):
         if not self.participant and not self.team:
