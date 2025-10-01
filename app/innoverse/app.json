@@ -50,7 +50,8 @@
         {
           "cameraPermission": "Allow Innoverse to access your camera to scan QR codes."
         }
-      ]
+      ],
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,

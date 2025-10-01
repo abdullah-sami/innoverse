@@ -1,4 +1,4 @@
-// tailwind.twrnc.config.js (create this new file)
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
@@ -14,5 +14,5 @@ module.exports = {
     },
   },
   plugins: [],
-  // Remove the nativewind preset for twrnc
+  
 }

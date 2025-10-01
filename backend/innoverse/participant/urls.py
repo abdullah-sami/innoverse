@@ -4,13 +4,3 @@ from rest_framework import routers
 
 
 
-
-urlpatterns = [
-    # path('/user_id/', views.),
-
-]
-
-
-
-
-

@@ -1,4 +1,3 @@
-
 from pathlib import Path
 import os
 from datetime import timedelta
@@ -65,7 +64,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'innoverse.wsgi.application'
 
-
+CSRF_TRUSTED_ORIGINS = ['https://1b0d83c26829.ngrok-free.app']
 
 # Database
 
@@ -107,7 +106,6 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
 

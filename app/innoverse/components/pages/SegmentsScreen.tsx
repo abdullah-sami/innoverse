@@ -23,17 +23,17 @@ export const SegmentsScreen: React.FC = () => {
     {
       id: '1',
       title: 'SketchTalk',
-      onPress: () => openQRScanner('seg', 'sktech')
+      onPress: () => openQRScanner('segment', 'sktech')
     },
     {
       id: '2',
       title: 'PolicyBridge Dialogue',
-      onPress: () => openQRScanner('seg', 'policy')
+      onPress: () => openQRScanner('segment', 'policy')
     },
     {
       id: '3',
       title: 'Innovation Expo',
-      onPress: () => openQRScanner('seg', 'expo')
+      onPress: () => openQRScanner('segment', 'expo')
     }
   ];
 

@@ -1,6 +1,9 @@
 export type RootStackParamList = {
   Login: undefined;
   '(tabs)': undefined;
+  Solo: undefined;
+  Team: undefined;
+  Segments: undefined;
   qr_scanner: {
     page: string;
     segment?: string | null;
@@ -14,5 +17,4 @@ export type RootStackParamList = {
 
 export type TabParamList = {
   index: undefined;
-  // Other tab screens
 };

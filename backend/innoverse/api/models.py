@@ -40,8 +40,8 @@ class GiftStatus(models.Model):
 
     def __str__(self):
         if self.participant:
-            return f"Gift {self.gift.id} - Participant: {self.participant}"
-        return f"Gift {self.gift.id} - Team: {self.team}"
+            return f"{self.gift} - Participant: {self.participant}"
+        return f"{self.gift} - Team: {self.team}"
 
 
 

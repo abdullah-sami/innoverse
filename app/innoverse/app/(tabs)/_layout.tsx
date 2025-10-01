@@ -6,6 +6,7 @@ import { icons } from '@/constants/icons';
 
 
 import HomeScreen from '@/app/(tabs)/index';
+import NetworkDashboard from './network';
 
 
 
@@ -112,6 +113,14 @@ export default function TabsLayout() {
           tabBarIcon: ({ focused }) => <TabIcon focused={focused} icon={icons.home} />,
         }}
       />
+      {/* <Tab.Screen
+        component={NetworkDashboard}
+        name="network"
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => <TabIcon focused={focused} icon={icons.network} />,
+        }}
+      /> */}
     </Tab.Navigator>
     
   );

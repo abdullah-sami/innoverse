@@ -51,13 +51,13 @@ const HomeScreen = () => {
       id: 5,
       title: 'Gifts',
       image: images.gifts,
-      onPress: () => navigation.navigate('Gifts' as never),
+      onPress: () => openQRScanner('gifts', ''),
     },
     {
       id: 6,
       title: 'View Info',
       image: images.participant_info,
-      onPress: () => navigation.navigate('ViewInfo' as never),
+      onPress: () => openQRScanner('info', ''),
     },
   ];
 
@@ -95,7 +95,6 @@ const HomeScreen = () => {
     <SafeAreaView style={tw`flex-1 bg-bgPrimary`}>
       <StatusBar backgroundColor="#79BF0D" barStyle="light-content" />
       
-      {/* Header */}
       <View style={tw`flex-row justify-between items-center bg-accentLight px-5 py-4 shadow-md`}>
         <View style={tw`flex-row items-center`}>
           <View style={tw`w-10 h-10 bg-white rounded-full justify-center items-center mr-3`}>

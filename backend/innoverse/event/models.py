@@ -3,6 +3,7 @@ from django.db import models
 
 class Segment(models.Model):
     segment_name = models.CharField(max_length=100, unique=True, db_index=True)
+    code = models.CharField(max_length=20, unique=True, db_index=True)
 
     def __str__(self):
         return self.segment_name
@@ -21,6 +22,8 @@ class Gift(models.Model):
 
 class Competition(models.Model):
     competition = models.CharField(max_length=100, unique=True, db_index=True)
+    code = models.CharField(max_length=20, unique=True, db_index=True)
+
 
     def __str__(self):
         return self.competition
@@ -29,6 +32,8 @@ class Competition(models.Model):
 
 class TeamCompetition(models.Model):
     competition = models.CharField(max_length=100, unique=True, db_index=True)
+    code = models.CharField(max_length=20, unique=True, db_index=True)
+
 
     def __str__(self):
         return self.competition

@@ -38,7 +38,7 @@ export const CompetitionList: React.FC<CompetitionListProps> = ({
 
   const renderItem = ({ item}: { item: CompetitionItem}) => (
     <TouchableOpacity
-      style={tw`mt-2 mx-4 mb-3 p-4 bg-bgSecondary rounded-xl border border-gray-200 shadow-xl`}
+      style={tw`mt-2 mx-4 mb-3 p-4 bg-bgPrimary rounded-xl border border-gray-200 shadow-xl`}
       onPress={() => handleItemPress(item)}
       activeOpacity={0.7}
     >

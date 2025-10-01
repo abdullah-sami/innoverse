@@ -15,23 +15,31 @@ class ParticipantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Participant
         fields = [
-            'id', 'f_name', 'l_name', 'email', 'phone', 'unique_id',
+            'id', 'f_name', 'l_name', 'email', 'phone', 
             'age', 'institution',  'institution_id', 'address', 'payment_verified',
             'segment_list', 'comp_list', 'gift_list', 'entry_status'
         ]
 
     def get_segment_list(self, obj):
-        return [seg.segment.segment_name for seg in obj.registration.all()]
+        return [seg.segment.segment_name for seg in obj.registrations.all()]
     
     def get_comp_list(self, obj):
         return [comp.competition.competition for comp in obj.competition_registrations.all()]
 
     def get_gift_list(self, obj):
-        return [gift.gift.gift_name for gift in obj.giftstatus.all()]
+        return [gift.gift.gift_name for gift in obj.gift_status.all()]
 
     def get_entry_status(self, obj):
-        return obj.entrystatus_set.exists()
+        return obj.entry_status.exists()
 
+
+
+
+
+class TeamParticipantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TeamParticipant
+        fields = ['id', 'f_name', 'l_name', 'email', 'phone', 'age', 'institution', 'institution_id', 'is_leader']
 
 
 
@@ -40,24 +48,24 @@ class TeamSerializer(serializers.ModelSerializer):
     comp_list = serializers.SerializerMethodField()
     gift_list = serializers.SerializerMethodField()
     entry_status = serializers.SerializerMethodField()
+    members = TeamParticipantSerializer(many=True, read_only=True)
+    
     class Meta:
         model = Team
-        fields = ['id', 'team_name', 'payment_verified', 'comp_list', 'gift_list', 'entry_status']
+        fields = ['id', 'team_name', 'payment_verified', 'comp_list', 'gift_list', 'entry_status', 'members']  # Add 'members' here
 
     def get_comp_list(self, obj):
-        return [comp.competition.competition for comp in obj.teamcompetitionregistrations.all()]
+        return [comp.competition.competition for comp in obj.team_competition_registrations.all()]
+    
     def get_gift_list(self, obj):
-        return [gift.gift.gift_name for gift in obj.giftstatus.all()]
+        return [gift.gift.gift_name for gift in obj.gift_status.all()]
+    
     def get_entry_status(self, obj):
-        return obj.entrystatus.exists()
+        return obj.entry_status.exists()
 
 
 
 
-class TeamParticipantSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TeamParticipant
-        fields = "__all__"
 
 
 class PaymentSerializer(serializers.ModelSerializer):

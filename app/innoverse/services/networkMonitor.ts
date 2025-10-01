@@ -1,4 +1,3 @@
-// services/networkMonitor.ts
 import NetInfo from '@react-native-community/netinfo';
 
 export interface NetworkMetrics {

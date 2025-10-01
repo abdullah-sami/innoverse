@@ -1,4 +1,3 @@
-// _layout.tsx (root)
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -10,6 +9,10 @@ import { LoginScreen } from '@/components/auth/LoginScreen';
 import { QRScanner } from '@/components/qr/QRScanner';
 import { QRResultsPage } from '@/components/qr/QRResultsPage';
 import TabLayout from './(tabs)/_layout';
+import { SoloCompetitionScreen } from '@/components/pages/SoloCompetitionScreen';
+import { TeamCompetitionScreen } from '@/components/pages/TeamCompetitionScreen';
+import { SegmentsScreen } from '@/components/pages/SegmentsScreen';
+
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -23,7 +26,7 @@ export const linking = {
   },
 };
 
-
+ 
 
 
 function AppNavigator() {
@@ -39,6 +42,9 @@ function AppNavigator() {
         <Stack.Screen name="(tabs)" component={TabLayout} /> 
         <Stack.Screen name="qr_scanner" component={QRScanner} options={{ presentation: 'modal'}}/>
         <Stack.Screen name="qr_results_page" component={QRResultsPage}/>
+        <Stack.Screen name="Solo" component={SoloCompetitionScreen}/>
+        <Stack.Screen name="Team" component={TeamCompetitionScreen}/>
+        <Stack.Screen name="Segments" component={SegmentsScreen}/>
 </>
         
       ) : (
@@ -51,9 +57,7 @@ function AppNavigator() {
 export default function RootLayout() {
   return (
     <LoginContextProvider>
-      {/* <NavigationContainer linking={linking}> */}
         <AppNavigator />
-      {/* </NavigationContainer> */}
     </LoginContextProvider>
   );
 }

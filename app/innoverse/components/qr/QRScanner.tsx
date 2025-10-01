@@ -1,4 +1,3 @@
-// components/QRScanner.tsx
 import React, { useState, useEffect } from 'react';
 import { 
   View, 
@@ -27,7 +26,6 @@ export const QRScanner: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute();
   
-  // Get the route parameters
   const { page, segment = null } = route.params as { page: string; segment?: string | null };
 
   console.log('QR Scanner - Page:', page, 'Segment:', segment);
@@ -53,7 +51,6 @@ export const QRScanner: React.FC = () => {
     
     setScanned(true);
     
-    // console.log('Navigating to results with:', { page, segment, qr_code_data: data });
     
     navigation.navigate('qr_results_page' as never, { 
       page, 

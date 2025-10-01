@@ -13,15 +13,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width } = Dimensions.get('window');
 
-// Import your optimized API service
 import { apiService } from '@/services/optimizedApi';
 
-// Enhanced network monitor with better error handling
 const networkMonitor = {
   metrics: [],
   authStatus: null,
   
-  // Check authentication status before testing
   async checkAuthStatus() {
     try {
       const token = await AsyncStorage.getItem('access_token');
@@ -34,10 +31,9 @@ const networkMonitor = {
         lastChecked: new Date().toISOString()
       };
 
-      // Try to validate token with a lightweight request
       if (token) {
         try {
-          await apiService.get('/user/api/profile', { 
+          await apiService.get('/api/gifts/p_01', { 
             cache: false,
             timeout: 5000 
           });
@@ -62,11 +58,9 @@ const networkMonitor = {
     }
   },
 
-  // Test multiple endpoints with better error handling
   async runComprehensiveTest() {
     const testResults = [];
     
-    // Check auth first
     await this.checkAuthStatus();
     
     const testEndpoints = [
@@ -76,7 +70,6 @@ const networkMonitor = {
     ];
 
     for (const test of testEndpoints) {
-      // Skip auth-required endpoints if not authenticated
       if (test.requiresAuth && !this.authStatus?.tokenValid) {
         const metric = {
           endpoint: test.endpoint,
@@ -101,7 +94,7 @@ const networkMonitor = {
           cache: false, 
           compress: true, 
           minify: true,
-          timeout: 10000 // 10 second timeout
+          timeout: 10000 
         });
         
         const metric = {
@@ -144,17 +137,14 @@ const networkMonitor = {
       }
     }
 
-    // Keep only last 50 metrics
     this.metrics = this.metrics.slice(-50);
     
     return testResults;
   },
 
-  // Test batch requests with better error handling
   async testBatchRequests() {
     await this.checkAuthStatus();
     
-    // Only include endpoints that don't require auth if not authenticated
     const allRequests = [
       { endpoint: '/api/reels', method: 'GET', requiresAuth: false },
       { endpoint: '/api/posts', method: 'GET', requiresAuth: false },
@@ -234,7 +224,6 @@ const networkMonitor = {
     }
   },
 
-  // Test paginated requests
   async testPaginatedRequests() {
     try {
       const startTime = Date.now();
@@ -291,7 +280,6 @@ const networkMonitor = {
     const failedRequests = failedMetrics.length;
     const skippedRequests = skippedMetrics.length;
     
-    // Error analysis
     const authErrors = failedMetrics.filter(m => m.errorType === 'auth').length;
     const timeoutErrors = failedMetrics.filter(m => m.errorType === 'timeout').length;
     const networkErrors = failedMetrics.filter(m => m.errorType === 'network').length;
@@ -306,9 +294,8 @@ const networkMonitor = {
     const slowestRequest = responseTimes.length > 0 ? Math.max(...responseTimes) : 0;
     const largestPayload = payloadSizes.length > 0 ? Math.max(...payloadSizes) : 0;
     
-    // Calculate bandwidth estimation (payload size / response time)
     const averageBandwidth = averagePayloadSize > 0 && averageResponseTime > 0 ? 
-      (averagePayloadSize * 8) / (averageResponseTime * 1000) : 0; // Mbps
+      (averagePayloadSize * 8) / (averageResponseTime * 1000) : 0; 
 
     return {
       totalRequests,
@@ -325,7 +312,7 @@ const networkMonitor = {
       timeoutErrors,
       networkErrors,
       authStatus: this.authStatus,
-      metrics: this.metrics.slice(-10), // Last 10 requests
+      metrics: this.metrics.slice(-10), 
       cacheStats: apiService.getCacheStats?.() || { inMemorySize: 0 }
     };
   },
@@ -352,7 +339,7 @@ const NetworkDashboard = () => {
   const initializeDashboard = async () => {
     setIsLoading(true);
     try {
-      // Check authentication status
+     
       const authInfo = await networkMonitor.checkAuthStatus();
       setAuthStatus(authInfo);
       
@@ -367,7 +354,7 @@ const NetworkDashboard = () => {
         }
       });
 
-      // Load any existing analytics
+     
       loadAnalytics();
     } catch (error) {
       console.error('Failed to initialize dashboard:', error);
@@ -387,7 +374,7 @@ const NetworkDashboard = () => {
     setLastTestTime(new Date().toLocaleTimeString());
     
     try {
-      // Check auth first
+      
       const authInfo = await networkMonitor.checkAuthStatus();
       setAuthStatus(authInfo);
       
@@ -428,22 +415,22 @@ const NetworkDashboard = () => {
   const proceedWithTests = async () => {
     Alert.alert('Network Test Started', 'Running comprehensive network tests...');
     
-    // Run comprehensive API tests
+    
     const comprehensiveResults = await networkMonitor.runComprehensiveTest();
     
-    // Test batch requests
+   
     const batchResult = await networkMonitor.testBatchRequests();
     
-    // Test paginated requests
+   
     const paginatedResult = await networkMonitor.testPaginatedRequests();
     
     const allResults = [...comprehensiveResults, batchResult, paginatedResult];
     setTestResults(allResults);
     
-    // Update analytics
+    
     loadAnalytics();
     
-    // Show results
+    
     const successCount = allResults.filter(r => r.status === 'success').length;
     const failedCount = allResults.filter(r => r.status === 'failed').length;
     const skippedCount = allResults.filter(r => r.status === 'skipped').length;
@@ -540,7 +527,7 @@ const NetworkDashboard = () => {
       const authInfo = await networkMonitor.checkAuthStatus();
       setAuthStatus(authInfo);
       
-      // Update network info
+      
       setNetworkInfo(prev => ({
         ...prev,
         isConnected: authInfo.hasAccessToken,
@@ -585,8 +572,8 @@ const NetworkDashboard = () => {
   };
 
   const getPayloadStatus = (size) => {
-    if (size < 50000) return 'good'; // < 50KB
-    if (size < 200000) return 'warning'; // < 200KB
+    if (size < 50000) return 'good';
+    if (size < 200000) return 'warning'; 
     return 'poor';
   };
 
