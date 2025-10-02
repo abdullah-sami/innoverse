@@ -64,7 +64,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'innoverse.wsgi.application'
 
-CSRF_TRUSTED_ORIGINS = ['https://1b0d83c26829.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['https://555c77b3b37d.ngrok-free.app']
 
 # Database
 

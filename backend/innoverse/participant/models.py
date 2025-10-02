@@ -79,6 +79,9 @@ class Registration(models.Model):
     segment = models.ForeignKey(Segment, on_delete=models.CASCADE, related_name='segment_registrations', db_index=True)
     datetime = models.DateTimeField(auto_now_add=True, db_index=True)
 
+    def __str__(self):
+        return f"{self.participant} - {self.segment}"
+
 
 
 
@@ -87,9 +90,15 @@ class CompetitionRegistration(models.Model):
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name='competitions', db_index=True)
     datetime = models.DateTimeField(auto_now_add=True, null=True, blank=True, db_index=True)
 
+    def __str__(self):
+        return f"{self.participant} - {self.competition}"
 
 
 class TeamCompetitionRegistration(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='team_competition_registrations', db_index=True)
     competition = models.ForeignKey(TeamCompetition, on_delete=models.CASCADE, related_name='team_competitions', db_index=True)
     datetime = models.DateTimeField(auto_now_add=True, null=True, blank=True, db_index=True)
+
+    
+    def __str__(self):
+        return f"{self.team} - {self.competition}"
