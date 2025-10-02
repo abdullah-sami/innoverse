@@ -119,8 +119,6 @@ export const GiftsResultComponent: React.FC<GiftsResultProps> = ({ qr_code_data 
     
     try {
       const headers = await getHeaders();
-      console.log('Gifts - Headers:', headers);
-      console.log('Gifts - URL:', `${INNOVERSE_API_CONFIG.BASE_URL}/api/gifts/${qr_code_data}/`);
       
       const response = await fetch(
         `${INNOVERSE_API_CONFIG.BASE_URL}/api/gifts/${qr_code_data}/`,
@@ -130,18 +128,15 @@ export const GiftsResultComponent: React.FC<GiftsResultProps> = ({ qr_code_data 
         }
       );
 
-      console.log('Gifts - Response status:', response.status);
 
       const contentType = response.headers.get('content-type');
       if (!contentType || !contentType.includes('application/json')) {
         const textResponse = await response.text();
-        console.log('Gifts - Non-JSON response:', textResponse);
         throw new Error('Server returned non-JSON response');
       }
 
       if (response.ok) {
         const data: GiftsResponse = await response.json();
-        console.log('Gifts - Response data:', data);
         setGifts(data);
       } else {
         const errorData = await response.json();
@@ -166,8 +161,8 @@ export const GiftsResultComponent: React.FC<GiftsResultProps> = ({ qr_code_data 
     
     try {
       const headers = await getHeaders();
-      console.log('Updating gift status for:', giftName);
-      console.log('Update URL:', `${INNOVERSE_API_CONFIG.BASE_URL}/api/gifts/${qr_code_data}/`);
+      // console.log('Updating gift status for:', giftName);
+      // console.log('Update URL:', `${INNOVERSE_API_CONFIG.BASE_URL}/api/gifts/${qr_code_data}/`);
       
       const response = await fetch(
         `${INNOVERSE_API_CONFIG.BASE_URL}/api/gifts/${qr_code_data}/`,
