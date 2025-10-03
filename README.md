@@ -1,3 +1,81 @@
+### Request format for registration
+Endpoint:
+```bash
+Method: POST
+BASE_URL/api/register/
+```
+
+Request body (JSON):
+```bash
+{
+    "participant": {
+        "full_name": "",
+        "gender": "",
+        "email": "",
+        "phone": "",
+        "age": "",
+        "institution": "",
+        "institution_id": "",
+        "address": "",
+        "t_shirt_size": "",
+        "club_reference": "",
+        "campus_ambassador": ""
+    },
+    "payment": {
+        "amount": "",
+        "phone": "",
+        "trx_id": "",
+    },
+    "segment": [
+        "segment_code_1",
+        "segment_code_2",
+    ],
+    "competition": [
+        "competition_code_1",
+        "competition_code_2",
+    ],
+    "team_competition": {
+        "team": {
+            "team_name": "",
+            "participant": [
+                {
+                    "full_name": "",
+                    "gender": "",
+                    "email": "",
+                    "phone": "",
+                    "age": "",
+                    "institution": "",
+                    "institution_id": "",
+                    "address": "",
+                    "t_shirt_size": "",
+                    "club_reference": "",
+                    "campus_ambassador": ""
+                },
+                {
+                    "full_name": "",
+                    "gender": "",
+                    "phone": "",
+                    "age": "",
+                    "institution": "",
+                    "institution_id": "",
+                    "t_shirt_size": ""
+                }
+            ]
+        },
+        "competition": [
+            "team_competition_code_1",
+            "team_competition_code_2",
+        ]
+    },
+}
+```
+
+
+
+
+
+###### How to run django server
+
 ### 1. Install Python  
 Make sure **Python 3.10+** is installed.  
 Check version:
