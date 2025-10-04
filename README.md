@@ -70,6 +70,44 @@ Request body (JSON):
 }
 ```
 
+Response:
+```bash
+{
+    "success": true,
+    "message": "Registration completed successfully",
+    "data": {
+        "participant": {
+            "id": 2,
+            "name": "Saeed Adnan",
+            "email": "saeedadnan1219@gmail.com",
+            "payment_verified": false
+        },
+        "payment": {
+            "trx_id": "hf237ry298",
+            "amount": "700.00"
+        },
+        "segments": [
+            "expo"
+        ],
+        "competitions": [
+            "3m-res"
+        ],
+        "team": {
+            "id": 2,
+            "name": "BabySharks",
+            "payment_verified": false,
+            "members_count": 2,
+            "competitions": [
+                "sc_quiz"
+            ]
+        },
+        "team_payment": {
+            "trx_id": "hf237ry298",
+            "amount": "700.00"
+        }
+    }
+}
+```
 
 
 
