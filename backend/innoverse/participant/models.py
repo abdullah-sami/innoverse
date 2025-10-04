@@ -4,14 +4,33 @@ from event.models import Segment, Competition, Gift, TeamCompetition
 
 
 class Participant(models.Model):
+    GENDER_CHOICES = [
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('O', 'Other'),
+    ]
+    
+    TSHIRT_SIZES = [
+        ('XS', 'Extra Small'),
+        ('S', 'Small'),
+        ('M', 'Medium'),
+        ('L', 'Large'),
+        ('XL', 'Extra Large'),
+        ('XXL', 'Double Extra Large'),
+    ]
+    
     f_name = models.CharField(max_length=100, db_index=True)
     l_name = models.CharField(max_length=100, db_index=True)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
     email = models.EmailField(db_index=True)
     phone = models.CharField(max_length=20)
     age = models.IntegerField()
     institution = models.CharField(max_length=200)
     institution_id = models.CharField(max_length=100)
     address = models.TextField(blank=True, null=True)
+    t_shirt_size = models.CharField(max_length=3, choices=TSHIRT_SIZES, blank=True, null=True)
+    club_reference = models.CharField(max_length=200, blank=True, null=True)
+    campus_ambassador = models.CharField(max_length=200, blank=True, null=True)
     payment_verified = models.BooleanField(default=False, db_index=True)
 
     def __str__(self):
@@ -29,13 +48,33 @@ class Team(models.Model):
 
 
 class TeamParticipant(models.Model):
+    GENDER_CHOICES = [
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('O', 'Other'),
+    ]
+    
+    TSHIRT_SIZES = [
+        ('XS', 'Extra Small'),
+        ('S', 'Small'),
+        ('M', 'Medium'),
+        ('L', 'Large'),
+        ('XL', 'Extra Large'),
+        ('XXL', 'Double Extra Large'),
+    ]
+    
     f_name = models.CharField(max_length=100, db_index=True)
     l_name = models.CharField(max_length=100, db_index=True)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
     email = models.EmailField(db_index=True)
     phone = models.CharField(max_length=20)
     age = models.IntegerField()
     institution = models.CharField(max_length=200)
     institution_id = models.CharField(max_length=100)
+    address = models.TextField(blank=True, null=True)
+    t_shirt_size = models.CharField(max_length=3, choices=TSHIRT_SIZES, blank=True, null=True)
+    club_reference = models.CharField(max_length=200, blank=True, null=True)
+    campus_ambassador = models.CharField(max_length=200, blank=True, null=True)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='members', db_index=True)
     is_leader = models.BooleanField(default=False, db_index=True)
 
@@ -55,7 +94,7 @@ class Payment(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='payments', null=True, blank=True, db_index=True)
     phone = models.CharField(max_length=20, db_index=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, db_index=True)
-    trx_id = models.CharField(max_length=100, unique=True, db_index=True)
+    trx_id = models.CharField(max_length=100, db_index=True)
     datetime = models.DateTimeField(auto_now_add=True, db_index=True)
 
     def clean(self):
@@ -79,9 +118,6 @@ class Registration(models.Model):
     segment = models.ForeignKey(Segment, on_delete=models.CASCADE, related_name='segment_registrations', db_index=True)
     datetime = models.DateTimeField(auto_now_add=True, db_index=True)
 
-    def __str__(self):
-        return f"{self.participant} - {self.segment}"
-
 
 
 
@@ -90,15 +126,9 @@ class CompetitionRegistration(models.Model):
     competition = models.ForeignKey(Competition, on_delete=models.CASCADE, related_name='competitions', db_index=True)
     datetime = models.DateTimeField(auto_now_add=True, null=True, blank=True, db_index=True)
 
-    def __str__(self):
-        return f"{self.participant} - {self.competition}"
 
 
 class TeamCompetitionRegistration(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='team_competition_registrations', db_index=True)
     competition = models.ForeignKey(TeamCompetition, on_delete=models.CASCADE, related_name='team_competitions', db_index=True)
     datetime = models.DateTimeField(auto_now_add=True, null=True, blank=True, db_index=True)
-
-    
-    def __str__(self):
-        return f"{self.team} - {self.competition}"

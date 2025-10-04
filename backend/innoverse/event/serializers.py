@@ -6,6 +6,8 @@ from api.models import GiftStatus
 
 
 
+
+
 class SegmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Segment

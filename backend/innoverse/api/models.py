@@ -14,7 +14,7 @@ class Role(models.Model):
 class Volunteer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='volunteer_profile', db_index=True)
     v_name = models.CharField(max_length=100, db_index=True)
-    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='volunteers', db_index=True)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='role', db_index=True)
 
     def __str__(self):
         return f"{self.v_name} ({self.role.role_name})"
