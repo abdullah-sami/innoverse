@@ -36,7 +36,8 @@ The API uses JWT (JSON Web Token) authentication for protected endpoints.
     "user": {
             "id": int,
             "username": "string",
-            "email": "string"
+            "email": "string",
+			"role": "string" // only allow if role == admin
         }
 },
 ```
