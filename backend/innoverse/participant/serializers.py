@@ -16,7 +16,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
         model = Participant
         fields = [
             'id', 'f_name', 'l_name', 'email', 'phone', 
-            'age', 'institution',  'institution_id', 'address', 'payment_verified',
+            'age', 'institution', 'address', 'payment_verified',
             'segment_list', 'comp_list', 'gift_list', 'entry_status'
         ]
 
@@ -39,7 +39,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
 class TeamParticipantSerializer(serializers.ModelSerializer):
     class Meta:
         model = TeamParticipant
-        fields = ['id', 'f_name', 'l_name', 'email', 'phone', 'age', 'institution', 'institution_id', 'is_leader']
+        fields = ['id', 'f_name', 'l_name', 'email', 'phone', 'age', 'institution', 'is_leader']
 
 
 

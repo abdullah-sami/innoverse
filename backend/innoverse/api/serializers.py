@@ -1,3 +1,4 @@
+from event.serializers import CouponSerializer
 from rest_framework import serializers
 from .models import Role, Volunteer, GiftStatus, EntryStatus
 
@@ -5,7 +6,7 @@ from participant.models import (
     Participant, Team, TeamParticipant, Payment,
     Registration, CompetitionRegistration, TeamCompetitionRegistration
 )
-from event.models import Segment, Competition, TeamCompetition
+from event.models import Coupons, Segment, Competition, TeamCompetition
 
 
 class RoleSerializer(serializers.ModelSerializer):
@@ -45,15 +46,12 @@ class ParticipantRegistrationSerializer(serializers.Serializer):
     phone = serializers.CharField(max_length=20)
     age = serializers.IntegerField()
     institution = serializers.CharField(max_length=200)
-    institution_id = serializers.CharField(max_length=100)
     address = serializers.CharField(required=False, allow_blank=True)
     t_shirt_size = serializers.ChoiceField(
         choices=['XS', 'S', 'M', 'L', 'XL', 'XXL'],
         required=False,
         allow_blank=True
     )
-    club_reference = serializers.CharField(max_length=200, required=False, allow_blank=True)
-    campus_ambassador = serializers.CharField(max_length=200, required=False, allow_blank=True)
 
 
 class PaymentRegistrationSerializer(serializers.Serializer):
@@ -69,15 +67,12 @@ class TeamMemberRegistrationSerializer(serializers.Serializer):
     phone = serializers.CharField(max_length=20)
     age = serializers.IntegerField()
     institution = serializers.CharField(max_length=200)
-    institution_id = serializers.CharField(max_length=100)
     address = serializers.CharField(required=False, allow_blank=True)
     t_shirt_size = serializers.ChoiceField(
         choices=['XS', 'S', 'M', 'L', 'XL', 'XXL'],
         required=False,
         allow_blank=True
     )
-    club_reference = serializers.CharField(max_length=200, required=False, allow_blank=True)
-    campus_ambassador = serializers.CharField(max_length=200, required=False, allow_blank=True)
 
 
 class TeamInfoSerializer(serializers.Serializer):
@@ -106,6 +101,8 @@ class CompleteRegistrationSerializer(serializers.Serializer):
         default=list
     )
     team_competition = TeamCompetitionInfoSerializer(required=False, allow_null=True)
+    coupon = serializers.DictField(required=False, allow_null=True) 
+
 
     def validate_payment(self, value):
         # Check if transaction ID already exists
@@ -144,6 +141,20 @@ class CompleteRegistrationSerializer(serializers.Serializer):
                 raise serializers.ValidationError(f"Invalid team competition codes: {', '.join(invalid_codes)}")
         return value
 
+    def validate_coupon(self, value):
+        if value:
+            coupon_code = value.get('coupon_code')
+            if not coupon_code:
+                raise serializers.ValidationError("coupon_code is required")
+            
+            try:
+                coupon = Coupons.objects.get(coupon_code=coupon_code)
+                if coupon.coupon_number <= 0:
+                    raise serializers.ValidationError(f"Coupon '{coupon_code}' has no remaining uses")
+                return coupon  # Return the coupon object
+            except Coupons.DoesNotExist:
+                raise serializers.ValidationError(f"Invalid coupon code: {coupon_code}")
+        return None
     def validate(self, data):
         participant = data.get('participant', {})
         team_competition = data.get('team_competition')
@@ -263,7 +274,7 @@ class ParticipantDetailSerializer(serializers.ModelSerializer):
         model = Participant
         fields = [
             'id', 'f_name', 'l_name', 'full_name', 'email', 'phone',
-            'age', 'institution', 'institution_id', 'address',
+            'age', 'institution', 'address',
             'payment_verified', 'segment_registrations', 
             'competition_registrations', 'gifts_received', 'payments',
             'has_entry', 'entry_datetime', 'team_info'
@@ -307,7 +318,7 @@ class TeamParticipantSerializer(serializers.ModelSerializer):
         model = TeamParticipant
         fields = [
             'id', 'f_name', 'l_name', 'full_name', 'email', 'phone',
-            'age', 'institution', 'institution_id', 'is_leader'
+            'age', 'institution', 'is_leader'
         ]
     
     def get_full_name(self, obj):
@@ -353,7 +364,6 @@ class TeamListSerializer(serializers.ModelSerializer):
 
 
 class PaymentVerificationSerializer(serializers.Serializer):
-    """Serializer for payment verification request"""
     id = serializers.IntegerField()
 
 
@@ -368,7 +378,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
         model = Participant
         fields = [
             'id', 'f_name', 'l_name', 'email', 'phone', 
-            'age', 'institution',  'institution_id', 'address', 'payment_verified',
+            'age', 'institution', 'address', 'payment_verified',
             'segment_list', 'comp_list', 'gift_list', 'entry_status'
         ]
 

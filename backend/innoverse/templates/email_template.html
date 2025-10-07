@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Verified - Innoverse</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #4CAF50;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #4CAF50;
+            margin: 0;
+            font-size: 28px;
+        }
+        .success-badge {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .content {
+            margin: 20px 0;
+        }
+        .info-box {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #4CAF50;
+            margin: 20px 0;
+        }
+        .info-box p {
+            margin: 5px 0;
+        }
+        .qr-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        .qr-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .qr-code {
+            max-width: 300px;
+            height: auto;
+            margin: 20px auto;
+            border: 5px solid #4CAF50;
+            border-radius: 10px;
+            padding: 10px;
+            background-color: white;
+        }
+        .instructions {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .instructions h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            color: #666;
+            font-size: 14px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .team-info {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="cid:logo" alt="Innoverse Logo" style="max-width: 200px; height: auto; margin-bottom: 15px;">
+            <h1>🎉 Innoverse Registration</h1>
+            <div class="success-badge">Payment Verified</div>
+        </div>
+
+        <div class="content">
+            <p>Dear <strong>{{ participant_name }}</strong>,</p>
+            
+            <p>Congratulations! Your payment has been successfully verified for Innoverse.</p>
+
+            <div class="info-box">
+                <p><strong>Participant ID:</strong> {{ participant_id }}</p>
+                <p><strong>Email:</strong> {{ participant_email }}</p>
+                {% if team_name %}
+                <p><strong>Team:</strong> {{ team_name }}</p>
+                <p><strong>Team ID:</strong> {{ team_id }}</p>
+                {% endif %}
+            </div>
+
+            {% if team_name %}
+            <div class="team-info">
+                <h3 style="margin-top: 0;">👥 Team Information</h3>
+                <p>You are registered as part of team <strong>{{ team_name }}</strong>.</p>
+                <p>All team members have received this confirmation.</p>
+            </div>
+            {% endif %}
+
+            <div class="qr-section">
+                <h2>Your Entry QR Code</h2>
+                <p>Present this QR code at the event entrance:</p>
+                <img src="cid:qr_code" alt="QR Code" class="qr-code">
+                <p style="font-size: 14px; color: #666; margin-top: 15px;">
+                    ID: <strong>{{ qr_id }}</strong>
+                </p>
+            </div>
+
+            <div class="instructions">
+                <h3>📱 Important Instructions:</h3>
+                <ul>
+                    <li>Save this QR code or take a screenshot for easy access</li>
+                    <li>You can also download the attached QR code image</li>
+                    <li>Show this QR code at the registration desk during the event</li>
+                    <li>Keep your email safe as it contains your unique entry code</li>
+                    {% if team_name %}
+                    <li><strong>Team Entry:</strong> Any team member can present the team QR code for the entire team</li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            {% if segments %}
+            <div class="info-box">
+                <h3 style="margin-top: 0;">📋 Your Registrations:</h3>
+                <p><strong>Segments:</strong></p>
+                <ul>
+                    {% for segment in segments %}
+                    <li>{{ segment }}</li>
+                    {% endfor %}
+                </ul>
+                {% if competitions %}
+                <p><strong>Competitions:</strong></p>
+                <ul>
+                    {% for competition in competitions %}
+                    <li>{{ competition }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <p style="margin-top: 30px;">We look forward to seeing you at Innoverse!</p>
+        </div>
+
+        <div class="footer">
+            <p>If you have any questions, please contact us at support@innoverse.com</p>
+            <p>&copy; 2025 Innoverse. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

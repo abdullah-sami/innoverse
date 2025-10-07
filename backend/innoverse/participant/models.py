@@ -23,14 +23,13 @@ class Participant(models.Model):
     l_name = models.CharField(max_length=100, db_index=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
     email = models.EmailField(db_index=True)
-    phone = models.CharField(max_length=20)
+    phone = models.CharField(max_length=20, blank=True, null=True)
     age = models.IntegerField()
-    institution = models.CharField(max_length=200)
-    institution_id = models.CharField(max_length=100)
+    institution = models.CharField(max_length=200, blank=True, null=True)
+    
     address = models.TextField(blank=True, null=True)
     t_shirt_size = models.CharField(max_length=3, choices=TSHIRT_SIZES, blank=True, null=True)
-    club_reference = models.CharField(max_length=200, blank=True, null=True)
-    campus_ambassador = models.CharField(max_length=200, blank=True, null=True)
+    
     payment_verified = models.BooleanField(default=False, db_index=True)
 
     def __str__(self):
@@ -70,11 +69,9 @@ class TeamParticipant(models.Model):
     phone = models.CharField(max_length=20)
     age = models.IntegerField()
     institution = models.CharField(max_length=200)
-    institution_id = models.CharField(max_length=100)
     address = models.TextField(blank=True, null=True)
     t_shirt_size = models.CharField(max_length=3, choices=TSHIRT_SIZES, blank=True, null=True)
-    club_reference = models.CharField(max_length=200, blank=True, null=True)
-    campus_ambassador = models.CharField(max_length=200, blank=True, null=True)
+    
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='members', db_index=True)
     is_leader = models.BooleanField(default=False, db_index=True)
 

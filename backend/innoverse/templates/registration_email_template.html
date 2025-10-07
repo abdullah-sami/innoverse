@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Successful - Innoverse</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #2196F3;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #2196F3;
+            margin: 0;
+            font-size: 28px;
+        }
+        .success-badge {
+            background-color: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .content {
+            margin: 20px 0;
+        }
+        .info-box {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #2196F3;
+            margin: 20px 0;
+        }
+        .info-box p {
+            margin: 5px 0;
+        }
+        .info-box ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .warning-box h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+        .pending-badge {
+            background-color: #ff9800;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .team-info {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .team-members {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .team-members ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .payment-info {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            color: #666;
+            font-size: 14px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .next-steps {
+            background-color: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .next-steps h3 {
+            color: #1976D2;
+            margin-top: 0;
+        }
+        .next-steps ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .next-steps li {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="cid:logo" alt="Innoverse Logo" style="max-width: 200px; height: auto; margin-bottom: 15px;">
+            <h1>🎉 Welcome to Innoverse!</h1>
+            <div class="success-badge">Registration Successful</div>
+        </div>
+
+        <div class="content">
+            <p>Dear <strong>{{ participant_name }}</strong>,</p>
+            
+            <p>Thank you for registering for Innoverse! Your registration has been received successfully.</p>
+
+            <div class="info-box">
+                <h3 style="margin-top: 0;">📋 Your Registration Details:</h3>
+                <p><strong>Participant ID:</strong> {{ participant_id }}</p>
+                <p><strong>Name:</strong> {{ participant_name }}</p>
+                <p><strong>Email:</strong> {{ participant_email }}</p>
+                <p><strong>Phone:</strong> {{ participant_phone }}</p>
+                <p><strong>Institution:</strong> {{ participant_institution }}</p>
+                
+                {% if segments %}
+                <p><strong>Registered Segments:</strong></p>
+                <ul>
+                    {% for segment in segments %}
+                    <li>{{ segment }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                
+                {% if competitions %}
+                <p><strong>Registered Solo Competitions:</strong></p>
+                <ul>
+                    {% for competition in competitions %}
+                    <li>{{ competition }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            {% if team_name %}
+            <div class="team-info">
+                <h3 style="margin-top: 0;">👥 Team Registration</h3>
+                <p><strong>Team Name:</strong> {{ team_name }}</p>
+                <p><strong>Team ID:</strong> {{ team_id }}</p>
+                <p><strong>Your Role:</strong> Team Leader</p>
+                
+                {% if team_competitions %}
+                <p><strong>Team Competitions:</strong></p>
+                <ul>
+                    {% for competition in team_competitions %}
+                    <li>{{ competition }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                
+                {% if team_members %}
+                <div class="team-members">
+                    <p><strong>Team Members:</strong></p>
+                    <ul>
+                        {% for member in team_members %}
+                        <li>{{ member.name }} - {{ member.institution }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <div class="payment-info">
+                <h3 style="margin-top: 0;">💳 Payment Information</h3>
+                <p><strong>Transaction ID:</strong> {{ trx_id }}</p>
+                <p><strong>Amount Paid:</strong> {{ amount }} BDT</p>
+                <p><strong>Payment Phone:</strong> {{ payment_phone }}</p>
+                <div class="pending-badge">⏳ Pending Verification</div>
+            </div>
+
+            <div class="warning-box">
+                <h3>⚠️ Important: Payment Verification Required</h3>
+                <p>Your payment is currently under review. Our team will verify your payment within <strong>24-48 hours</strong>.</p>
+                <p><strong>What happens after verification:</strong></p>
+                <ul>
+                    <li>You'll receive a confirmation email with your QR code</li>
+                    <li>The QR code will be required for event entry</li>
+                    <li>You can download and save the QR code for easy access</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>Note:</strong> Please keep your transaction ID safe for reference.</p>
+            </div>
+
+            <div class="next-steps">
+                <h3>📌 Next Steps:</h3>
+                <ol>
+                    <li><strong>Wait for Payment Verification:</strong> You'll receive a confirmation email once your payment is verified</li>
+                    <li><strong>Check Your Email:</strong> The confirmation email will contain your unique QR code</li>
+                    <li><strong>Save Your QR Code:</strong> Download and save the QR code from the confirmation email</li>
+                    <li><strong>Event Day:</strong> Present your QR code at the registration desk</li>
+                </ol>
+            </div>
+
+            {% if team_name %}
+            <div class="info-box">
+                <h3 style="margin-top: 0;">👥 Team Information</h3>
+                <p>As the team leader, you'll receive the team QR code once payment is verified. All team members will also receive individual confirmation emails.</p>
+                <p><strong>Important:</strong> Any team member can present the team QR code for entry.</p>
+            </div>
+            {% endif %}
+
+            <div class="info-box">
+                <h3 style="margin-top: 0;">📞 Need Help?</h3>
+                <p>If you have any questions or concerns about your registration or payment verification, please contact us:</p>
+                <ul>
+                    <li><strong>Email:</strong> support@innoverse.com</li>
+                    <li><strong>Phone:</strong> +880 XXX-XXXXXXX</li>
+                </ul>
+                <p>Please include your Participant ID ({{ participant_id }}) and Transaction ID ({{ trx_id }}) in your message.</p>
+            </div>
+
+            <p style="margin-top: 30px;">We're excited to have you join us at Innoverse! See you at the event!</p>
+        </div>
+
+        <div class="footer">
+            <p><strong>Thank you for registering!</strong></p>
+            <p>If you have any questions, please contact us at support@innoverse.com</p>
+            <p>&copy; 2025 Innoverse. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

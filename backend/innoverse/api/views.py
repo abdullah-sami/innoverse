@@ -16,7 +16,7 @@ from .serializers import (
     GiftStatusSerializer
 
 )
-from event.models import Segment, Competition, TeamCompetition
+from event.models import Coupons, Segment, Competition, TeamCompetition
 from event.serializers import SegmentSerializer, CompetitionSerializer, TeamCompetitionSerializer
 from api.models import Volunteer
 from participant.models import Registration, CompetitionRegistration, TeamCompetitionRegistration, Payment, TeamParticipant
@@ -36,6 +36,8 @@ class IsAdminVolunteer(IsAuthenticated):
             return volunteer.role.role_name.lower() == 'admin'
         except Volunteer.DoesNotExist:
             return False
+
+
 
 
 
@@ -83,13 +85,25 @@ class RegisterViewSet(viewsets.ViewSet):
                 # Step 5: Handle team competition if provided
                 team = None
                 team_payment = None
+                team_members = None
+                team_competitions = None
+                
                 if 'team_competition' in validated_data:
                     team, team_payment = self._handle_team_competition(
                         validated_data['team_competition'],
                         validated_data['payment'],
                         participant
                     )
-                
+                    # Get team members and competitions for email
+                    team_members = team.members.all()
+                    team_competitions = team.team_competition_registrations.all()
+
+                # Check if coupon is valid
+                coupon = validated_data.get('coupon')  # This will now be the Coupon object
+                self._update_coupon(coupon)
+
+
+
                 # Build response
                 response_data = {
                     "success": True,
@@ -102,6 +116,7 @@ class RegisterViewSet(viewsets.ViewSet):
                             "payment_verified": participant.payment_verified
                         },
                         "payment": {
+                            "coupon": coupon.coupon_code if coupon else None,
                             "trx_id": participant_payment.trx_id,
                             "amount": str(participant_payment.amount)
                         },
@@ -122,6 +137,38 @@ class RegisterViewSet(viewsets.ViewSet):
                         "trx_id": team_payment.trx_id,
                         "amount": str(team_payment.amount)
                     }
+                
+                # Send registration confirmation email
+                from .utils import send_registration_confirmation_email, send_team_registration_confirmation_emails
+                
+                try:
+                    if team:
+                        # Send to all team members
+                        email_sent = send_team_registration_confirmation_emails(
+                            team, 
+                            team_members,
+                            team_competitions,
+                            team_payment
+                        )
+                        if email_sent:
+                            response_data["email_sent"] = True
+                            response_data["message"] += " Confirmation emails sent to all team members."
+                        else:
+                            response_data["email_warning"] = "Registration successful but emails failed to send"
+                    else:
+                        # Send to individual participant
+                        email_sent = send_registration_confirmation_email(
+                            participant,
+                            participant_payment
+                        )
+                        if email_sent:
+                            response_data["email_sent"] = True
+                            response_data["message"] += " Confirmation email sent."
+                        else:
+                            response_data["email_warning"] = "Registration successful but email failed to send"
+                except Exception as e:
+                    logger.error(f"Email sending failed: {str(e)}")
+                    response_data["email_warning"] = "Registration successful but email failed to send"
                 
                 return Response(response_data, status=status.HTTP_201_CREATED)
                 
@@ -147,11 +194,8 @@ class RegisterViewSet(viewsets.ViewSet):
             phone=participant_data['phone'],
             age=participant_data['age'],
             institution=participant_data['institution'],
-            institution_id=participant_data['institution_id'],
             address=participant_data.get('address', ''),
             t_shirt_size=participant_data.get('t_shirt_size', ''),
-            club_reference=participant_data.get('club_reference', ''),
-            campus_ambassador=participant_data.get('campus_ambassador', ''),
             payment_verified=False
         )
         return participant
@@ -199,11 +243,8 @@ class RegisterViewSet(viewsets.ViewSet):
             phone=leader_participant.phone,
             age=leader_participant.age,
             institution=leader_participant.institution,
-            institution_id=leader_participant.institution_id,
             address=leader_participant.address,
             t_shirt_size=leader_participant.t_shirt_size,
-            club_reference=leader_participant.club_reference,
-            campus_ambassador=leader_participant.campus_ambassador,
             team=team,
             is_leader=True
         )
@@ -222,11 +263,8 @@ class RegisterViewSet(viewsets.ViewSet):
                 phone=member_data['phone'],
                 age=member_data['age'],
                 institution=member_data['institution'],
-                institution_id=member_data['institution_id'],
                 address=member_data.get('address', ''),
                 t_shirt_size=member_data.get('t_shirt_size', ''),
-                club_reference=member_data.get('club_reference', ''),
-                campus_ambassador=member_data.get('campus_ambassador', ''),
                 team=team,
                 is_leader=False
             )
@@ -244,8 +282,14 @@ class RegisterViewSet(viewsets.ViewSet):
             )
         
         return team, team_payment
-
-
+    
+    def _update_coupon(self, coupon):
+        if coupon and coupon.coupon_number > 0:
+            coupon.coupon_number -= 1
+            coupon.save()
+            return True
+        return False
+    
 
 
 
@@ -498,6 +542,56 @@ class TeamCompetitionViewSet(viewsets.ReadOnlyModelViewSet):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+
+
+
+
+
+
+class CouponValidationViewSet(viewsets.ViewSet):
+    permission_classes = [AllowAny]
+
+    def list(self, request, code=None):
+        if not code:
+            return Response({
+                'success': False,
+                'error': 'Coupon code is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        from event.models import Coupons
+        try:
+            coupon = Coupons.objects.get(coupon_code=code)
+
+            if coupon.coupon_number <= 0:
+                return Response({
+                    'success': False,
+                    'error': 'Coupon code is no longer valid'
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+
+            return Response({
+                'success': True,
+                'coupon': {
+                    'code': coupon.coupon_code,
+                    'discount': coupon.discount,
+                }
+            }, status=status.HTTP_200_OK)
+        
+        except Coupons.DoesNotExist:
+            return Response({
+                'success': False,
+                'error': 'Invalid or inactive coupon code'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        except Exception as e:
+            logger.error(f"Error validating coupon: {str(e)}")
+            return Response({
+                'success': False,
+                'error': 'Failed to validate coupon'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
 class PaymentVerificationViewSet(viewsets.ViewSet):
     permission_classes = [IsAdminVolunteer]
     
@@ -516,6 +610,8 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
             try:
                 participant = Participant.objects.get(id=participant_id)
                 
+                # Toggle payment verification
+                was_verified = participant.payment_verified
                 participant.payment_verified = not participant.payment_verified
                 participant.save()
                 
@@ -527,11 +623,13 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
                     }
                 }
                 
+                # Check if participant is a team leader
                 team_member = TeamParticipant.objects.filter(
                     email=participant.email, 
                     is_leader=True
                 ).first()
                 
+                team = None
                 if team_member:
                     team = team_member.team
                     team.payment_verified = participant.payment_verified
@@ -546,6 +644,20 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
                 message = f'Payment verified for {participant.f_name} {participant.l_name}'
                 if team_member:
                     message += f' and team {team.team_name}'
+                
+                # Send email only when payment is verified (changed from False to True)
+                if participant.payment_verified and not was_verified:
+                    from .utils import send_payment_verification_email
+                    
+                    email_sent = send_payment_verification_email(participant, team)
+                    
+                    if email_sent:
+                        message += '. Confirmation email sent.'
+                        response_data['email_sent'] = True
+                    else:
+                        message += '. Warning: Email failed to send.'
+                        response_data['email_sent'] = False
+                        response_data['email_warning'] = 'Failed to send confirmation email'
                 
                 return Response({
                     'success': True,
@@ -563,9 +675,9 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
             logger.error(f"Error updating payment verification: {str(e)}")
             return Response({
                 'success': False,
-                'error': 'Failed to update payment verification'
+                'error': 'Failed to update payment verification',
+                'details': str(e)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 
 
@@ -1012,16 +1124,5 @@ class CheckViewSet(viewsets.ViewSet):
                 {"error": f"Failed to fetch participant/team info: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-
-
-
-
-
-
-
-
-
-
-
 
 

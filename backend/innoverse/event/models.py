@@ -6,7 +6,7 @@ class Segment(models.Model):
     code = models.CharField(max_length=20, unique=True, db_index=True)
 
     def __str__(self):
-        return self.segment_name
+        return f"{self.segment_name} ({self.code})"
 
 
 
@@ -26,7 +26,7 @@ class Competition(models.Model):
 
 
     def __str__(self):
-        return self.competition
+        return f"{self.competition} ({self.code})"
 
 
 
@@ -36,4 +36,15 @@ class TeamCompetition(models.Model):
 
 
     def __str__(self):
-        return self.competition
+        return f"{self.competition} ({self.code})"
+    
+
+
+
+class Coupons(models.Model):
+    coupon_code = models.CharField(max_length=50, unique=True, db_index=True, null=True, blank=True)
+    discount = models.FloatField(default=10.0, db_index=True, null=True, blank=True)
+    coupon_number = models.IntegerField(default=10, db_index=True, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.coupon_code} - {self.discount}% - ({self.coupon_number} left)"

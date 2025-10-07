@@ -21,6 +21,8 @@ urlpatterns = [
          }), 
          name="register"),
 
+    path('coupon/<str:code>/', views.CouponValidationViewSet.as_view({'get': 'list'}), name='validate-coupon'),
+
 
      path('payment/verify/', views.PaymentVerificationViewSet.as_view({'post': 'create'}), name='payment-verify'),
 

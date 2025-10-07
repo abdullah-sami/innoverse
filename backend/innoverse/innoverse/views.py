@@ -81,5 +81,17 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 def logout_view(request):
     logout(request)
+
+    # get access token from request header
+    access_token = request.META.get('HTTP_AUTHORIZATION', '').split('Bearer ')[-1]
+    if access_token:
+        # blacklist the token
+        from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
+        try:
+            token = OutstandingToken.objects.get(token=access_token)
+            BlacklistedToken.objects.get_or_create(token=token)
+        except OutstandingToken.DoesNotExist:
+            pass
+
     return redirect('login')
 

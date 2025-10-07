@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Segment, Gift, Competition, TeamCompetition
+from .models import Coupons, Segment, Gift, Competition, TeamCompetition
 from participant.models import Registration, CompetitionRegistration, TeamCompetitionRegistration
 from participant.serializers import ParticipantSerializer, TeamSerializer
 from api.models import GiftStatus
@@ -90,3 +90,11 @@ class TeamGiftStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = GiftStatus
         fields = ["team", "gift", "volunteer", "datetime"]
+
+
+
+
+class CouponSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Coupons
+        fields = "__all__"
