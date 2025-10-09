@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Base API Configuration
 export const INNOVERSE_API_CONFIG = {
-  BASE_URL: "https://555c77b3b37d.ngrok-free.app",
+  BASE_URL: "http://192.168.0.115:90/",
   // BASE_URL: "https://rafidabdullahsamiweb.pythonanywhere.com",
 };
 
