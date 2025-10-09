@@ -64,7 +64,13 @@ The API uses JWT (JSON Web Token) authentication for protected endpoints.
 ```bash
 {
   "access": "string",
-  "refresh": "string"
+  "refresh": "string",
+  "user": {
+    "id": int,
+    "username": "string",
+    "email": "string",
+    "role": "string"
+  }
 }
 ```
 
@@ -141,8 +147,9 @@ The API uses JWT (JSON Web Token) authentication for protected endpoints.
     "gender": "M",
     "email": "john@example.com",
     "phone": "1234567890",
-    "age": 22,
+    "grade": "12",
     "institution": "Example University",
+    "guardian_phone": "1234567890",
     "address": "123 Main St",
     "t_shirt_size": "L"
   },
@@ -391,8 +398,9 @@ GET /api/participant/?segment=expo&payment_verified=true&search=john
     "full_name": "John Doe",
     "email": "john@example.com",
     "phone": "1234567890",
-    "age": 22,
+    "grade": "12",
     "institution": "Example University",
+    "guardian_phone": "1234567890",
     "address": "123 Main St",
     "payment_verified": true,
     "segment_registrations": [
@@ -906,24 +914,45 @@ POST /api/recordentry/p_1/
 POST /api/recordentry/t_1/
 ```
 
-**Response (Participant):**
+**Response (Participant - Success):**
 ```bash
 {
   "success": true,
-  "data": {
-    "p_name": "John Doe",
-    "t_name": null
+  "message": "Entry recorded successfully",
+  "participant": {
+    "id": 12,
+    "name": "Sajid",
+    "email": "photos.rafidabdullahsami@gmail.com",
+    "phone": "+8801894515222",
+    "institution": "Cox's Bazar Hashemia Madrasa",
+    "guardian_phone": null,
+    "payment_verified": true
   }
 }
 ```
 
-**Response (Team):**
+**Response (Team - Success):**
 ```bash
 {
   "success": true,
-  "data": {
-    "p_name": null,
-    "t_name": "Team Alpha (3 members)"
+  "message": "Entry recorded successfully",
+  "team": {
+    "id": 9,
+    "name": "Shreks 6",
+    "member_count": 2,
+    "payment_verified": false,
+    "members": [
+      {
+        "name": "Ahmad Saeed Anas",
+        "email": "rafidabdullahsami+4@gmail.com",
+        "is_leader": true
+      },
+      {
+        "name": "Sami Sami",
+        "email": "sami@sami.com",
+        "is_leader": false
+      }
+    ]
   }
 }
 ```
@@ -975,7 +1004,7 @@ DELETE /api/recordentry/t_1/
 
 **Endpoint:** `GET /api/gifts/{id}/`
 
-**Description:** Get gift distribution status for participant or team. Returns a dictionary with all available gifts and their status (0 = not received, 1 = received).
+**Description:** Get gift distribution status for participant or team along with participant/team information.
 
 **Authentication:** Required (Volunteer)
 
@@ -988,17 +1017,69 @@ GET /api/gifts/p_1/
 GET /api/gifts/t_1/
 ```
 
-**Response:**
+**Response (Participant):**
 ```bash
 {
-  "t-shirt": 1,
-  "badge": 0,
-  "certificate": 1,
-  "trophy": 0
+  "gifts": {
+    "tshirt": 0,
+    "breakfast": 0,
+    "snacks": 0,
+    "notebook": 1
+  },
+  "participant": {
+    "id": 11,
+    "name": "Sadia a",
+    "email": "rafidabdullahsami+5@gmail.com",
+    "phone": "+8801894515222",
+    "institution": "Cox's Bazar Hashemia Madrasa",
+    "guardian_phone": "904857",
+    "grade": "12",
+    "payment_verified": true
+  }
 }
 ```
 
-**Note:** The response includes all gifts defined in the system. The keys are lowercase gift names.
+**Response (Team with Participant):**
+```bash
+{
+  "gifts": {
+    "tshirt": 0,
+    "breakfast": 0,
+    "snacks": 0,
+    "notebook": 1
+  },
+  "participant": {
+    "id": 11,
+    "name": "Sadia a",
+    "email": "rafidabdullahsami+5@gmail.com",
+    "phone": "+8801894515222",
+    "institution": "Cox's Bazar Hashemia Madrasa",
+    "guardian_phone": "904857",
+    "grade": "12",
+    "payment_verified": true
+  },
+  "team": {
+    "id": 10,
+    "name": "Sadia",
+    "member_count": 2,
+    "payment_verified": true,
+    "members": [
+      {
+        "name": "Sadia",
+        "email": "rafidabdullahsami+5@gmail.com",
+        "is_leader": true
+      },
+      {
+        "name": "Sami Sami",
+        "email": "abdullahsami4103+1@gmail.com",
+        "is_leader": false
+      }
+    ]
+  }
+}
+```
+
+**Note:** Gift status values: 0 = not received, 1 = received. Response includes participant/team information along with gift status.
 
 **Error Response:**
 ```bash
@@ -1029,7 +1110,7 @@ GET /api/gifts/t_1/
 **Request Body:**
 ```bash
 {
-  "gift_name": "T-Shirt"
+  "gift_name": "tshirt"
 }
 ```
 
@@ -1091,6 +1172,32 @@ GET /api/info/p_1/
 GET /api/info/t_1/
 ```
 
+**Response (Participant only):**
+```bash
+{
+  "participant": {
+    "id": 9,
+    "f_name": "Ahmad",
+    "l_name": "Saeed Anas",
+    "email": "rafidabdullahsami+3@gmail.com",
+    "phone": "+8801894515222",
+    "age": 19,
+    "institution": "Cox's Bazar Hashemia Madrasa",
+    "address": "Cox's Bazar",
+    "guardian_phone": null,
+    "payment_verified": true,
+    "segment_list": [
+      "Innovation Expo"
+    ],
+    "comp_list": [
+      "3-Minute Research"
+    ],
+    "gift_list": [],
+    "entry_status": false
+  }
+}
+```
+
 **Response (Participant with Team):**
 ```bash
 {
@@ -1103,6 +1210,7 @@ GET /api/info/t_1/
     "age": 22,
     "institution": "Example University",
     "address": "123 Main St",
+    "guardian_phone": "1234567890",
     "payment_verified": true,
     "segment_list": ["Innovation Expo", "Sketch Talk"],
     "comp_list": ["Math Auction"],
@@ -1121,7 +1229,6 @@ GET /api/info/t_1/
         "id": 1,
         "f_name": "John",
         "l_name": "Doe",
-        "full_name": "John Doe",
         "email": "john@example.com",
         "phone": "1234567890",
         "age": 22,
@@ -1132,7 +1239,6 @@ GET /api/info/t_1/
         "id": 2,
         "f_name": "Alice",
         "l_name": "Johnson",
-        "full_name": "Alice Johnson",
         "email": "alice@example.com",
         "phone": "9876543210",
         "age": 21,
@@ -1174,6 +1280,7 @@ GET /api/info/t_1/
 
 ---
 
+
 ### 25. Check Access Permission
 
 **Endpoint:** `GET /api/check/{page}/{event}/{id}/`
@@ -1200,7 +1307,37 @@ GET /api/check/team/pr_show/t_1/
 **Response (Access allowed):**
 ```bash
 {
-  "allowed": true
+    "allowed": true,
+    "page": "segment",
+    "event": "expo",
+    "participant": {
+        "id": 11,
+        "name": "Sadia a",
+        "email": "rafidabdullahsami+5@gmail.com",
+        "phone": "+8801894515222",
+        "institution": "Cox's Bazar Hashemia Madrasa",
+        "guardian_phone": "904857",
+        "grade": "12",
+        "payment_verified": true
+    },
+    "team": {
+        "id": 10,
+        "name": "Sadia",
+        "member_count": 2,
+        "payment_verified": true,
+        "members": [
+            {
+                "name": "Sadia ",
+                "email": "rafidabdullahsami+5@gmail.com",
+                "is_leader": true
+            },
+            {
+                "name": "Sami Sami",
+                "email": "abdullahsami4103+1@gmail.com",
+                "is_leader": false
+            }
+        ]
+    }
 }
 ```
 
@@ -1386,5 +1523,5 @@ or
 
 
 
-**Version:** 1.0  
-**Last Updated:** 7 October 2025
+**Version:** 1.3  
+**Last Updated:** 10 October 2025
