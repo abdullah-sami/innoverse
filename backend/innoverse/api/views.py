@@ -1,11 +1,12 @@
+import logging
+from django.db import transaction
+from django.db.models import Q
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from django.db.models import Q
-from django.db import transaction
 
-from .models import Participant, Team,  EntryStatus, Gift, GiftStatus
+from .models import Participant, Team, EntryStatus, Gift, GiftStatus
 from .serializers import (
     ParticipantDetailSerializer,
     ParticipantListSerializer,
@@ -14,19 +15,20 @@ from .serializers import (
     CompleteRegistrationSerializer,
     EntryStatusSerializer,
     GiftStatusSerializer
-
 )
 from event.models import Coupons, Segment, Competition, TeamCompetition
 from event.serializers import SegmentSerializer, CompetitionSerializer, TeamCompetitionSerializer
 from api.models import Volunteer
 from participant.models import Registration, CompetitionRegistration, TeamCompetitionRegistration, Payment, TeamParticipant
 from participant.serializers import ParticipantSerializer, TeamSerializer
-import logging
 
 logger = logging.getLogger(__name__)
 
 
+
 class IsAdminVolunteer(IsAuthenticated):
+    """Permission class that allows only admin volunteers"""
+    
     def has_permission(self, request, view):
         if not super().has_permission(request, view):
             return False
@@ -41,8 +43,75 @@ class IsAdminVolunteer(IsAuthenticated):
 
 
 
+def parse_full_name(full_name):
+    name_parts = full_name.strip().split(maxsplit=1)
+    f_name = name_parts[0]
+    l_name = name_parts[1] if len(name_parts) > 1 else ""
+    return f_name, l_name
+
+
+def get_entity_info(participant=None, team=None):
+    info = {}
+    
+    if participant:
+        info['participant'] = {
+            'id': participant.id,
+            'name': f"{participant.f_name} {participant.l_name}",
+            'email': participant.email,
+            'phone': participant.phone,
+            'institution': participant.institution,
+            'payment_verified': participant.payment_verified
+        }
+        
+        # Auto-detect team if not provided
+        if not team:
+            team = Team.objects.filter(members__email=participant.email).first()
+    
+    if team:
+        info['team'] = {
+            'id': team.id,
+            'name': team.team_name,
+            'member_count': team.members.count(),
+            'payment_verified': team.payment_verified,
+            'members': [
+                {
+                    'name': f"{member.f_name} {member.l_name}",
+                    'email': member.email,
+                    'is_leader': member.is_leader
+                }
+                for member in team.members.all()
+            ]
+        }
+    
+    return info
+
+
+def parse_id_parameter(id_param):
+    if id_param.startswith("p_"):
+        return 'participant', id_param.split("_")[1]
+    elif id_param.startswith("t_"):
+        return 'team', id_param.split("_")[1]
+    else:
+        raise ValueError("Invalid ID format. Use 'p_' for participant or 't_' for team")
+
+
+def get_entity_by_id(id_param):
+    entity_type, entity_id = parse_id_parameter(id_param)
+    
+    if entity_type == 'participant':
+        participant = Participant.objects.get(id=entity_id)
+        team = Team.objects.filter(members__email=participant.email).first()
+        return participant, team
+    else:
+        team = Team.objects.get(id=entity_id)
+        return None, team
+
+
+
+
 
 class RegisterViewSet(viewsets.ViewSet):
+    
     permission_classes = [AllowAny]
     
     def list(self, request):
@@ -65,24 +134,23 @@ class RegisterViewSet(viewsets.ViewSet):
         
         try:
             with transaction.atomic():
-                # Step 1: Create main participant (team leader)
+                coupon = validated_data.get('coupon')
+                
+                # Create main participant (team leader if team competition)
                 participant = self._create_participant(validated_data['participant'])
                 
-                # Step 2: Record participant payment
+                # Record payment with coupon discount
                 participant_payment = self._create_payment(
                     validated_data['payment'],
-                    participant=participant
+                    participant=participant,
+                    coupon=coupon
                 )
                 
-                # Step 3: Register for segments
-                segment_codes = validated_data.get('segment', [])
-                self._register_segments(participant, segment_codes)
+                # Register for segments and solo competitions
+                self._register_segments(participant, validated_data.get('segment', []))
+                self._register_competitions(participant, validated_data.get('competition', []))
                 
-                # Step 4: Register for solo competitions
-                competition_codes = validated_data.get('competition', [])
-                self._register_competitions(participant, competition_codes)
-                
-                # Step 5: Handle team competition if provided
+                # Handle team competition registration if provided
                 team = None
                 team_payment = None
                 team_members = None
@@ -92,84 +160,27 @@ class RegisterViewSet(viewsets.ViewSet):
                     team, team_payment = self._handle_team_competition(
                         validated_data['team_competition'],
                         validated_data['payment'],
-                        participant
+                        participant,
+                        coupon
                     )
-                    # Get team members and competitions for email
                     team_members = team.members.all()
                     team_competitions = team.team_competition_registrations.all()
 
-                # Check if coupon is valid
-                coupon = validated_data.get('coupon')  # This will now be the Coupon object
+                # Update coupon usage count
                 self._update_coupon(coupon)
 
+                # Build response data
+                response_data = self._build_response_data(
+                    participant, participant_payment, team, team_payment, 
+                    validated_data, coupon
+                )
+                
+                # Send confirmation emails
+                self._send_confirmation_emails(
+                    response_data, participant, participant_payment, 
+                    team, team_members, team_competitions, team_payment
+                )
 
-
-                # Build response
-                response_data = {
-                    "success": True,
-                    "message": "Registration completed successfully",
-                    "data": {
-                        "participant": {
-                            "id": participant.id,
-                            "name": f"{participant.f_name} {participant.l_name}",
-                            "email": participant.email,
-                            "payment_verified": participant.payment_verified
-                        },
-                        "payment": {
-                            "coupon": coupon.coupon_code if coupon else None,
-                            "trx_id": participant_payment.trx_id,
-                            "amount": str(participant_payment.amount)
-                        },
-                        "segments": segment_codes,
-                        "competitions": competition_codes
-                    }
-                }
-                
-                if team:
-                    response_data["data"]["team"] = {
-                        "id": team.id,
-                        "name": team.team_name,
-                        "payment_verified": team.payment_verified,
-                        "members_count": team.members.count(),
-                        "competitions": validated_data['team_competition']['competition']
-                    }
-                    response_data["data"]["team_payment"] = {
-                        "trx_id": team_payment.trx_id,
-                        "amount": str(team_payment.amount)
-                    }
-                
-                # Send registration confirmation email
-                from .utils import send_registration_confirmation_email, send_team_registration_confirmation_emails
-                
-                try:
-                    if team:
-                        # Send to all team members
-                        email_sent = send_team_registration_confirmation_emails(
-                            team, 
-                            team_members,
-                            team_competitions,
-                            team_payment
-                        )
-                        if email_sent:
-                            response_data["email_sent"] = True
-                            response_data["message"] += " Confirmation emails sent to all team members."
-                        else:
-                            response_data["email_warning"] = "Registration successful but emails failed to send"
-                    else:
-                        # Send to individual participant
-                        email_sent = send_registration_confirmation_email(
-                            participant,
-                            participant_payment
-                        )
-                        if email_sent:
-                            response_data["email_sent"] = True
-                            response_data["message"] += " Confirmation email sent."
-                        else:
-                            response_data["email_warning"] = "Registration successful but email failed to send"
-                except Exception as e:
-                    logger.error(f"Email sending failed: {str(e)}")
-                    response_data["email_warning"] = "Registration successful but email failed to send"
-                
                 return Response(response_data, status=status.HTTP_201_CREATED)
                 
         except Exception as e:
@@ -181,12 +192,9 @@ class RegisterViewSet(viewsets.ViewSet):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     def _create_participant(self, participant_data):
-        full_name = participant_data['full_name'].strip()
-        name_parts = full_name.split(maxsplit=1)
-        f_name = name_parts[0]
-        l_name = name_parts[1] if len(name_parts) > 1 else ""
+        f_name, l_name = parse_full_name(participant_data['full_name'])
         
-        participant = Participant.objects.create(
+        return Participant.objects.create(
             f_name=f_name,
             l_name=l_name,
             gender=participant_data['gender'],
@@ -198,17 +206,16 @@ class RegisterViewSet(viewsets.ViewSet):
             t_shirt_size=participant_data.get('t_shirt_size', ''),
             payment_verified=False
         )
-        return participant
     
-    def _create_payment(self, payment_data, participant=None, team=None):
-        payment = Payment.objects.create(
+    def _create_payment(self, payment_data, participant=None, team=None, coupon=None):
+        return Payment.objects.create(
             participant=participant,
             team=team,
             phone=payment_data['phone'],
             amount=payment_data['amount'],
-            trx_id=payment_data['trx_id']
+            trx_id=payment_data['trx_id'],
+            coupon=coupon
         )
-        return payment
     
     def _register_segments(self, participant, segment_codes):
         for code in segment_codes:
@@ -226,12 +233,11 @@ class RegisterViewSet(viewsets.ViewSet):
                 competition=competition
             )
     
-    def _handle_team_competition(self, team_competition_data, payment_data, leader_participant):
+    def _handle_team_competition(self, team_competition_data, payment_data, leader_participant, coupon=None):
         team_info = team_competition_data['team']
-        team_name = team_info['team_name']
         
         team = Team.objects.create(
-            team_name=team_name,
+            team_name=team_info['team_name'],
             payment_verified=False
         )
         
@@ -250,10 +256,7 @@ class RegisterViewSet(viewsets.ViewSet):
         )
         
         for member_data in team_info['participant']:
-            full_name = member_data['full_name'].strip()
-            name_parts = full_name.split(maxsplit=1)
-            f_name = name_parts[0]
-            l_name = name_parts[1] if len(name_parts) > 1 else ""
+            f_name, l_name = parse_full_name(member_data['full_name'])
             
             TeamParticipant.objects.create(
                 f_name=f_name,
@@ -269,10 +272,7 @@ class RegisterViewSet(viewsets.ViewSet):
                 is_leader=False
             )
         
-        team_payment = self._create_payment(
-            payment_data,
-            team=team
-        )
+        team_payment = self._create_payment(payment_data, team=team, coupon=coupon)
         
         for competition_code in team_competition_data['competition']:
             competition = TeamCompetition.objects.get(code=competition_code)
@@ -290,21 +290,72 @@ class RegisterViewSet(viewsets.ViewSet):
             return True
         return False
     
+    def _build_response_data(self, participant, participant_payment, team, team_payment, validated_data, coupon):
+        response_data = {
+            "success": True,
+            "message": "Registration completed successfully",
+            "data": {
+                "participant": {
+                    "id": participant.id,
+                    "name": f"{participant.f_name} {participant.l_name}",
+                    "email": participant.email,
+                    "payment_verified": participant.payment_verified
+                },
+                "payment": {
+                    "coupon": coupon.coupon_code if coupon else None,
+                    "discount": str(coupon.discount) if coupon else None,
+                    "trx_id": participant_payment.trx_id,
+                    "amount": str(participant_payment.amount)
+                },
+                "segments": validated_data.get('segment', []),
+                "competitions": validated_data.get('competition', [])
+            }
+        }
+        
+        if team:
+            response_data["data"]["team"] = {
+                "id": team.id,
+                "name": team.team_name,
+                "payment_verified": team.payment_verified,
+                "members_count": team.members.count(),
+                "competitions": validated_data['team_competition']['competition']
+            }
+            response_data["data"]["team_payment"] = {
+                "trx_id": team_payment.trx_id,
+                "amount": str(team_payment.amount)
+            }
+        
+        return response_data
+    
+    def _send_confirmation_emails(self, response_data, participant, participant_payment, 
+                                  team, team_members, team_competitions, team_payment):
+        from .utils import send_registration_confirmation_email, send_team_registration_confirmation_emails
 
-
-
-
-
-
-
-# admin dashboard viewsets  *************************************************
-
-
-
-
-
-
-
+        try:
+            # Send individual participant email
+            email_sent = send_registration_confirmation_email(participant, participant_payment)
+            
+            if email_sent:
+                response_data["email_sent"] = True
+                response_data["message"] += " Confirmation email sent."
+            else:
+                response_data["email_warning"] = "Registration successful but email failed to send"
+            
+            # Send team emails if team exists
+            if team:
+                team_email_sent = send_team_registration_confirmation_emails(
+                    team, team_members, team_competitions, team_payment
+                )
+                
+                if team_email_sent:
+                    response_data["team_email_sent"] = True
+                    response_data["message"] += " Team confirmation emails sent to all members."
+                else:
+                    response_data["team_email_warning"] = "Team registration successful but team emails failed to send"
+                    
+        except Exception as e:
+            logger.error(f"Email sending failed: {str(e)}")
+            response_data["email_warning"] = "Registration successful but email(s) failed to send"
 
 
 
@@ -389,6 +440,7 @@ class ParticipantViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class TeamListViewSet(viewsets.ReadOnlyModelViewSet):
+    
     permission_classes = [IsAdminVolunteer]
     serializer_class = TeamListSerializer
     
@@ -433,6 +485,7 @@ class TeamListViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class SegmentViewSet(viewsets.ReadOnlyModelViewSet):
+    
     permission_classes = [IsAdminVolunteer]
     serializer_class = SegmentSerializer
     queryset = Segment.objects.all()
@@ -443,6 +496,7 @@ class SegmentViewSet(viewsets.ReadOnlyModelViewSet):
             segment = self.get_object()
             serializer = self.get_serializer(segment)
             
+            # Get all participants registered for this segment
             participants = Participant.objects.filter(
                 registrations__segment=segment
             ).distinct()
@@ -470,6 +524,7 @@ class SegmentViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class CompetitionViewSet(viewsets.ReadOnlyModelViewSet):
+    
     permission_classes = [IsAdminVolunteer]
     serializer_class = CompetitionSerializer
     queryset = Competition.objects.all()
@@ -507,6 +562,7 @@ class CompetitionViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class TeamCompetitionViewSet(viewsets.ReadOnlyModelViewSet):
+    
     permission_classes = [IsAdminVolunteer]
     serializer_class = TeamCompetitionSerializer
     queryset = TeamCompetition.objects.all()
@@ -542,13 +598,8 @@ class TeamCompetitionViewSet(viewsets.ReadOnlyModelViewSet):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-
-
-
-
-
-
 class CouponValidationViewSet(viewsets.ViewSet):
+    
     permission_classes = [AllowAny]
 
     def list(self, request, code=None):
@@ -558,17 +609,16 @@ class CouponValidationViewSet(viewsets.ViewSet):
                 'error': 'Coupon code is required'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        from event.models import Coupons
         try:
             coupon = Coupons.objects.get(coupon_code=code)
 
+            # Check if coupon has remaining uses
             if coupon.coupon_number <= 0:
                 return Response({
                     'success': False,
                     'error': 'Coupon code is no longer valid'
                 }, status=status.HTTP_400_BAD_REQUEST)
             
-
             return Response({
                 'success': True,
                 'coupon': {
@@ -591,8 +641,8 @@ class CouponValidationViewSet(viewsets.ViewSet):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-
 class PaymentVerificationViewSet(viewsets.ViewSet):
+    
     permission_classes = [IsAdminVolunteer]
     
     def create(self, request):
@@ -610,7 +660,6 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
             try:
                 participant = Participant.objects.get(id=participant_id)
                 
-                # Toggle payment verification
                 was_verified = participant.payment_verified
                 participant.payment_verified = not participant.payment_verified
                 participant.save()
@@ -623,7 +672,6 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
                     }
                 }
                 
-                # Check if participant is a team leader
                 team_member = TeamParticipant.objects.filter(
                     email=participant.email, 
                     is_leader=True
@@ -645,19 +693,8 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
                 if team_member:
                     message += f' and team {team.team_name}'
                 
-                # Send email only when payment is verified (changed from False to True)
                 if participant.payment_verified and not was_verified:
-                    from .utils import send_payment_verification_email
-                    
-                    email_sent = send_payment_verification_email(participant, team)
-                    
-                    if email_sent:
-                        message += '. Confirmation email sent.'
-                        response_data['email_sent'] = True
-                    else:
-                        message += '. Warning: Email failed to send.'
-                        response_data['email_sent'] = False
-                        response_data['email_warning'] = 'Failed to send confirmation email'
+                    self._send_verification_emails(participant, team, response_data, message)
                 
                 return Response({
                     'success': True,
@@ -678,28 +715,33 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
                 'error': 'Failed to update payment verification',
                 'details': str(e)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# app viewsets ******************************************************************
-
-
-
-
-
+    
+    def _send_verification_emails(self, participant, team, response_data, message):
+        from .utils import send_payment_verification_email, send_team_payment_verification_emails
+        
+        email_sent = send_payment_verification_email(participant, team=None)
+        
+        if email_sent:
+            message += '. Participant confirmation email sent.'
+            response_data['email_sent'] = True
+        else:
+            message += '. Warning: Participant email failed to send.'
+            response_data['email_sent'] = False
+            response_data['email_warning'] = 'Failed to send participant confirmation email'
+        
+        if team:
+            team_email_sent = send_team_payment_verification_emails(team)
+            
+            if team_email_sent:
+                message += ' Team confirmation emails sent to all members.'
+                response_data['team_email_sent'] = True
+            else:
+                message += ' Warning: Team emails failed to send.'
+                response_data['team_email_sent'] = False
+                if 'email_warning' in response_data:
+                    response_data['email_warning'] += '; Team emails also failed'
+                else:
+                    response_data['email_warning'] = 'Failed to send team confirmation emails'
 
 
 
@@ -710,349 +752,250 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
 
 
 class RecordEntryViewSet(viewsets.ModelViewSet):
+    
     queryset = EntryStatus.objects.all().order_by('-datetime')
     serializer_class = EntryStatusSerializer
 
     def get_queryset(self):
         id_param = self.kwargs.get("id")
-
-        if id_param.startswith("p_"):
-            participant_id = id_param.split("_")[1]
-            return EntryStatus.objects.filter(participant__id=participant_id)
-
-        elif id_param.startswith("t_"):
-            team_id = id_param.split("_")[1]
-            return EntryStatus.objects.filter(team__id=team_id)
-
-        return EntryStatus.objects.none()
+        
+        try:
+            entity_type, entity_id = parse_id_parameter(id_param)
+            
+            if entity_type == 'participant':
+                return EntryStatus.objects.filter(participant__id=entity_id)
+            else:
+                return EntryStatus.objects.filter(team__id=entity_id)
+        except ValueError:
+            return EntryStatus.objects.none()
 
     def list(self, request, *args, **kwargs):
+        id_param = self.kwargs.get("id")
+        
+        try:
+            participant, team = get_entity_by_id(id_param)
+        except ValueError as e:
+            return Response({
+                "success": False, 
+                "error": str(e)
+            }, status=status.HTTP_400_BAD_REQUEST)
+        except Participant.DoesNotExist:
+            return Response({
+                "success": False, 
+                "error": "No participant with the ID"
+            }, status=status.HTTP_404_NOT_FOUND)
+        except Team.DoesNotExist:
+            return Response({
+                "success": False, 
+                "error": "No team with the ID"
+            }, status=status.HTTP_404_NOT_FOUND)
+        
         queryset = self.get_queryset()
-        if not queryset.exists():
-            return Response({"success": False}, status=status.HTTP_404_NOT_FOUND)
-        return Response({"success": True}, status=status.HTTP_200_OK)
+        has_entry = queryset.exists()
+        entity_info = get_entity_info(participant, team)
+        
+        return Response({
+            "success": True,
+            "has_entry": has_entry,
+            **entity_info
+        }, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         id_param = self.kwargs.get("id")
         data = {}
+        participant = None
+        team = None
 
-        # Participant entry
-        if id_param.startswith("p_"):
-            participant_id = id_param.split("_")[1]
-            try:
-                participant = Participant.objects.get(id=participant_id)
-            except Participant.DoesNotExist:
-                return Response(
-                    {"success": False, "error": "No participant with the ID"},
-                    status=status.HTTP_404_NOT_FOUND
-                )
-            data["participant"] = participant.id
+        try:
+            entity_type, entity_id = parse_id_parameter(id_param)
+            
+            if entity_type == 'participant':
+                participant = Participant.objects.get(id=entity_id)
+                data["participant"] = participant.id
+                
+                if EntryStatus.objects.filter(participant_id=participant.id).exists():
+                    return Response({
+                        "success": False, 
+                        "error": "Already recorded entry"
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                team = Team.objects.get(id=entity_id)
+                data["team"] = team.id
+                
+                if EntryStatus.objects.filter(team__id=team.id).exists():
+                    return Response({
+                        "success": False, 
+                        "error": "Already recorded entry"
+                    }, status=status.HTTP_400_BAD_REQUEST)
+                    
+        except ValueError as e:
+            return Response({
+                "success": False, 
+                "error": str(e)
+            }, status=status.HTTP_400_BAD_REQUEST)
+        except Participant.DoesNotExist:
+            return Response({
+                "success": False, 
+                "error": "No participant with the ID"
+            }, status=status.HTTP_404_NOT_FOUND)
+        except Team.DoesNotExist:
+            return Response({
+                "success": False, 
+                "error": "No team with the ID"
+            }, status=status.HTTP_404_NOT_FOUND)
 
-            if EntryStatus.objects.filter(participant_id=participant.id).exists():
-                return Response(
-                    {"success": False, "error": "Already recorded entry"},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
-        # Team entry
-        elif id_param.startswith("t_"):
-            team_id = id_param.split("_")[1]
-            try:
-                team = Team.objects.get(id=team_id)
-            except Team.DoesNotExist:
-                return Response(
-                    {"success": False, "error": "No team with the ID"},
-                    status=status.HTTP_404_NOT_FOUND
-                )
-            data["team"] = team.id
-
-            if EntryStatus.objects.filter(team__id=team.id).exists():
-                return Response(
-                    {"success": False, "error": "Already recorded entry"},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
-        # Attach volunteer
         try:
             volunteer = Volunteer.objects.get(user=self.request.user)
+            data["volunteer"] = volunteer.id
         except Volunteer.DoesNotExist:
-            return Response(
-                {"success": False, "error": "Volunteer not found for this user"},
-                status=status.HTTP_404_NOT_FOUND
-            )
+            return Response({
+                "success": False, 
+                "error": "Volunteer not found for this user"
+            }, status=status.HTTP_404_NOT_FOUND)
 
-        data["volunteer"] = volunteer.id
-
-        team_participant = TeamParticipant.objects.filter(team=team).count() if 'team' in data else 0
-
-        res = {"p_name": f"{participant.f_name} {participant.l_name}" if data.get("participant") else None, "t_name": f"{team.team_name} ({team_participant} members)" if data.get("team") else None}
-
-        # Serialize
         serializer = self.get_serializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"success": True, "data": res}, status=status.HTTP_201_CREATED)
+            entity_info = get_entity_info(participant, team)
+            
+            return Response({
+                "success": True,
+                "message": "Entry recorded successfully",
+                **entity_info
+            }, status=status.HTTP_201_CREATED)
 
-        return Response({"success": False, "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-
-
-
-
-
-
-
-
-
+        return Response({
+            "success": False, 
+            "errors": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class GiftsStatusViewSet(viewsets.ViewSet):
+    
     permission_classes = [IsAuthenticated]
     
     def list(self, request, id=None):
         try:
-            id_param = id
-            participant = None
-            team = None
-            
-            
-            if id_param.startswith("p_"):
-                participant_id = id_param.split("_")[1]
-                try:
-                    participant = Participant.objects.get(id=participant_id)
-                except Participant.DoesNotExist:
-                    return Response(
-                        {"error": "No participant with the ID"},
-                        status=status.HTTP_404_NOT_FOUND
-                    )
-            elif id_param.startswith("t_"):
-                team_id = id_param.split("_")[1]
-                try:
-                    team = Team.objects.get(id=team_id)
-                except Team.DoesNotExist:
-                    return Response(
-                        {"error": "No team with the ID"},
-                        status=status.HTTP_404_NOT_FOUND
-                    )
-            else:
-                return Response(
-                    {"error": "Invalid ID format. Use 'p_' for participant or 't_' for team"},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            
-            
+            participant, team = get_entity_by_id(id)
+        except ValueError as e:
+            return Response({
+                "error": str(e)
+            }, status=status.HTTP_400_BAD_REQUEST)
+        except Participant.DoesNotExist:
+            return Response({
+                "error": "No participant with the ID"
+            }, status=status.HTTP_404_NOT_FOUND)
+        except Team.DoesNotExist:
+            return Response({
+                "error": "No team with the ID"
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        try:
             all_gifts = Gift.objects.all()
-            gift_status_dict = {}
-            
-            
-            for gift in all_gifts:
-                gift_status_dict[gift.gift_name.lower()] = 0
-            
+            gift_status_dict = {gift.gift_name.lower(): 0 for gift in all_gifts}
             
             if participant:
                 received_gifts = GiftStatus.objects.filter(participant=participant)
             else:
                 received_gifts = GiftStatus.objects.filter(team=team)
             
-            
             for gift_status_obj in received_gifts:
                 gift_name = gift_status_obj.gift.gift_name.lower()
                 gift_status_dict[gift_name] = 1
             
-           
-            return Response(gift_status_dict, status=status.HTTP_200_OK)
+            entity_info = get_entity_info(participant, team)
+            
+            return Response({
+                "gifts": gift_status_dict,
+                **entity_info
+            }, status=status.HTTP_200_OK)
 
         except Exception as e:
             logger.error(f"Error fetching gifts status for {id}: {str(e)}")
-            return Response(
-                {"error": "Failed to fetch gifts status"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return Response({
+                "error": "Failed to fetch gifts status"
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     def create(self, request, id=None):
         try:
-            id_param = id
-            
-            
             gift_name = request.data.get('gift_name')
             if not gift_name:
-                return Response(
-                    {"error": "gift_name is required in request body"},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            
+                return Response({
+                    "error": "gift_name is required in request body"
+                }, status=status.HTTP_400_BAD_REQUEST)
             
             try:
                 gift = Gift.objects.get(gift_name__iexact=gift_name)
             except Gift.DoesNotExist:
-                return Response(
-                    {"error": f"Gift '{gift_name}' not found"},
-                    status=status.HTTP_404_NOT_FOUND
-                )
+                return Response({
+                    "error": f"Gift '{gift_name}' not found"
+                }, status=status.HTTP_404_NOT_FOUND)
             
-            data = {}
-            participant = None
-            team = None
+            try:
+                participant, team = get_entity_by_id(id)
+            except ValueError as e:
+                return Response({
+                    "error": str(e)
+                }, status=status.HTTP_400_BAD_REQUEST)
+            except Participant.DoesNotExist:
+                return Response({
+                    "error": "No participant with the ID"
+                }, status=status.HTTP_404_NOT_FOUND)
+            except Team.DoesNotExist:
+                return Response({
+                    "error": "No team with the ID"
+                }, status=status.HTTP_404_NOT_FOUND)
             
-           
-            if id_param.startswith("p_"):
-                participant_id = id_param.split("_")[1]
-                try:
-                    participant = Participant.objects.get(id=participant_id)
-                except Participant.DoesNotExist:
-                    return Response(
-                        {"error": "No participant with the ID"},
-                        status=status.HTTP_404_NOT_FOUND
-                    )
+            data = {"gift": gift.id}
+            
+            if participant:
                 data["participant"] = participant.id
                 
-                
                 if GiftStatus.objects.filter(participant=participant, gift=gift).exists():
-                    return Response(
-                        {"message": f"{gift.gift_name} already marked as received"},
-                        status=status.HTTP_200_OK
-                    )
-                    
-            elif id_param.startswith("t_"):
-                team_id = id_param.split("_")[1]
-                try:
-                    team = Team.objects.get(id=team_id)
-                except Team.DoesNotExist:
-                    return Response(
-                        {"error": "No team with the ID"},
-                        status=status.HTTP_404_NOT_FOUND
-                    )
+                    entity_info = get_entity_info(participant, None)
+                    return Response({
+                        "message": f"{gift.gift_name} already marked as received",
+                        **entity_info
+                    }, status=status.HTTP_200_OK)
+            else:
                 data["team"] = team.id
                 
-                
                 if GiftStatus.objects.filter(team=team, gift=gift).exists():
-                    return Response(
-                        {"message": f"{gift.gift_name} already marked as received"},
-                        status=status.HTTP_200_OK
-                    )
-            else:
-                return Response(
-                    {"error": "Invalid ID format. Use 'p_' for participant or 't_' for team"},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            
+                    entity_info = get_entity_info(None, team)
+                    return Response({
+                        "message": f"{gift.gift_name} already marked as received",
+                        **entity_info
+                    }, status=status.HTTP_200_OK)
             
             try:
                 volunteer = Volunteer.objects.get(user=request.user)
                 data["volunteer"] = volunteer.id
             except Volunteer.DoesNotExist:
-                return Response(
-                    {"error": "Volunteer not found for this user"},
-                    status=status.HTTP_404_NOT_FOUND
-                )
-            
-            
-            data["gift"] = gift.id
-
-            
-            
+                return Response({
+                    "error": "Volunteer not found for this user"
+                }, status=status.HTTP_404_NOT_FOUND)
             
             serializer = GiftStatusSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
-                return Response(
-                    {"message": f"{gift.gift_name} marked as received successfully"},
-                    status=status.HTTP_201_CREATED
-                )
+                entity_info = get_entity_info(participant, team)
+                
+                return Response({
+                    "message": f"{gift.gift_name} marked as received successfully",
+                    "gift": gift.gift_name,
+                    **entity_info
+                }, status=status.HTTP_201_CREATED)
             else:
-                return Response(
-                    {"error": "Failed to update gift status", "details": serializer.errors},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                return Response({
+                    "error": "Failed to update gift status", 
+                    "details": serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
                     
         except Exception as e:
             logger.error(f"Error updating gift status for {id}: {str(e)}")
-            return Response(
-                {"error": "Failed to update gift status"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
-        
-
-
-
-
-
-
-
-class ParticipantTeamInfoViewSet(viewsets.ViewSet):
-    
-    permission_classes = [IsAuthenticated]
-
-    def get_permissions(self):
-        if self.action not in ['list']:
-            self.http_method_names = ['get'] 
-        return super().get_permissions()
-
-    def list(self, request, id=None):
-        try:
-            id_param = id
-            participant = None
-            team = None
-
-            if id_param.startswith("p_"):
-                participant_id = id_param.split("_")[1]
-                try:
-                    participant = Participant.objects.get(id=participant_id)
-                except Participant.DoesNotExist:
-                    return Response(
-                        {"error": "No participant with the ID"},
-                        status=status.HTTP_404_NOT_FOUND
-                    )
-                
-                try:
-                    team = Team.objects.filter(members__email=participant.email).first()
-                except Exception:
-                    team = None
-
-            elif id_param.startswith("t_"):
-                team_id = id_param.split("_")[1]
-                try:
-                    team = Team.objects.get(id=team_id)
-                except Team.DoesNotExist:
-                    return Response(
-                        {"error": "No team with the ID"},
-                        status=status.HTTP_404_NOT_FOUND
-                    )
-            else:
-                return Response(
-                    {"error": "Invalid ID format. Use 'p_' for participant or 't_' for team"},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
-           
-            response_data = {}
-            if participant:
-                response_data["participant"] = ParticipantSerializer(participant).data
-            if team:
-                response_data["team"] = TeamSerializer(team).data
-
-            return Response(response_data, status=status.HTTP_200_OK)
-
-        except Exception as e:
-            logger.error(f"Error fetching participant/team info for {id}: {str(e)}")
-            return Response(
-                {"error": "Failed to fetch participant/team info"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
-
-
-
-
-
-
-
-
-
-
-
-
+            return Response({
+                "error": "Failed to update gift status"
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class CheckViewSet(viewsets.ViewSet):
@@ -1060,69 +1003,105 @@ class CheckViewSet(viewsets.ViewSet):
 
     def list(self, request, page, event, id):
         try:
-            participant = None
-            team = None
+            # Get participant or team
+            try:
+                participant, team = get_entity_by_id(id)
+            except ValueError as e:
+                return Response({
+                    "error": str(e)
+                }, status=status.HTTP_400_BAD_REQUEST)
+            except Participant.DoesNotExist:
+                return Response({
+                    "error": "No participant with the ID"
+                }, status=status.HTTP_404_NOT_FOUND)
+            except Team.DoesNotExist:
+                return Response({
+                    "error": "No team with the ID"
+                }, status=status.HTTP_404_NOT_FOUND)
+
             allowed = False
 
-            if id.startswith("p_"):
-                participant_id = id.split("_")[1]
-                try:
-                    participant = Participant.objects.get(id=participant_id)
-                except Participant.DoesNotExist:
-                    return Response(
-                        {"error": "No participant with the ID"},
-                        status=status.HTTP_404_NOT_FOUND
-                    )
-
-                
-                team = Team.objects.filter(members__email=participant.email).first()
-
-            elif id.startswith("t_"):
-                team_id = id.split("_")[1]
-                try:
-                    team = Team.objects.get(id=team_id)
-                except Team.DoesNotExist:
-                    return Response(
-                        {"error": "No team with the ID"},
-                        status=status.HTTP_404_NOT_FOUND
-                    )
-
-            else:
-                return Response(
-                    {"error": "Invalid ID format. Use 'p_' for participant or 't_' for team"},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
+            # Check registration based on page type
             if page == "segment":
                 if participant:
                     allowed = Registration.objects.filter(
-                        participant=participant, segment__code=event
+                        participant=participant, 
+                        segment__code=event
                     ).exists()
 
             elif page == "solo":
                 if participant:
                     allowed = CompetitionRegistration.objects.filter(
-                        participant=participant, competition__code=event
+                        participant=participant, 
+                        competition__code=event
                     ).exists()
 
             elif page == "team":
                 if team:
                     allowed = TeamCompetitionRegistration.objects.filter(
-                        team=team, competition__code=event
+                        team=team, 
+                        competition__code=event
                     ).exists()
 
             else:
-                return Response(
-                    {"error": "Invalid page type"},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                return Response({
+                    "error": "Invalid page type. Use 'segment', 'solo', or 'team'"
+                }, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response({"allowed": allowed}, status=status.HTTP_200_OK)
+            entity_info = get_entity_info(participant, team)
+            
+            return Response({
+                "allowed": allowed,
+                "page": page,
+                "event": event,
+                **entity_info
+            }, status=status.HTTP_200_OK)
 
         except Exception as e:
-            return Response(
-                {"error": f"Failed to fetch participant/team info: {str(e)}"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            logger.error(f"Error in CheckViewSet: {str(e)}")
+            return Response({
+                "error": f"Failed to check allowance: {str(e)}"
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class ParticipantTeamInfoViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def get_permissions(self):
+        """Only allow GET requests"""
+        if self.action not in ['list']:
+            self.http_method_names = ['get'] 
+        return super().get_permissions()
+
+    def list(self, request, id=None):
+        try:
+            try:
+                participant, team = get_entity_by_id(id)
+            except ValueError as e:
+                return Response({
+                    "error": str(e)
+                }, status=status.HTTP_400_BAD_REQUEST)
+            except Participant.DoesNotExist:
+                return Response({
+                    "error": "No participant with the ID"
+                }, status=status.HTTP_404_NOT_FOUND)
+            except Team.DoesNotExist:
+                return Response({
+                    "error": "No team with the ID"
+                }, status=status.HTTP_404_NOT_FOUND)
+
+            response_data = {}
+            
+            if participant:
+                response_data["participant"] = ParticipantSerializer(participant).data
+            
+            if team:
+                response_data["team"] = TeamSerializer(team).data
+
+            return Response(response_data, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            logger.error(f"Error fetching participant/team info for {id}: {str(e)}")
+            return Response({
+                "error": "Failed to fetch participant/team info"
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

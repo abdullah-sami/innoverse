@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-from event.models import Segment, Competition, Gift, TeamCompetition
+from event.models import Coupons, Segment, Competition, Gift, TeamCompetition
 
 
 class Participant(models.Model):
@@ -92,6 +92,7 @@ class Payment(models.Model):
     phone = models.CharField(max_length=20, db_index=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, db_index=True)
     trx_id = models.CharField(max_length=100, db_index=True)
+    coupon = models.ForeignKey(Coupons, on_delete=models.SET_NULL, null=True, blank=True, db_index=True)
     datetime = models.DateTimeField(auto_now_add=True, db_index=True)
 
     def clean(self):
