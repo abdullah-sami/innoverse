@@ -146,35 +146,39 @@ class RegisterViewSet(viewsets.ViewSet):
             with transaction.atomic():
                 coupon = validated_data.get('coupon')
                 
-                # Create main participant (team leader if team competition)
+                # Prefetch all required objects in one go
+                segments_dict, competitions_dict, team_competitions_dict = self._prefetch_competition_data(
+                    validated_data
+                )
+                
+                # Create main participant
                 participant = self._create_participant(validated_data['participant'])
                 
-                # Record payment with coupon discount
+                # Record payment
                 participant_payment = self._create_payment(
                     validated_data['payment'],
                     participant=participant,
                     coupon=coupon
                 )
                 
-                # Register for segments and solo competitions
-                self._register_segments(participant, validated_data.get('segment', []))
-                self._register_competitions(participant, validated_data.get('competition', []))
+                # Bulk register for segments and competitions
+                self._register_segments(participant, validated_data.get('segment', []), segments_dict)
+                self._register_competitions(participant, validated_data.get('competition', []), competitions_dict)
                 
                 # Handle team competition registration if provided
                 team = None
                 team_payment = None
-                team_members = None
-                team_competitions = None
+                team_members_list = None
+                team_competitions_list = None
                 
                 if 'team_competition' in validated_data:
-                    team, team_payment = self._handle_team_competition(
+                    team, team_payment, team_members_list, team_competitions_list = self._handle_team_competition(
                         validated_data['team_competition'],
                         validated_data['payment'],
                         participant,
-                        coupon
+                        coupon,
+                        team_competitions_dict
                     )
-                    team_members = team.members.all()
-                    team_competitions = team.team_competition_registrations.all()
 
                 # Update coupon usage count
                 self._update_coupon(coupon)
@@ -185,11 +189,15 @@ class RegisterViewSet(viewsets.ViewSet):
                     validated_data, coupon
                 )
                 
-                # Send confirmation emails
-                self._send_confirmation_emails(
-                    response_data, participant, participant_payment, 
-                    team, team_members, team_competitions, team_payment
+                # Queue emails asynchronously (non-blocking)
+                self._queue_confirmation_emails(
+                    participant, participant_payment, 
+                    team, team_members_list, team_competitions_list, team_payment,
+                    validated_data
                 )
+                
+                response_data["email_queued"] = True
+                response_data["message"] += " Confirmation email will be sent shortly."
 
                 return Response(response_data, status=status.HTTP_201_CREATED)
                 
@@ -200,6 +208,34 @@ class RegisterViewSet(viewsets.ViewSet):
                 "error": "Registration failed",
                 "details": str(e)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def _prefetch_competition_data(self, validated_data):
+        """
+        Prefetch all segments, competitions, and team competitions in bulk
+        to avoid multiple database queries
+        """
+        segment_codes = validated_data.get('segment', [])
+        competition_codes = validated_data.get('competition', [])
+        team_competition_codes = []
+        
+        if 'team_competition' in validated_data:
+            team_competition_codes = validated_data['team_competition'].get('competition', [])
+        
+        # Fetch all at once
+        segments_dict = {}
+        competitions_dict = {}
+        team_competitions_dict = {}
+        
+        if segment_codes:
+            segments_dict = {seg.code: seg for seg in Segment.objects.filter(code__in=segment_codes)}
+        
+        if competition_codes:
+            competitions_dict = {comp.code: comp for comp in Competition.objects.filter(code__in=competition_codes)}
+        
+        if team_competition_codes:
+            team_competitions_dict = {comp.code: comp for comp in TeamCompetition.objects.filter(code__in=team_competition_codes)}
+        
+        return segments_dict, competitions_dict, team_competitions_dict
     
     def _create_participant(self, participant_data):
         f_name, l_name = parse_full_name(participant_data['full_name'])
@@ -229,31 +265,42 @@ class RegisterViewSet(viewsets.ViewSet):
             coupon=coupon
         )
     
-    def _register_segments(self, participant, segment_codes):
-        for code in segment_codes:
-            segment = Segment.objects.get(code=code)
-            Registration.objects.create(
-                participant=participant,
-                segment=segment
-            )
+    def _register_segments(self, participant, segment_codes, segments_dict):
+        """Bulk create segment registrations"""
+        if not segment_codes:
+            return
+        
+        registrations = [
+            Registration(participant=participant, segment=segments_dict[code])
+            for code in segment_codes
+        ]
+        Registration.objects.bulk_create(registrations)
     
-    def _register_competitions(self, participant, competition_codes):
-        for code in competition_codes:
-            competition = Competition.objects.get(code=code)
-            CompetitionRegistration.objects.create(
-                participant=participant,
-                competition=competition
-            )
+    def _register_competitions(self, participant, competition_codes, competitions_dict):
+        """Bulk create competition registrations"""
+        if not competition_codes:
+            return
+        
+        registrations = [
+            CompetitionRegistration(participant=participant, competition=competitions_dict[code])
+            for code in competition_codes
+        ]
+        CompetitionRegistration.objects.bulk_create(registrations)
     
-    def _handle_team_competition(self, team_competition_data, payment_data, leader_participant, coupon=None):
+    def _handle_team_competition(self, team_competition_data, payment_data, leader_participant, coupon, team_competitions_dict):
         team_info = team_competition_data['team']
         
+        # Create team
         team = Team.objects.create(
             team_name=team_info['team_name'],
             payment_verified=False
         )
         
-        TeamParticipant.objects.create(
+        # Prepare all team members for bulk creation
+        team_members = []
+        
+        # Add leader
+        leader = TeamParticipant(
             f_name=leader_participant.f_name,
             l_name=leader_participant.l_name,
             gender=leader_participant.gender,
@@ -266,11 +313,13 @@ class RegisterViewSet(viewsets.ViewSet):
             team=team,
             is_leader=True
         )
+        team_members.append(leader)
         
+        # Add other members
         for member_data in team_info['participant']:
             f_name, l_name = parse_full_name(member_data['full_name'])
             
-            TeamParticipant.objects.create(
+            member = TeamParticipant(
                 f_name=f_name,
                 l_name=l_name,
                 gender=member_data['gender'],
@@ -283,22 +332,31 @@ class RegisterViewSet(viewsets.ViewSet):
                 team=team,
                 is_leader=False
             )
+            team_members.append(member)
         
+        # Bulk create team members
+        TeamParticipant.objects.bulk_create(team_members)
+        
+        # Create team payment
         team_payment = self._create_payment(payment_data, team=team, coupon=coupon)
         
-        for competition_code in team_competition_data['competition']:
-            competition = TeamCompetition.objects.get(code=competition_code)
-            TeamCompetitionRegistration.objects.create(
-                team=team,
-                competition=competition
-            )
+        # Bulk create team competition registrations
+        competition_codes = team_competition_data['competition']
+        team_comp_registrations = [
+            TeamCompetitionRegistration(team=team, competition=team_competitions_dict[code])
+            for code in competition_codes
+        ]
+        TeamCompetitionRegistration.objects.bulk_create(team_comp_registrations)
         
-        return team, team_payment
+        # Prepare lists for email (avoid additional queries later)
+        team_competitions_list = [team_competitions_dict[code].competition for code in competition_codes]
+        
+        return team, team_payment, team_members, team_competitions_list
     
     def _update_coupon(self, coupon):
         if coupon and coupon.coupon_number > 0:
             coupon.coupon_number -= 1
-            coupon.save()
+            coupon.save(update_fields=['coupon_number'])  # Only update specific field
             return True
         return False
     
@@ -329,7 +387,7 @@ class RegisterViewSet(viewsets.ViewSet):
                 "id": team.id,
                 "name": team.team_name,
                 "payment_verified": team.payment_verified,
-                "members_count": team.members.count(),
+                "members_count": len(team_payment) if hasattr(team_payment, '__len__') else 0,
                 "competitions": validated_data['team_competition']['competition']
             }
             response_data["data"]["team_payment"] = {
@@ -339,21 +397,23 @@ class RegisterViewSet(viewsets.ViewSet):
         
         return response_data
     
-    def _send_confirmation_emails(self, response_data, participant, participant_payment, 
-                              team, team_members, team_competitions, team_payment):
+    def _queue_confirmation_emails(self, participant, participant_payment, 
+                                   team, team_members_list, team_competitions_list, team_payment,
+                                   validated_data):
         """
-        Queue email sending tasks asynchronously
+        Queue email sending tasks asynchronously without waiting
+        Data is prepared in-memory to avoid additional queries
         """
         try:
-            # Prepare participant data
+            # Prepare participant data (no additional queries)
             participant_data = {
                 'id': participant.id,
                 'name': f"{participant.f_name} {participant.l_name}",
                 'email': participant.email,
                 'phone': participant.phone,
                 'institution': participant.institution,
-                'segments': [reg.segment.segment_name for reg in participant.registrations.all()],
-                'competitions': [comp.competition.competition for comp in participant.competition_registrations.all()],
+                'segments': validated_data.get('segment', []),  # Use validated data
+                'competitions': validated_data.get('competition', []),
             }
             
             payment_data = {
@@ -365,7 +425,6 @@ class RegisterViewSet(viewsets.ViewSet):
             # Prepare team data if exists
             team_data = None
             team_members_data = None
-            team_competitions_list = None
             
             if team:
                 team_data = {
@@ -373,7 +432,7 @@ class RegisterViewSet(viewsets.ViewSet):
                     'name': team.team_name,
                 }
                 
-                if team_members:
+                if team_members_list:
                     team_members_data = [
                         {
                             'id': member.id,
@@ -383,33 +442,23 @@ class RegisterViewSet(viewsets.ViewSet):
                             'institution': member.institution,
                             'is_leader': member.is_leader
                         }
-                        for member in team_members if not member.is_leader
+                        for member in team_members_list if not member.is_leader
                     ]
-                
-                if team_competitions:
-                    team_competitions_list = [comp.competition.competition for comp in team_competitions]
             
-            # Queue individual participant email task
-            send_registration_email_task.delay(
-                participant_data, 
-                payment_data, 
-                team_data, 
-                team_members_data, 
-                team_competitions_list
+            # Use apply_async with ignore_result=True for fire-and-forget
+            send_registration_email_task.apply_async(
+                args=[participant_data, payment_data, team_data, team_members_data, team_competitions_list],
+                ignore_result=True
             )
             
-            response_data["email_queued"] = True
-            response_data["message"] += " Confirmation email queued for sending."
-            
             # Queue team emails if team exists
-            if team and team_members:
+            if team and team_members_list:
                 team_payment_data = {
                     'trx_id': team_payment.trx_id,
                     'amount': str(team_payment.amount),
                     'phone': team_payment.phone,
                 }
                 
-                # Include leader in team members data for team emails
                 all_team_members_data = [
                     {
                         'id': member.id,
@@ -419,23 +468,17 @@ class RegisterViewSet(viewsets.ViewSet):
                         'institution': member.institution,
                         'is_leader': member.is_leader
                     }
-                    for member in team_members
+                    for member in team_members_list
                 ]
                 
-                send_team_registration_emails_task.delay(
-                    team_data,
-                    all_team_members_data,
-                    team_competitions_list,
-                    team_payment_data
+                send_team_registration_emails_task.apply_async(
+                    args=[team_data, all_team_members_data, team_competitions_list, team_payment_data],
+                    ignore_result=True
                 )
-                
-                response_data["team_email_queued"] = True
-                response_data["message"] += " Team confirmation emails queued for all members."
                         
         except Exception as e:
             logger.error(f"Email queueing failed: {str(e)}")
-            response_data["email_warning"] = "Registration successful but failed to queue email(s)"
-
+            # Don't fail the registration, just log the error
 
 
 
@@ -720,6 +763,7 @@ class CouponValidationViewSet(viewsets.ViewSet):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+
 class PaymentVerificationViewSet(viewsets.ViewSet):
     
     permission_classes = [IsAdminVolunteer]
@@ -737,11 +781,15 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
             participant_id = serializer.validated_data['id']
             
             try:
-                participant = Participant.objects.get(id=participant_id)
+                # Prefetch related data to avoid N+1 queries
+                participant = Participant.objects.prefetch_related(
+                    'registrations__segment',
+                    'competition_registrations__competition'
+                ).get(id=participant_id)
                 
                 was_verified = participant.payment_verified
                 participant.payment_verified = not participant.payment_verified
-                participant.save()
+                participant.save(update_fields=['payment_verified'])
                 
                 response_data = {
                     'participant': {
@@ -751,7 +799,8 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
                     }
                 }
                 
-                team_member = TeamParticipant.objects.filter(
+                # Find team efficiently with prefetch
+                team_member = TeamParticipant.objects.select_related('team').filter(
                     email=participant.email, 
                     is_leader=True
                 ).first()
@@ -760,7 +809,7 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
                 if team_member:
                     team = team_member.team
                     team.payment_verified = participant.payment_verified
-                    team.save()
+                    team.save(update_fields=['payment_verified'])
                     
                     response_data['team'] = {
                         'id': team.id,
@@ -772,8 +821,16 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
                 if team_member:
                     message += f' and team {team.team_name}'
                 
+                # Only send emails when verifying (not unverifying)
                 if participant.payment_verified and not was_verified:
-                    self._send_verification_emails(participant, team, response_data, message)
+                    # Collect data before queuing emails
+                    segments = [reg.segment.segment_name for reg in participant.registrations.all()]
+                    competitions = [comp.competition.competition for comp in participant.competition_registrations.all()]
+                    
+                    self._queue_verification_emails(
+                        participant, team, response_data, message,
+                        segments, competitions
+                    )
                 
                 return Response({
                     'success': True,
@@ -788,72 +845,100 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
                 }, status=status.HTTP_404_NOT_FOUND)
             
         except Exception as e:
-            logger.error(f"Error updating payment verification: {str(e)}")
+            logger.error(f"Error updating payment verification: {str(e)}", exc_info=True)
             return Response({
                 'success': False,
                 'error': 'Failed to update payment verification',
                 'details': str(e)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-    def _send_verification_emails(self, participant, team, response_data, message):
+    def _queue_verification_emails(self, participant, team, response_data, message, 
+                                   segments, competitions):
         """
         Queue verification email tasks asynchronously
+        Optimized to avoid additional queries
         """
         from .tasks import send_payment_verification_email_task, send_team_payment_verification_emails_task
         
         try:
-            # Prepare participant data
+            # Prepare participant data (no additional queries)
             participant_data = {
                 'id': participant.id,
                 'name': f'{participant.f_name} {participant.l_name}',
                 'email': participant.email,
-                'segments': [reg.segment.segment_name for reg in participant.registrations.all()],
-                'competitions': [comp.competition.competition for comp in participant.competition_registrations.all()],
+                'segments': segments,
+                'competitions': competitions,
             }
             
             # Prepare team data if exists
             team_data = None
+            team_members_data = None
+            
             if team:
-                team_members = team.members.all()
+                # Fetch team members and competitions once
+                team_members = list(team.members.select_related().all())
+                team_competitions = list(
+                    team.team_competition_registrations.select_related('competition').all()
+                )
+                
                 team_data = {
                     'id': team.id,
                     'name': team.team_name,
                     'member_emails': [member.email for member in team_members if member.email],
+                    'competitions': [comp.competition.competition for comp in team_competitions],
                 }
-            
-            # Queue participant email task
-            send_payment_verification_email_task.delay(participant_data, team_data)
-            
-            response_data['email_queued'] = True
-            message += '. Participant confirmation email queued.'
-            
-            # Queue team emails if team exists
-            if team:
+                
                 team_members_data = [
                     {
                         'id': member.id,
                         'name': f"{member.f_name} {member.l_name}",
                         'email': member.email,
                     }
-                    for member in team.members.all() if member.email
+                    for member in team_members if member.email
                 ]
-                
-                team_data_full = {
-                    'id': team.id,
-                    'name': team.team_name,
-                    'competitions': [comp.competition.competition for comp in team.team_competition_registrations.all()],
+            
+            # Use apply_async with ignore_result for fire-and-forget
+            logger.info(f"Queueing payment verification email for participant {participant.id}")
+            
+            send_payment_verification_email_task.apply_async(
+                args=[participant_data, team_data],
+                ignore_result=True,
+                retry=True,
+                retry_policy={
+                    'max_retries': 3,
+                    'interval_start': 0,
+                    'interval_step': 60,
+                    'interval_max': 180,
                 }
+            )
+            
+            response_data['email_queued'] = True
+            message += '. Participant confirmation email queued.'
+            
+            # Queue team emails if team exists
+            if team and team_members_data:
+                logger.info(f"Queueing team verification emails for team {team.id}")
                 
-                send_team_payment_verification_emails_task.delay(team_data_full, team_members_data)
+                send_team_payment_verification_emails_task.apply_async(
+                    args=[team_data, team_members_data],
+                    ignore_result=True,
+                    retry=True,
+                    retry_policy={
+                        'max_retries': 3,
+                        'interval_start': 0,
+                        'interval_step': 60,
+                        'interval_max': 180,
+                    }
+                )
                 
                 response_data['team_email_queued'] = True
                 message += ' Team confirmation emails queued for all members.'
+            
+            logger.info(f"Successfully queued all verification emails for participant {participant.id}")
         
         except Exception as e:
-            logger.error(f"Failed to queue verification emails: {str(e)}")
+            logger.error(f"Failed to queue verification emails: {str(e)}", exc_info=True)
             response_data['email_warning'] = 'Failed to queue confirmation email(s)'
-
-
 
 
 

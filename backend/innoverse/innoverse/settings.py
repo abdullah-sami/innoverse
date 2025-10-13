@@ -201,7 +201,8 @@ DEFAULT_FROM_EMAIL = config('EMAIL_HOST_USER')
 
 # Celery Broker & Backend
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'django-db'  # Store results in PostgreSQL
+# CELERY_RESULT_BACKEND = 'django-db'  # Store results in PostgreSQL
+CELERY_RESULT_BACKEND = None 
 CELERY_CACHE_BACKEND = 'django-cache'
 
 # Serialization
@@ -248,18 +249,19 @@ CELERY_RESULT_COMPRESSION = 'gzip'
 CELERY_BROKER_POOL_LIMIT = 10
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
-# ============================================
-# DATABASE OPTIMIZATION
-# ============================================
 
-DATABASES['default']['CONN_MAX_AGE'] = 600  # Connection pooling (10 minutes)
+CELERY_TASK_ALWAYS_EAGER = False  # Set to True for synchronous execution (testing)
+CELERY_TASK_EAGER_PROPAGATES = False  # Propagate exceptions in eager mode
+
+
+
+DATABASES['default']['CONN_MAX_AGE'] = 600
 DATABASES['default']['OPTIONS'] = {
     'connect_timeout': 10,
 }
 
-# ============================================
-# CACHING (Recommended for production)
-# ============================================
+
+
 
 CACHES = {
     'default': {
@@ -269,13 +271,10 @@ CACHES = {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         },
         'KEY_PREFIX': 'innoverse',
-        'TIMEOUT': 300,  # 5 minutes default
+        'TIMEOUT': 300, 
     }
 }
 
-# ============================================
-# LOGGING (Production)
-# ============================================
 
 LOGGING = {
     'version': 1,

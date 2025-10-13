@@ -1,0 +1,21 @@
+[ERROR] 2025-10-14 01:25:16,328 log 544279 140426358568288 Internal Server Error: /api/register/
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/rest_framework/viewsets.py", line 117, in view
+    handler = getattr(self, action)
+AttributeError: 'RegisterViewSet' object has no attribute 'create'
+[WARNING] 2025-10-14 01:28:21,828 log 544281 140426358568288 Bad Request: /api/register/
+[WARNING] 2025-10-14 01:28:32,542 log 544280 140426358568288 Bad Request: /api/register/
+[ERROR] 2025-10-14 01:28:41,211 views 544278 140426358568288 Registration failed: 'RegisterViewSet' object has no attribute '_register_segments'
+[ERROR] 2025-10-14 01:28:41,217 log 544278 140426358568288 Internal Server Error: /api/register/
+[ERROR] 2025-10-14 01:31:50,647 views 544280 140426358568288 Registration failed: 'RegisterViewSet' object has no attribute '_register_segments'
+[ERROR] 2025-10-14 01:31:50,650 log 544280 140426358568288 Internal Server Error: /api/register/
+[ERROR] 2025-10-14 01:31:53,604 views 544278 140426358568288 Registration failed: 'RegisterViewSet' object has no attribute '_register_segments'
+[ERROR] 2025-10-14 01:31:53,608 log 544278 140426358568288 Internal Server Error: /api/register/
+[ERROR] 2025-10-14 01:33:08,437 views 544280 140426358568288 Registration failed: 'RegisterViewSet' object has no attribute '_register_segments'
+[ERROR] 2025-10-14 01:33:08,442 log 544280 140426358568288 Internal Server Error: /api/register/

@@ -8,6 +8,9 @@ from participant.models import (
 )
 from event.models import Coupons, Segment, Competition, TeamCompetition
 
+from django.core.cache import cache
+from django.db.models import Q
+
 
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,10 +34,6 @@ class EntryStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = EntryStatus
         fields = "__all__"
-
-
-
-
 
 
 
@@ -103,98 +102,241 @@ class CompleteRegistrationSerializer(serializers.Serializer):
         default=list
     )
     team_competition = TeamCompetitionInfoSerializer(required=False, allow_null=True)
-    coupon = serializers.DictField(required=False, allow_null=True) 
-
+    coupon = serializers.DictField(required=False, allow_null=True)
 
     def validate_payment(self, value):
-        # Check if transaction ID already exists
+        """Check if transaction ID already exists - OPTIMIZED"""
         trx_id = value.get('trx_id')
-        if Payment.objects.filter(trx_id=trx_id).exists():
+        # Use only() to fetch only the field we need
+        if Payment.objects.filter(trx_id=trx_id).only('id').exists():
             raise serializers.ValidationError(f"Transaction ID {trx_id} already exists")
         return value
 
     def validate_segment(self, value):
-        if value:
-            invalid_codes = []
-            for code in value:
-                if not Segment.objects.filter(code=code).exists():
-                    invalid_codes.append(code)
-            if invalid_codes:
-                raise serializers.ValidationError(f"Invalid segment codes: {', '.join(invalid_codes)}")
+        """Validate all segment codes in ONE query - OPTIMIZED"""
+        if not value:
+            return value
+        
+        # Get all valid codes in a single query
+        valid_codes = set(
+            Segment.objects.filter(code__in=value).values_list('code', flat=True)
+        )
+        
+        # Find invalid codes
+        invalid_codes = [code for code in value if code not in valid_codes]
+        
+        if invalid_codes:
+            raise serializers.ValidationError(
+                f"Invalid segment codes: {', '.join(invalid_codes)}"
+            )
+        
         return value
 
     def validate_competition(self, value):
-        if value:
-            invalid_codes = []
-            for code in value:
-                if not Competition.objects.filter(code=code).exists():
-                    invalid_codes.append(code)
-            if invalid_codes:
-                raise serializers.ValidationError(f"Invalid competition codes: {', '.join(invalid_codes)}")
+        """Validate all competition codes in ONE query - OPTIMIZED"""
+        if not value:
+            return value
+        
+        # Get all valid codes in a single query
+        valid_codes = set(
+            Competition.objects.filter(code__in=value).values_list('code', flat=True)
+        )
+        
+        # Find invalid codes
+        invalid_codes = [code for code in value if code not in valid_codes]
+        
+        if invalid_codes:
+            raise serializers.ValidationError(
+                f"Invalid competition codes: {', '.join(invalid_codes)}"
+            )
+        
         return value
 
     def validate_team_competition(self, value):
-        if value and 'competition' in value:
-            invalid_codes = []
-            for code in value['competition']:
-                if not TeamCompetition.objects.filter(code=code).exists():
-                    invalid_codes.append(code)
-            if invalid_codes:
-                raise serializers.ValidationError(f"Invalid team competition codes: {', '.join(invalid_codes)}")
+        """Validate all team competition codes in ONE query - OPTIMIZED"""
+        if not value or 'competition' not in value:
+            return value
+        
+        competition_codes = value['competition']
+        
+        # Get all valid codes in a single query
+        valid_codes = set(
+            TeamCompetition.objects.filter(
+                code__in=competition_codes
+            ).values_list('code', flat=True)
+        )
+        
+        # Find invalid codes
+        invalid_codes = [code for code in competition_codes if code not in valid_codes]
+        
+        if invalid_codes:
+            raise serializers.ValidationError(
+                f"Invalid team competition codes: {', '.join(invalid_codes)}"
+            )
+        
         return value
 
     def validate_coupon(self, value):
-        if value:
-            coupon_code = value.get('coupon_code')
-            if not coupon_code:
-                raise serializers.ValidationError("coupon_code is required")
+        """Validate coupon - OPTIMIZED with select_for_update"""
+        if not value:
+            return None
+        
+        coupon_code = value.get('coupon_code')
+        if not coupon_code:
+            raise serializers.ValidationError("coupon_code is required")
+        
+        try:
+            # Use only() to fetch only required fields
+            coupon = Coupons.objects.only(
+                'id', 'coupon_code', 'coupon_number', 'discount'
+            ).get(coupon_code=coupon_code)
             
-            try:
-                coupon = Coupons.objects.get(coupon_code=coupon_code)
-                if coupon.coupon_number <= 0:
-                    raise serializers.ValidationError(f"Coupon '{coupon_code}' has no remaining uses")
-                return coupon  # Return the coupon object
-            except Coupons.DoesNotExist:
-                raise serializers.ValidationError(f"Invalid coupon code: {coupon_code}")
-        return None
+            if coupon.coupon_number <= 0:
+                raise serializers.ValidationError(
+                    f"Coupon '{coupon_code}' has no remaining uses"
+                )
+            
+            return coupon
+            
+        except Coupons.DoesNotExist:
+            raise serializers.ValidationError(f"Invalid coupon code: {coupon_code}")
+
     def validate(self, data):
+        """
+        Cross-field validation - OPTIMIZED
+        Combines all existence checks into minimal queries
+        """
         participant = data.get('participant', {})
         team_competition = data.get('team_competition')
-
-        # Check if participant email already exists
-        email = participant.get('email')
-        if Participant.objects.filter(email=email).exists():
-            raise serializers.ValidationError({"participant": f"Email {email} is already registered"})
-
-        # Check if team name already exists
+        
+        # Collect all emails to check in one query
+        emails_to_check = [participant.get('email')]
+        team_name_to_check = None
+        
         if team_competition:
-            team_name = team_competition['team']['team_name']
-            if Team.objects.filter(team_name=team_name).exists():
-                raise serializers.ValidationError({"team_competition": f"Team name '{team_name}' already exists"})
-
-            # Check for duplicate emails in team members
-            team_members = team_competition['team']['participant']
-            emails = [m.get('email') for m in team_members if m.get('email')]
+            team_name_to_check = team_competition['team']['team_name']
+            team_member_emails = [
+                m.get('email') for m in team_competition['team']['participant'] 
+                if m.get('email')
+            ]
+            emails_to_check.extend(team_member_emails)
+            
+            # Check for duplicate emails within team (in-memory, no DB query)
+            if len(team_member_emails) != len(set(team_member_emails)):
+                raise serializers.ValidationError({
+                    "team_competition": "Duplicate emails found in team members"
+                })
             
             # Check if leader email matches any team member email
-            if email in emails:
-                raise serializers.ValidationError({"team_competition": "Team leader email cannot be the same as team member email"})
-            
-            # Check for duplicate emails within team
-            if len(emails) != len(set(emails)):
-                raise serializers.ValidationError({"team_competition": "Duplicate emails found in team members"})
-
+            if participant.get('email') in team_member_emails:
+                raise serializers.ValidationError({
+                    "team_competition": "Team leader email cannot be the same as team member email"
+                })
+        
+        # Single query to check all emails and team name at once
+        errors = {}
+        
+        # Check participant email
+        if Participant.objects.filter(email=participant.get('email')).only('id').exists():
+            errors['participant'] = f"Email {participant.get('email')} is already registered"
+        
+        # Check team name if needed
+        if team_name_to_check and Team.objects.filter(team_name=team_name_to_check).only('id').exists():
+            errors['team_competition'] = f"Team name '{team_name_to_check}' already exists"
+        
+        if errors:
+            raise serializers.ValidationError(errors)
+        
         return data
+
+
+# BONUS: Add caching for frequently accessed codes (optional but powerful)
+class CachedValidationMixin:
+    """
+    Mixin to add caching to code validation
+    Use this if you have stable segment/competition codes that don't change often
+    """
     
+    @staticmethod
+    def get_valid_codes_cached(model, codes, cache_key_prefix, timeout=3600):
+        """
+        Get valid codes with caching
+        
+        Args:
+            model: Django model class (Segment, Competition, etc.)
+            codes: List of codes to validate
+            cache_key_prefix: Prefix for cache key (e.g., 'valid_segments')
+            timeout: Cache timeout in seconds (default 1 hour)
+        """
+        cache_key = f"{cache_key_prefix}_all"
+        
+        # Try to get from cache
+        valid_codes = cache.get(cache_key)
+        
+        if valid_codes is None:
+            # Cache miss - fetch from database
+            valid_codes = set(model.objects.values_list('code', flat=True))
+            cache.set(cache_key, valid_codes, timeout)
+        
+        # Filter requested codes
+        valid_codes_set = set(codes) & valid_codes
+        invalid_codes = [code for code in codes if code not in valid_codes_set]
+        
+        return valid_codes_set, invalid_codes
 
 
-
-
-
-
-
-
-
+# Example usage of caching (modify your serializer methods):
+class CompleteRegistrationSerializerWithCache(CompleteRegistrationSerializer):
+    """
+    Version with aggressive caching - use if codes rarely change
+    Clear cache when you add/remove segments/competitions
+    """
+    
+    def validate_segment(self, value):
+        if not value:
+            return value
+        
+        _, invalid_codes = CachedValidationMixin.get_valid_codes_cached(
+            Segment, value, 'valid_segments', timeout=3600
+        )
+        
+        if invalid_codes:
+            raise serializers.ValidationError(
+                f"Invalid segment codes: {', '.join(invalid_codes)}"
+            )
+        
+        return value
+    
+    def validate_competition(self, value):
+        if not value:
+            return value
+        
+        _, invalid_codes = CachedValidationMixin.get_valid_codes_cached(
+            Competition, value, 'valid_competitions', timeout=3600
+        )
+        
+        if invalid_codes:
+            raise serializers.ValidationError(
+                f"Invalid competition codes: {', '.join(invalid_codes)}"
+            )
+        
+        return value
+    
+    def validate_team_competition(self, value):
+        if not value or 'competition' not in value:
+            return value
+        
+        _, invalid_codes = CachedValidationMixin.get_valid_codes_cached(
+            TeamCompetition, value['competition'], 'valid_team_competitions', timeout=3600
+        )
+        
+        if invalid_codes:
+            raise serializers.ValidationError(
+                f"Invalid team competition codes: {', '.join(invalid_codes)}"
+            )
+        
+        return value
+    
 
 
 

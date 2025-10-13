@@ -1,0 +1,82 @@
+[
+  {
+    "index": 0,
+    "status_code": 0,
+    "elapsed_time": 0.0037589073181152344,
+    "success": false,
+    "response_size": 0,
+    "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/register/ (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f999e81b700>: Failed to establish a new connection: [Errno 111] Connection refused'))"
+  },
+  {
+    "index": 2,
+    "status_code": 0,
+    "elapsed_time": 0.0022804737091064453,
+    "success": false,
+    "response_size": 0,
+    "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/register/ (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f999e868ca0>: Failed to establish a new connection: [Errno 111] Connection refused'))"
+  },
+  {
+    "index": 1,
+    "status_code": 0,
+    "elapsed_time": 0.015143871307373047,
+    "success": false,
+    "response_size": 0,
+    "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/register/ (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f999e81b700>: Failed to establish a new connection: [Errno 111] Connection refused'))"
+  },
+  {
+    "index": 3,
+    "status_code": 0,
+    "elapsed_time": 0.0069293975830078125,
+    "success": false,
+    "response_size": 0,
+    "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/register/ (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f999e868910>: Failed to establish a new connection: [Errno 111] Connection refused'))"
+  },
+  {
+    "index": 4,
+    "status_code": 0,
+    "elapsed_time": 0.006589412689208984,
+    "success": false,
+    "response_size": 0,
+    "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/register/ (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f999e8694b0>: Failed to establish a new connection: [Errno 111] Connection refused'))"
+  },
+  {
+    "index": 5,
+    "status_code": 0,
+    "elapsed_time": 0.004709005355834961,
+    "success": false,
+    "response_size": 0,
+    "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/register/ (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f999e869cc0>: Failed to establish a new connection: [Errno 111] Connection refused'))"
+  },
+  {
+    "index": 6,
+    "status_code": 0,
+    "elapsed_time": 0.00475764274597168,
+    "success": false,
+    "response_size": 0,
+    "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/register/ (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f999e86a530>: Failed to establish a new connection: [Errno 111] Connection refused'))"
+  },
+  {
+    "index": 7,
+    "status_code": 0,
+    "elapsed_time": 0.005282163619995117,
+    "success": false,
+    "response_size": 0,
+    "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/register/ (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f999e81b6a0>: Failed to establish a new connection: [Errno 111] Connection refused'))"
+  },
+  {
+    "index": 8,
+    "status_code": 0,
+    "elapsed_time": 0.0050852298736572266,
+    "success": false,
+    "response_size": 0,
+    "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/register/ (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f999e81b3d0>: Failed to establish a new connection: [Errno 111] Connection refused'))"
+  },
+  {
+    "index": 9,
+    "status_code": 0,
+    "elapsed_time": 0.0041790008544921875,
+    "success": false,
+    "response_size": 0,
+    "error": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /api/register/ (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7f999e86a530>: Failed to establish a new connection: [Errno 111] Connection refused'))"
+  }
+]
