@@ -158,8 +158,7 @@ The API uses JWT (JSON Web Token) authentication for protected endpoints.
     "phone": "1234567890",
     "trx_id": "TRX123456789"
   },
-  "segment": ["expo", "sketch"],
-  "competition": ["m_auction", "res_abs"],
+  "competition": ["sc_olym", "programming"],
   "team_competition": {
     "team": {
       "team_name": "Team Alpha",
@@ -176,7 +175,7 @@ The API uses JWT (JSON Web Token) authentication for protected endpoints.
         }
       ]
     },
-    "competition": ["pr_show"]
+    "competition": ["quiz"]
   },
   "coupon": {
     "coupon_code": "SAVE20"
@@ -202,28 +201,21 @@ The API uses JWT (JSON Web Token) authentication for protected endpoints.
 - `trx_id` (required): Unique transaction ID
 
 **Optional Fields:**
-- `segment` (optional): Array of segment codes
 - `competition` (optional): Array of competition codes
 - `team_competition` (optional): Team competition details
 - `coupon` (optional): Coupon information
 
 **Segments and Competition Codes:**
 ```bash
-Segments:
-  - Innovation Expo: expo
-  - Sketch Talk: sketch
-  - Policy Bridge Dialogue: policy
-
 Solo Competitions:
-  - Math Auction: m_auction
-  - 3-Minute Research: 3m_res
-  - Research Abstract: res_abs
   - Science Olympiad: sc_olym
   - Programming Contest: programming
-
+  - 3-Minute Research: 3m_res
+  - Research Article Contest: res_art
+  - Math Maestro: math
+  
 Team Competitions:
-  - Project Showcasing: pr_show
-  - Science Quiz: sc_quiz
+  - Science Quiz: quiz
   - Robo Soccer: robo_soc
 ```
 
@@ -245,7 +237,6 @@ Team Competitions:
       "trx_id": "TRX123456789",
       "amount": "500.00"
     },
-    "segments": ["expo", "sketch"],
     "competitions": ["m_auction", "res_abs"],
     "team": {
       "id": 1,
@@ -1456,6 +1447,7 @@ or
 - `phone`: Phone number (optional)
 - `age`: Age (integer)
 - `institution`: Institution name (optional)
+- `guardian_phone`: Guardian Phone number (optional)
 - `address`: Address (optional)
 - `t_shirt_size`: XS/S/M/L/XL/XXL (optional)
 - `payment_verified`: Boolean (default: false)
@@ -1523,5 +1515,5 @@ or
 
 
 
-**Version:** 1.3  
-**Last Updated:** 10 October 2025
+**Version:** 1.4
+**Last Updated:** 13 October 2025
