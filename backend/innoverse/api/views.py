@@ -6,6 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
+
 from .models import Participant, Team, EntryStatus, Gift, GiftStatus
 from .serializers import (
     ParticipantDetailSerializer,
@@ -21,6 +22,13 @@ from event.serializers import SegmentSerializer, CompetitionSerializer, TeamComp
 from api.models import Volunteer
 from participant.models import Registration, CompetitionRegistration, TeamCompetitionRegistration, Payment, TeamParticipant
 from participant.serializers import ParticipantSerializer, TeamSerializer
+
+from .tasks import (
+    send_registration_email_task,
+    send_payment_verification_email_task,
+    send_team_registration_emails_task,
+    send_team_payment_verification_emails_task
+)
 
 logger = logging.getLogger(__name__)
 
@@ -332,34 +340,101 @@ class RegisterViewSet(viewsets.ViewSet):
         return response_data
     
     def _send_confirmation_emails(self, response_data, participant, participant_payment, 
-                                  team, team_members, team_competitions, team_payment):
-        from .utils import send_registration_confirmation_email, send_team_registration_confirmation_emails
-
+                              team, team_members, team_competitions, team_payment):
+        """
+        Queue email sending tasks asynchronously
+        """
         try:
-            # Send individual participant email
-            email_sent = send_registration_confirmation_email(participant, participant_payment)
+            # Prepare participant data
+            participant_data = {
+                'id': participant.id,
+                'name': f"{participant.f_name} {participant.l_name}",
+                'email': participant.email,
+                'phone': participant.phone,
+                'institution': participant.institution,
+                'segments': [reg.segment.segment_name for reg in participant.registrations.all()],
+                'competitions': [comp.competition.competition for comp in participant.competition_registrations.all()],
+            }
             
-            if email_sent:
-                response_data["email_sent"] = True
-                response_data["message"] += " Confirmation email sent."
-            else:
-                response_data["email_warning"] = "Registration successful but email failed to send"
+            payment_data = {
+                'trx_id': participant_payment.trx_id,
+                'amount': str(participant_payment.amount),
+                'phone': participant_payment.phone,
+            }
             
-            # Send team emails if team exists
+            # Prepare team data if exists
+            team_data = None
+            team_members_data = None
+            team_competitions_list = None
+            
             if team:
-                team_email_sent = send_team_registration_confirmation_emails(
-                    team, team_members, team_competitions, team_payment
+                team_data = {
+                    'id': team.id,
+                    'name': team.team_name,
+                }
+                
+                if team_members:
+                    team_members_data = [
+                        {
+                            'id': member.id,
+                            'name': f"{member.f_name} {member.l_name}",
+                            'email': member.email,
+                            'phone': member.phone,
+                            'institution': member.institution,
+                            'is_leader': member.is_leader
+                        }
+                        for member in team_members if not member.is_leader
+                    ]
+                
+                if team_competitions:
+                    team_competitions_list = [comp.competition.competition for comp in team_competitions]
+            
+            # Queue individual participant email task
+            send_registration_email_task.delay(
+                participant_data, 
+                payment_data, 
+                team_data, 
+                team_members_data, 
+                team_competitions_list
+            )
+            
+            response_data["email_queued"] = True
+            response_data["message"] += " Confirmation email queued for sending."
+            
+            # Queue team emails if team exists
+            if team and team_members:
+                team_payment_data = {
+                    'trx_id': team_payment.trx_id,
+                    'amount': str(team_payment.amount),
+                    'phone': team_payment.phone,
+                }
+                
+                # Include leader in team members data for team emails
+                all_team_members_data = [
+                    {
+                        'id': member.id,
+                        'name': f"{member.f_name} {member.l_name}",
+                        'email': member.email,
+                        'phone': member.phone,
+                        'institution': member.institution,
+                        'is_leader': member.is_leader
+                    }
+                    for member in team_members
+                ]
+                
+                send_team_registration_emails_task.delay(
+                    team_data,
+                    all_team_members_data,
+                    team_competitions_list,
+                    team_payment_data
                 )
                 
-                if team_email_sent:
-                    response_data["team_email_sent"] = True
-                    response_data["message"] += " Team confirmation emails sent to all members."
-                else:
-                    response_data["team_email_warning"] = "Team registration successful but team emails failed to send"
-                    
+                response_data["team_email_queued"] = True
+                response_data["message"] += " Team confirmation emails queued for all members."
+                        
         except Exception as e:
-            logger.error(f"Email sending failed: {str(e)}")
-            response_data["email_warning"] = "Registration successful but email(s) failed to send"
+            logger.error(f"Email queueing failed: {str(e)}")
+            response_data["email_warning"] = "Registration successful but failed to queue email(s)"
 
 
 
@@ -721,31 +796,62 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     def _send_verification_emails(self, participant, team, response_data, message):
-        from .utils import send_payment_verification_email, send_team_payment_verification_emails
+        """
+        Queue verification email tasks asynchronously
+        """
+        from .tasks import send_payment_verification_email_task, send_team_payment_verification_emails_task
         
-        email_sent = send_payment_verification_email(participant, team=None)
-        
-        if email_sent:
-            message += '. Participant confirmation email sent.'
-            response_data['email_sent'] = True
-        else:
-            message += '. Warning: Participant email failed to send.'
-            response_data['email_sent'] = False
-            response_data['email_warning'] = 'Failed to send participant confirmation email'
-        
-        if team:
-            team_email_sent = send_team_payment_verification_emails(team)
+        try:
+            # Prepare participant data
+            participant_data = {
+                'id': participant.id,
+                'name': f'{participant.f_name} {participant.l_name}',
+                'email': participant.email,
+                'segments': [reg.segment.segment_name for reg in participant.registrations.all()],
+                'competitions': [comp.competition.competition for comp in participant.competition_registrations.all()],
+            }
             
-            if team_email_sent:
-                message += ' Team confirmation emails sent to all members.'
-                response_data['team_email_sent'] = True
-            else:
-                message += ' Warning: Team emails failed to send.'
-                response_data['team_email_sent'] = False
-                if 'email_warning' in response_data:
-                    response_data['email_warning'] += '; Team emails also failed'
-                else:
-                    response_data['email_warning'] = 'Failed to send team confirmation emails'
+            # Prepare team data if exists
+            team_data = None
+            if team:
+                team_members = team.members.all()
+                team_data = {
+                    'id': team.id,
+                    'name': team.team_name,
+                    'member_emails': [member.email for member in team_members if member.email],
+                }
+            
+            # Queue participant email task
+            send_payment_verification_email_task.delay(participant_data, team_data)
+            
+            response_data['email_queued'] = True
+            message += '. Participant confirmation email queued.'
+            
+            # Queue team emails if team exists
+            if team:
+                team_members_data = [
+                    {
+                        'id': member.id,
+                        'name': f"{member.f_name} {member.l_name}",
+                        'email': member.email,
+                    }
+                    for member in team.members.all() if member.email
+                ]
+                
+                team_data_full = {
+                    'id': team.id,
+                    'name': team.team_name,
+                    'competitions': [comp.competition.competition for comp in team.team_competition_registrations.all()],
+                }
+                
+                send_team_payment_verification_emails_task.delay(team_data_full, team_members_data)
+                
+                response_data['team_email_queued'] = True
+                message += ' Team confirmation emails queued for all members.'
+        
+        except Exception as e:
+            logger.error(f"Failed to queue verification emails: {str(e)}")
+            response_data['email_warning'] = 'Failed to queue confirmation email(s)'
 
 
 
