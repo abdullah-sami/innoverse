@@ -11,9 +11,6 @@ logger = logging.getLogger(__name__)
 
 
 def attach_logo(email):
-    """
-    Attach logo to email as inline image
-    """
     logo_path = os.path.join(settings.MEDIA_ROOT, 'logo.png')
     
     if os.path.exists(logo_path):
@@ -30,10 +27,6 @@ def attach_logo(email):
 
 
 def generate_qr_code(data, participant_id=None):
-    """
-    Generate QR code and return as BytesIO object
-    Also saves to media folder with participant/team ID
-    """
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_H,
@@ -45,12 +38,12 @@ def generate_qr_code(data, participant_id=None):
 
     img = qr.make_image(fill_color="black", back_color="white")
     
-    # Save to BytesIO for email
+    
     buffer = BytesIO()
     img.save(buffer, format='JPEG')
     buffer.seek(0)
     
-    # Also save to media folder
+    
     if participant_id:
         qr_dir = settings.QR_CODE_ROOT
         os.makedirs(qr_dir, exist_ok=True)
@@ -67,14 +60,10 @@ def generate_qr_code(data, participant_id=None):
 
 
 def send_payment_verification_email(participant, team=None):
-    """
-    Send payment verification email with QR code to participant
-    If team is provided, send to all team members
-    """
     recipients = []
     qr_id = f"p_{participant.id}"
     
-    # Prepare context for email template
+    
     context = {
         'participant_name': f"{participant.f_name} {participant.l_name}",
         'participant_id': participant.id,
@@ -84,10 +73,10 @@ def send_payment_verification_email(participant, team=None):
         'competitions': [comp.competition.competition for comp in participant.competition_registrations.all()],
     }
     
-    # Add participant email
+    
     recipients.append(participant.email)
     
-    # If team exists, add team info and all team member emails
+    
     if team:
         qr_id = f"t_{team.id}"
         context['team_name'] = team.team_name
@@ -146,9 +135,7 @@ def send_payment_verification_email(participant, team=None):
 
 
 def send_registration_confirmation_email(participant, payment, team=None, team_members=None, team_competitions=None):
-    """
-    Send registration confirmation email to participant after successful registration
-    """
+
     # Prepare context for email template
     context = {
         'participant_name': f"{participant.f_name} {participant.l_name}",
@@ -156,6 +143,7 @@ def send_registration_confirmation_email(participant, payment, team=None, team_m
         'participant_email': participant.email,
         'participant_phone': participant.phone,
         'participant_institution': participant.institution,
+        'participant_guardian_phone': participant.guardian_phone,
         'trx_id': payment.trx_id,
         'amount': payment.amount,
         'payment_phone': payment.phone,
@@ -163,7 +151,7 @@ def send_registration_confirmation_email(participant, payment, team=None, team_m
         'competitions': [comp.competition.competition for comp in participant.competition_registrations.all()],
     }
     
-    # Add team information if provided
+    
     if team:
         context['team_name'] = team.team_name
         context['team_id'] = team.id

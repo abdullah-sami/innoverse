@@ -60,6 +60,8 @@ def get_entity_info(participant=None, team=None):
             'email': participant.email,
             'phone': participant.phone,
             'institution': participant.institution,
+            'guardian_phone': participant.guardian_phone,
+            'grade': participant.grade,
             'payment_verified': participant.payment_verified
         }
         
@@ -202,7 +204,9 @@ class RegisterViewSet(viewsets.ViewSet):
             phone=participant_data['phone'],
             age=participant_data['age'],
             institution=participant_data['institution'],
+            grade=participant_data.get('grade', ''),
             address=participant_data.get('address', ''),
+            guardian_phone=participant_data.get('guardian_phone', ''),
             t_shirt_size=participant_data.get('t_shirt_size', ''),
             payment_verified=False
         )

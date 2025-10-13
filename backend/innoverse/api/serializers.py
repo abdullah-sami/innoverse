@@ -47,6 +47,8 @@ class ParticipantRegistrationSerializer(serializers.Serializer):
     age = serializers.IntegerField()
     institution = serializers.CharField(max_length=200)
     address = serializers.CharField(required=False, allow_blank=True)
+    guardian_phone = serializers.CharField(max_length=20, required=False, allow_blank=True)
+    grade = serializers.CharField(max_length=20, required=False, allow_blank=True)
     t_shirt_size = serializers.ChoiceField(
         choices=['XS', 'S', 'M', 'L', 'XL', 'XXL'],
         required=False,

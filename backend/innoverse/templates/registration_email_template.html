@@ -154,6 +154,9 @@
                 <p><strong>Name:</strong> {{ participant_name }}</p>
                 <p><strong>Email:</strong> {{ participant_email }}</p>
                 <p><strong>Phone:</strong> {{ participant_phone }}</p>
+                {% if participant_guardian_phone %}
+                <p><strong>Guardian Phone:</strong> {{ participant_guardian_phone }}</p>
+                {% endif %}
                 <p><strong>Institution:</strong> {{ participant_institution }}</p>
                 
                 {% if segments %}

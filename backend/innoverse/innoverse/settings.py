@@ -10,9 +10,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['www.innoversebd.bdix.cloud', '103.169.161.8', 'innoversebd.bdix.cloud', 'localhost', '127.0.0.1']
 
 
 
@@ -64,16 +64,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'innoverse.wsgi.application'
 
-CSRF_TRUSTED_ORIGINS = ['https://555c77b3b37d.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['http://103.169.161.8', 'http://innoversebd.bdix.cloud']
 
 # Database
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
+
+
+
 
 
 # Password validation
@@ -107,11 +114,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 QR_CODE_ROOT = os.path.join(MEDIA_ROOT, 'qr_codes')
 
@@ -154,7 +162,37 @@ SIMPLE_JWT = {
 
 
 
-# Email Config for Gmail SMTP
+
+
+
+
+
+# Celery Configuration
+# CELERY_BROKER_URL = 'redis://localhost:6379/0' 
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TIMEZONE = 'Asia/Dhaka'
+# CELERY_TASK_TRACK_STARTED = True
+# CELERY_TASK_TIME_LIMIT = 30 * 60
+
+
+# # Email Config for Local SMTP Server
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'localhost'  # or your server's SMTP host
+# EMAIL_PORT = 25  # or 587 for TLS, 465 for SSL
+# EMAIL_USE_TLS = False  # Set to True if using port 587
+# EMAIL_USE_SSL = False  # Set to True if using port 465
+# EMAIL_HOST_USER = ''  # Leave empty for local server
+# EMAIL_HOST_PASSWORD = ''  # Leave empty for local server
+# DEFAULT_FROM_EMAIL = 'noreply@innoversebd.net'
+# SERVER_EMAIL = 'server@innoversebd.net'
+
+
+
+
+Email Config for Gmail SMTP
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -162,5 +200,3 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')  
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = config('EMAIL_HOST_USER')
-
-
