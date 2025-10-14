@@ -26,7 +26,6 @@ from participant.serializers import ParticipantSerializer, TeamSerializer
 from .tasks import (
     send_registration_email_task,
     send_payment_verification_email_task,
-    send_team_registration_emails_task,
     send_team_payment_verification_emails_task
 )
 
@@ -471,7 +470,7 @@ class RegisterViewSet(viewsets.ViewSet):
                     for member in team_members_list
                 ]
                 
-                send_team_registration_emails_task.apply_async(
+                send_registration_email_task.apply_async(
                     args=[team_data, all_team_members_data, team_competitions_list, team_payment_data],
                     ignore_result=True
                 )
@@ -765,181 +764,214 @@ class CouponValidationViewSet(viewsets.ViewSet):
 
 
 class PaymentVerificationViewSet(viewsets.ViewSet):
+    """
+    Optimized payment verification endpoint
+    - Handles both participant and team payments
+    - Async email processing via Celery
+    - Minimal database queries
+    - Fast response time
+    """
     
     permission_classes = [IsAdminVolunteer]
     
+    @transaction.atomic
     def create(self, request):
+        """
+        Toggle payment verification status
+        POST /api/payment/verify/
+        Body: {"id": participant_id}
+        """
         try:
-            serializer = PaymentVerificationSerializer(data=request.data)
+            participant_id = request.data.get('id')
             
-            if not serializer.is_valid():
+            if not participant_id:
                 return Response({
                     'success': False,
-                    'errors': serializer.errors
+                    'error': 'Participant ID is required'
                 }, status=status.HTTP_400_BAD_REQUEST)
             
-            participant_id = serializer.validated_data['id']
-            
+            # Fetch participant with all related data
             try:
-                # Prefetch related data to avoid N+1 queries
                 participant = Participant.objects.prefetch_related(
+                    'payments',
                     'registrations__segment',
                     'competition_registrations__competition'
                 ).get(id=participant_id)
                 
-                was_verified = participant.payment_verified
-                participant.payment_verified = not participant.payment_verified
-                participant.save(update_fields=['payment_verified'])
-                
-                response_data = {
-                    'participant': {
-                        'id': participant.id,
-                        'name': f'{participant.f_name} {participant.l_name}',
-                        'payment_verified': participant.payment_verified
-                    }
-                }
-                
-                # Find team efficiently with prefetch
-                team_member = TeamParticipant.objects.select_related('team').filter(
-                    email=participant.email, 
-                    is_leader=True
-                ).first()
-                
-                team = None
-                if team_member:
-                    team = team_member.team
-                    team.payment_verified = participant.payment_verified
-                    team.save(update_fields=['payment_verified'])
-                    
-                    response_data['team'] = {
-                        'id': team.id,
-                        'name': team.team_name,
-                        'payment_verified': team.payment_verified
-                    }
-                
-                message = f'Payment verified for {participant.f_name} {participant.l_name}'
-                if team_member:
-                    message += f' and team {team.team_name}'
-                
-                # Only send emails when verifying (not unverifying)
-                if participant.payment_verified and not was_verified:
-                    # Collect data before queuing emails
-                    segments = [reg.segment.segment_name for reg in participant.registrations.all()]
-                    competitions = [comp.competition.competition for comp in participant.competition_registrations.all()]
-                    
-                    self._queue_verification_emails(
-                        participant, team, response_data, message,
-                        segments, competitions
-                    )
-                
-                return Response({
-                    'success': True,
-                    'message': message,
-                    'data': response_data
-                }, status=status.HTTP_200_OK)
-                
             except Participant.DoesNotExist:
                 return Response({
                     'success': False,
-                    'error': 'Participant not found'
+                    'error': f'Participant with ID {participant_id} not found'
                 }, status=status.HTTP_404_NOT_FOUND)
             
+            # Get payment record (could be linked to participant or their team)
+            payment = participant.payments.first()
+            
+            # If no direct payment, check if participant is part of a team with payment
+            team = None
+            team_member = None
+            
+            if not payment:
+                team_member = TeamParticipant.objects.select_related('team').filter(
+                    email=participant.email
+                ).first()
+                
+                if team_member:
+                    team = team_member.team
+                    payment = team.payments.first()
+            
+            if not payment:
+                return Response({
+                    'success': False,
+                    'error': 'No payment record found for this participant or their team'
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Toggle verification status
+            was_verified = participant.payment_verified
+            new_status = not was_verified
+            participant.payment_verified = new_status
+            participant.save(update_fields=['payment_verified'])
+            
+            # Prepare response
+            response_data = {
+                'participant': {
+                    'id': participant.id,
+                    'name': f'{participant.f_name} {participant.l_name}',
+                    'email': participant.email,
+                    'payment_verified': new_status
+                },
+                'payment': {
+                    'trx_id': payment.trx_id,
+                    'amount': str(payment.amount),
+                    'phone': payment.phone
+                }
+            }
+            
+            # Update team verification if team exists
+            if not team and team_member:
+                team = team_member.team
+            
+            if team:
+                team.payment_verified = new_status
+                team.save(update_fields=['payment_verified'])
+                
+                response_data['team'] = {
+                    'id': team.id,
+                    'name': team.team_name,
+                    'payment_verified': new_status
+                }
+            
+            # Build status message
+            action = 'verified' if new_status else 'unverified'
+            message = f'Payment {action} for {participant.f_name} {participant.l_name}'
+            if team:
+                message += f' and team {team.team_name}'
+            
+            # Queue emails ONLY when verifying (not unverifying)
+            if new_status and not was_verified:
+                email_queued = self._queue_verification_emails_async(
+                    participant, team
+                )
+                
+                if email_queued:
+                    response_data['email_status'] = 'queued'
+                    message += '. Confirmation emails are being sent.'
+                else:
+                    response_data['email_status'] = 'failed'
+                    message += '. Warning: Failed to queue confirmation emails.'
+            
+            return Response({
+                'success': True,
+                'message': message,
+                'data': response_data
+            }, status=status.HTTP_200_OK)
+            
         except Exception as e:
-            logger.error(f"Error updating payment verification: {str(e)}", exc_info=True)
+            logger.error(f"Payment verification error: {str(e)}", exc_info=True)
             return Response({
                 'success': False,
-                'error': 'Failed to update payment verification',
-                'details': str(e)
+                'error': 'Internal server error during payment verification',
+                'details': str(e) if request.user.is_superuser else None
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-    def _queue_verification_emails(self, participant, team, response_data, message, 
-                                   segments, competitions):
+    def _queue_verification_emails_async(self, participant, team=None):
         """
-        Queue verification email tasks asynchronously
-        Optimized to avoid additional queries
-        """
-        from .tasks import send_payment_verification_email_task, send_team_payment_verification_emails_task
+        Queue email tasks asynchronously via Celery
+        This method returns immediately without blocking
         
+        Returns:
+            bool: True if tasks queued successfully, False otherwise
+        """
         try:
-            # Prepare participant data (no additional queries)
+            from .tasks import send_payment_verification_email_task
+            
+            # Prepare minimal participant data (avoid serialization issues)
             participant_data = {
                 'id': participant.id,
                 'name': f'{participant.f_name} {participant.l_name}',
                 'email': participant.email,
-                'segments': segments,
-                'competitions': competitions,
+                'segments': [
+                    reg.segment.segment_name 
+                    for reg in participant.registrations.all()
+                ],
+                'competitions': [
+                    comp.competition.competition 
+                    for comp in participant.competition_registrations.all()
+                ]
             }
             
-            # Prepare team data if exists
             team_data = None
-            team_members_data = None
             
+            # Prepare team data if exists
             if team:
-                # Fetch team members and competitions once
-                team_members = list(team.members.select_related().all())
+                # Fetch team members and competitions efficiently
+                team_members = list(
+                    team.members.values('id', 'f_name', 'l_name', 'email')
+                )
                 team_competitions = list(
-                    team.team_competition_registrations.select_related('competition').all()
+                    team.team_competition_registrations
+                    .select_related('competition')
+                    .values_list('competition__competition', flat=True)
                 )
                 
                 team_data = {
                     'id': team.id,
                     'name': team.team_name,
-                    'member_emails': [member.email for member in team_members if member.email],
-                    'competitions': [comp.competition.competition for comp in team_competitions],
+                    'member_emails': [
+                        m['email'] for m in team_members if m.get('email')
+                    ],
+                    'competitions': team_competitions,
+                    'members': [
+                        {
+                            'id': m['id'],
+                            'name': f"{m['f_name']} {m['l_name']}",
+                            'email': m['email']
+                        }
+                        for m in team_members if m.get('email')
+                    ]
                 }
-                
-                team_members_data = [
-                    {
-                        'id': member.id,
-                        'name': f"{member.f_name} {member.l_name}",
-                        'email': member.email,
-                    }
-                    for member in team_members if member.email
-                ]
             
-            # Use apply_async with ignore_result for fire-and-forget
+            # Queue the Celery task (fire-and-forget)
             logger.info(f"Queueing payment verification email for participant {participant.id}")
             
             send_payment_verification_email_task.apply_async(
                 args=[participant_data, team_data],
-                ignore_result=True,
+                queue='emails',
                 retry=True,
                 retry_policy={
                     'max_retries': 3,
-                    'interval_start': 0,
+                    'interval_start': 60,
                     'interval_step': 60,
                     'interval_max': 180,
                 }
             )
             
-            response_data['email_queued'] = True
-            message += '. Participant confirmation email queued.'
+            logger.info(f"✓ Email task queued for participant {participant.id}")
+            return True
             
-            # Queue team emails if team exists
-            if team and team_members_data:
-                logger.info(f"Queueing team verification emails for team {team.id}")
-                
-                send_team_payment_verification_emails_task.apply_async(
-                    args=[team_data, team_members_data],
-                    ignore_result=True,
-                    retry=True,
-                    retry_policy={
-                        'max_retries': 3,
-                        'interval_start': 0,
-                        'interval_step': 60,
-                        'interval_max': 180,
-                    }
-                )
-                
-                response_data['team_email_queued'] = True
-                message += ' Team confirmation emails queued for all members.'
-            
-            logger.info(f"Successfully queued all verification emails for participant {participant.id}")
-        
         except Exception as e:
-            logger.error(f"Failed to queue verification emails: {str(e)}", exc_info=True)
-            response_data['email_warning'] = 'Failed to queue confirmation email(s)'
-
+            logger.error(f"Failed to queue email task: {str(e)}", exc_info=True)
+            return False
 
 
 

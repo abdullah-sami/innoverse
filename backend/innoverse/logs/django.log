@@ -1,0 +1,5 @@
+[INFO] 2025-10-14 10:46:25,500 views 6069 140312002999648 Queueing payment verification email for participant 17
+[INFO] 2025-10-14 10:46:25,517 views 6069 140312002999648 ✓ Email task queued for participant 17
+[WARNING] 2025-10-14 10:46:41,757 log 6068 140312002999648 Not Found: /api/payment/verify/
+[INFO] 2025-10-14 10:46:47,453 views 6069 140312002999648 Queueing payment verification email for participant 20
+[INFO] 2025-10-14 10:46:47,466 views 6069 140312002999648 ✓ Email task queued for participant 20
