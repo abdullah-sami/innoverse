@@ -43,7 +43,7 @@ class ParticipantRegistrationSerializer(serializers.Serializer):
     gender = serializers.ChoiceField(choices=['M', 'F', 'O'])
     email = serializers.EmailField()
     phone = serializers.CharField(max_length=20)
-    age = serializers.IntegerField()
+    
     institution = serializers.CharField(max_length=200)
     address = serializers.CharField(required=False, allow_blank=True)
     guardian_phone = serializers.CharField(max_length=20, required=False, allow_blank=True)
@@ -66,7 +66,7 @@ class TeamMemberRegistrationSerializer(serializers.Serializer):
     gender = serializers.ChoiceField(choices=['M', 'F', 'O'])
     email = serializers.EmailField(required=False, allow_blank=True)
     phone = serializers.CharField(max_length=20)
-    age = serializers.IntegerField()
+    
     institution = serializers.CharField(max_length=200)
     address = serializers.CharField(required=False, allow_blank=True)
     t_shirt_size = serializers.ChoiceField(
@@ -417,8 +417,7 @@ class ParticipantDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Participant
         fields = [
-            'id', 'f_name', 'l_name', 'full_name', 'email', 'phone',
-            'age', 'institution', 'address',
+            'id', 'f_name', 'l_name', 'full_name', 'email', 'phone', 'institution', 'address',
             'payment_verified', 'segment_registrations', 
             'competition_registrations', 'gifts_received', 'payments',
             'has_entry', 'entry_datetime', 'team_info'
@@ -461,8 +460,7 @@ class TeamParticipantSerializer(serializers.ModelSerializer):
     class Meta:
         model = TeamParticipant
         fields = [
-            'id', 'f_name', 'l_name', 'full_name', 'email', 'phone',
-            'age', 'institution', 'is_leader'
+            'id', 'f_name', 'l_name', 'full_name', 'email', 'phone', 'institution', 'is_leader'
         ]
     
     def get_full_name(self, obj):
@@ -521,8 +519,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Participant
         fields = [
-            'id', 'f_name', 'l_name', 'email', 'phone', 
-            'age', 'institution', 'address', 'payment_verified',
+            'id', 'f_name', 'l_name', 'email', 'phone', 'institution', 'address', 'payment_verified',
             'segment_list', 'comp_list', 'gift_list', 'entry_status'
         ]
 

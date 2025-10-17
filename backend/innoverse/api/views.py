@@ -5,6 +5,8 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 
 from .models import Participant, Team, EntryStatus, Gift, GiftStatus
@@ -118,7 +120,7 @@ def get_entity_by_id(id_param):
 
 
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class RegisterViewSet(viewsets.ViewSet):
     
     permission_classes = [AllowAny]
@@ -245,7 +247,6 @@ class RegisterViewSet(viewsets.ViewSet):
             gender=participant_data['gender'],
             email=participant_data['email'],
             phone=participant_data['phone'],
-            age=participant_data['age'],
             institution=participant_data['institution'],
             grade=participant_data.get('grade', ''),
             address=participant_data.get('address', ''),
@@ -305,7 +306,6 @@ class RegisterViewSet(viewsets.ViewSet):
             gender=leader_participant.gender,
             email=leader_participant.email,
             phone=leader_participant.phone,
-            age=leader_participant.age,
             institution=leader_participant.institution,
             address=leader_participant.address,
             t_shirt_size=leader_participant.t_shirt_size,
@@ -324,7 +324,6 @@ class RegisterViewSet(viewsets.ViewSet):
                 gender=member_data['gender'],
                 email=member_data.get('email', ''),
                 phone=member_data['phone'],
-                age=member_data['age'],
                 institution=member_data['institution'],
                 address=member_data.get('address', ''),
                 t_shirt_size=member_data.get('t_shirt_size', ''),
@@ -397,8 +396,8 @@ class RegisterViewSet(viewsets.ViewSet):
         return response_data
     
     def _queue_confirmation_emails(self, participant, participant_payment, 
-                                   team, team_members_list, team_competitions_list, team_payment,
-                                   validated_data):
+                               team, team_members_list, team_competitions_list, team_payment,
+                               validated_data):
         """
         Queue email sending tasks asynchronously without waiting
         Data is prepared in-memory to avoid additional queries
@@ -411,7 +410,8 @@ class RegisterViewSet(viewsets.ViewSet):
                 'email': participant.email,
                 'phone': participant.phone,
                 'institution': participant.institution,
-                'segments': validated_data.get('segment', []),  # Use validated data
+                'guardian_phone': participant.guardian_phone,
+                'segments': validated_data.get('segment', []),
                 'competitions': validated_data.get('competition', []),
             }
             
@@ -421,63 +421,46 @@ class RegisterViewSet(viewsets.ViewSet):
                 'phone': participant_payment.phone,
             }
             
-            # Prepare team data if exists
-            team_data = None
-            team_members_data = None
+            # Queue participant registration email
+            logger.info(f"Queueing registration email for participant {participant.id}")
             
             if team:
+                # Prepare team data
                 team_data = {
                     'id': team.id,
                     'name': team.team_name,
                 }
                 
+                # Prepare team members data (excluding leader for display)
+                team_members_data = []
                 if team_members_list:
                     team_members_data = [
                         {
-                            'id': member.id,
                             'name': f"{member.f_name} {member.l_name}",
-                            'email': member.email,
-                            'phone': member.phone,
-                            'institution': member.institution,
-                            'is_leader': member.is_leader
+                            'institution': member.institution
                         }
                         for member in team_members_list if not member.is_leader
                     ]
-            
-            # Use apply_async with ignore_result=True for fire-and-forget
-            send_registration_email_task.apply_async(
-                args=[participant_data, payment_data, team_data, team_members_data, team_competitions_list],
-                ignore_result=True
-            )
-            
-            # Queue team emails if team exists
-            if team and team_members_list:
-                team_payment_data = {
-                    'trx_id': team_payment.trx_id,
-                    'amount': str(team_payment.amount),
-                    'phone': team_payment.phone,
-                }
                 
-                all_team_members_data = [
-                    {
-                        'id': member.id,
-                        'name': f"{member.f_name} {member.l_name}",
-                        'email': member.email,
-                        'phone': member.phone,
-                        'institution': member.institution,
-                        'is_leader': member.is_leader
-                    }
-                    for member in team_members_list
-                ]
-                
+                # Queue registration email with team info
                 send_registration_email_task.apply_async(
-                    args=[team_data, all_team_members_data, team_competitions_list, team_payment_data],
+                    args=[participant_data, payment_data, team_data, team_members_data, team_competitions_list],
+                    queue='emails',
                     ignore_result=True
                 )
+                logger.info(f"✓ Team registration email queued for participant {participant.id}")
+                
+            else:
+                # Queue registration email without team
+                send_registration_email_task.apply_async(
+                    args=[participant_data, payment_data, None, None, None],
+                    queue='emails',
+                    ignore_result=True
+                )
+                logger.info(f"✓ Registration email queued for participant {participant.id}")
                         
         except Exception as e:
-            logger.error(f"Email queueing failed: {str(e)}")
-            # Don't fail the registration, just log the error
+            logger.error(f"Email queueing failed: {str(e)}", exc_info=True)
 
 
 
@@ -903,7 +886,10 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
             bool: True if tasks queued successfully, False otherwise
         """
         try:
-            from .tasks import send_payment_verification_email_task
+            from .tasks import (
+                send_payment_verification_email_task,
+                send_team_payment_verification_emails_task
+            )
             
             # Prepare minimal participant data (avoid serialization issues)
             participant_data = {
@@ -920,42 +906,10 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
                 ]
             }
             
-            team_data = None
-            
-            # Prepare team data if exists
-            if team:
-                # Fetch team members and competitions efficiently
-                team_members = list(
-                    team.members.values('id', 'f_name', 'l_name', 'email')
-                )
-                team_competitions = list(
-                    team.team_competition_registrations
-                    .select_related('competition')
-                    .values_list('competition__competition', flat=True)
-                )
-                
-                team_data = {
-                    'id': team.id,
-                    'name': team.team_name,
-                    'member_emails': [
-                        m['email'] for m in team_members if m.get('email')
-                    ],
-                    'competitions': team_competitions,
-                    'members': [
-                        {
-                            'id': m['id'],
-                            'name': f"{m['f_name']} {m['l_name']}",
-                            'email': m['email']
-                        }
-                        for m in team_members if m.get('email')
-                    ]
-                }
-            
-            # Queue the Celery task (fire-and-forget)
-            logger.info(f"Queueing payment verification email for participant {participant.id}")
-            
+            # ALWAYS send participant email
+            logger.info(f"Queueing participant email for {participant.id}")
             send_payment_verification_email_task.apply_async(
-                args=[participant_data, team_data],
+                args=[participant_data, None],  # No team data for participant email
                 queue='emails',
                 retry=True,
                 retry_policy={
@@ -965,8 +919,50 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
                     'interval_max': 180,
                 }
             )
+            logger.info(f"✓ Participant email task queued for {participant.id}")
             
-            logger.info(f"✓ Email task queued for participant {participant.id}")
+            # If team exists, send SEPARATE team email to all members
+            if team:
+                logger.info(f"Queueing team emails for team {team.id}")
+                
+                # Fetch team members efficiently
+                team_members = list(team.members.all())
+                
+                team_competitions = [
+                    comp.competition.competition 
+                    for comp in team.team_competition_registrations.select_related('competition').all()
+                ]
+                
+                team_data = {
+                    'id': team.id,
+                    'name': team.team_name,
+                    'competitions': team_competitions,
+                }
+                
+                team_members_data = [
+                    {
+                        'id': m.id,
+                        'name': f"{m.f_name} {m.l_name}",
+                        'email': m.email,
+                    }
+                    for m in team_members if m.email
+                ]
+                
+                # Use the correct task for team emails
+                send_team_payment_verification_emails_task.apply_async(
+                    args=[team_data, team_members_data],
+                    queue='emails',
+                    retry=True,
+                    retry_policy={
+                        'max_retries': 3,
+                        'interval_start': 60,
+                        'interval_step': 60,
+                        'interval_max': 180,
+                    }
+                )
+                
+                logger.info(f"✓ Team email tasks queued for {len(team_members_data)} members")
+            
             return True
             
         except Exception as e:

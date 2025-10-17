@@ -3,3 +3,1070 @@
 [WARNING] 2025-10-14 10:46:41,757 log 6068 140312002999648 Not Found: /api/payment/verify/
 [INFO] 2025-10-14 10:46:47,453 views 6069 140312002999648 Queueing payment verification email for participant 20
 [INFO] 2025-10-14 10:46:47,466 views 6069 140312002999648 ✓ Email task queued for participant 20
+[INFO] 2025-10-14 11:22:36,805 views 8368 139892262160320 Queueing payment verification email for participant 20
+[INFO] 2025-10-14 11:22:36,982 views 8368 139892262160320 ✓ Email task queued for participant 20
+[INFO] 2025-10-14 11:43:45,599 views 8368 139892262160320 Queueing payment verification email for participant 20
+[INFO] 2025-10-14 11:43:45,619 views 8368 139892262160320 ✓ Email task queued for participant 20
+[INFO] 2025-10-14 12:11:49,568 tasks 18933 139794781130752 [TASK START] Registration email for participant 20
+[ERROR] 2025-10-14 12:11:49,571 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[INFO] 2025-10-14 12:11:49,610 tasks 18933 139794781130752 [TASK START] Registration email for participant 21
+[ERROR] 2025-10-14 12:11:49,611 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[INFO] 2025-10-14 12:11:49,624 tasks 18933 139794781130752 [TASK START] Registration email for participant 17
+[ERROR] 2025-10-14 12:11:49,624 tasks 18933 139794781130752 Invalid participant data
+[INFO] 2025-10-14 12:11:49,630 tasks 18933 139794781130752 [TASK START] Registration email for participant 22
+[ERROR] 2025-10-14 12:11:49,631 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[INFO] 2025-10-14 12:11:49,643 tasks 18933 139794781130752 [TASK START] Registration email for participant 18
+[ERROR] 2025-10-14 12:11:49,644 tasks 18933 139794781130752 Invalid participant data
+[INFO] 2025-10-14 12:11:49,649 tasks 18933 139794781130752 [TASK START] Registration email for participant 23
+[ERROR] 2025-10-14 12:11:49,651 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[INFO] 2025-10-14 12:11:49,663 tasks 18933 139794781130752 [TASK START] Registration email for participant 19
+[ERROR] 2025-10-14 12:11:49,663 tasks 18933 139794781130752 Invalid participant data
+[INFO] 2025-10-14 12:11:49,668 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 17
+[ERROR] 2025-10-14 12:11:49,669 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[WARNING] 2025-10-14 12:11:49,672 tasks 18933 139794781130752 Retrying in 60s (attempt 1/3)
+[INFO] 2025-10-14 12:11:49,680 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
+[ERROR] 2025-10-14 12:11:49,681 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[WARNING] 2025-10-14 12:11:49,685 tasks 18933 139794781130752 Retrying in 60s (attempt 1/3)
+[INFO] 2025-10-14 12:11:49,693 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
+[ERROR] 2025-10-14 12:11:49,694 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[WARNING] 2025-10-14 12:11:49,697 tasks 18933 139794781130752 Retrying in 60s (attempt 1/3)
+[INFO] 2025-10-14 12:11:49,706 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
+[ERROR] 2025-10-14 12:11:49,707 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[WARNING] 2025-10-14 12:11:49,711 tasks 18933 139794781130752 Retrying in 60s (attempt 1/3)
+[INFO] 2025-10-14 12:11:49,720 tasks 18933 139794781130752 [TASK START] Registration email for participant 24
+[ERROR] 2025-10-14 12:11:49,722 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[INFO] 2025-10-14 12:11:49,734 tasks 18933 139794781130752 [TASK START] Registration email for participant 20
+[ERROR] 2025-10-14 12:11:49,735 tasks 18933 139794781130752 Invalid participant data
+[INFO] 2025-10-14 12:12:49,595 tasks 18933 139794781130752 [TASK START] Registration email for participant 20
+[ERROR] 2025-10-14 12:12:49,597 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[INFO] 2025-10-14 12:12:49,617 tasks 18933 139794781130752 [TASK START] Registration email for participant 21
+[ERROR] 2025-10-14 12:12:49,618 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[INFO] 2025-10-14 12:12:49,637 tasks 18933 139794781130752 [TASK START] Registration email for participant 22
+[ERROR] 2025-10-14 12:12:49,638 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[INFO] 2025-10-14 12:12:49,656 tasks 18933 139794781130752 [TASK START] Registration email for participant 23
+[ERROR] 2025-10-14 12:12:49,657 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[INFO] 2025-10-14 12:12:49,675 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 17
+[ERROR] 2025-10-14 12:12:49,676 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[WARNING] 2025-10-14 12:12:49,680 tasks 18933 139794781130752 Retrying in 120s (attempt 2/3)
+[INFO] 2025-10-14 12:12:49,686 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
+[ERROR] 2025-10-14 12:12:49,687 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[WARNING] 2025-10-14 12:12:49,691 tasks 18933 139794781130752 Retrying in 120s (attempt 2/3)
+[INFO] 2025-10-14 12:12:49,701 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
+[ERROR] 2025-10-14 12:12:49,702 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[WARNING] 2025-10-14 12:12:49,706 tasks 18933 139794781130752 Retrying in 120s (attempt 2/3)
+[INFO] 2025-10-14 12:12:49,715 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
+[ERROR] 2025-10-14 12:12:49,716 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[WARNING] 2025-10-14 12:12:49,720 tasks 18933 139794781130752 Retrying in 120s (attempt 2/3)
+[INFO] 2025-10-14 12:12:49,728 tasks 18933 139794781130752 [TASK START] Registration email for participant 24
+[ERROR] 2025-10-14 12:12:49,729 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[INFO] 2025-10-14 12:14:49,605 tasks 18933 139794781130752 [TASK START] Registration email for participant 20
+[ERROR] 2025-10-14 12:14:49,608 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[INFO] 2025-10-14 12:14:49,624 tasks 18933 139794781130752 [TASK START] Registration email for participant 21
+[ERROR] 2025-10-14 12:14:49,625 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[INFO] 2025-10-14 12:14:49,644 tasks 18933 139794781130752 [TASK START] Registration email for participant 22
+[ERROR] 2025-10-14 12:14:49,645 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[INFO] 2025-10-14 12:14:49,663 tasks 18933 139794781130752 [TASK START] Registration email for participant 23
+[ERROR] 2025-10-14 12:14:49,664 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[INFO] 2025-10-14 12:14:49,682 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 17
+[ERROR] 2025-10-14 12:14:49,684 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[WARNING] 2025-10-14 12:14:49,687 tasks 18933 139794781130752 Retrying in 240s (attempt 3/3)
+[INFO] 2025-10-14 12:14:49,693 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
+[ERROR] 2025-10-14 12:14:49,694 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[WARNING] 2025-10-14 12:14:49,697 tasks 18933 139794781130752 Retrying in 240s (attempt 3/3)
+[INFO] 2025-10-14 12:14:49,710 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
+[ERROR] 2025-10-14 12:14:49,711 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[WARNING] 2025-10-14 12:14:49,714 tasks 18933 139794781130752 Retrying in 240s (attempt 3/3)
+[INFO] 2025-10-14 12:14:49,723 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
+[ERROR] 2025-10-14 12:14:49,724 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[WARNING] 2025-10-14 12:14:49,727 tasks 18933 139794781130752 Retrying in 240s (attempt 3/3)
+[INFO] 2025-10-14 12:14:49,736 tasks 18933 139794781130752 [TASK START] Registration email for participant 24
+[ERROR] 2025-10-14 12:14:49,737 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
+    connection = self._available_connections.pop()
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
+    if cache.get(cache_key):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
+    return self._cache.get(key, default)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
+    value = client.get(key)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
+    return self.execute_command("GET", name)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
+    connection = self.make_connection()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
+    return self.connection_class(**self.connection_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
+    super().__init__(**kwargs)
+TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+[INFO] 2025-10-14 12:18:21,696 views 19850 139697350784352 Queueing registration email for participant 25
+[INFO] 2025-10-14 12:18:21,844 views 19850 139697350784352 ✓ Team registration email queued for participant 25
+[WARNING] 2025-10-14 12:28:00,063 log 1129 140617889232224 Bad Request: /api/register/
+[INFO] 2025-10-14 12:40:37,554 views 1109 140617889232224 Queueing registration email for participant 26
+[INFO] 2025-10-14 12:40:37,673 views 1109 140617889232224 ✓ Team registration email queued for participant 26
+[INFO] 2025-10-14 12:43:03,021 views 1114 140617889232224 Queueing participant email for 25
+[INFO] 2025-10-14 12:43:03,191 views 1114 140617889232224 ✓ Participant email task queued for 25
+[INFO] 2025-10-14 12:49:21,594 views 1114 140617855857696 Queueing registration email for participant 27
+[INFO] 2025-10-14 12:49:21,614 views 1114 140617855857696 ✓ Registration email queued for participant 27
+[INFO] 2025-10-14 13:00:12,155 tasks 6455 140236349509632 [TASK START] Registration email for participant 20
+[INFO] 2025-10-14 13:00:12,816 utils 6455 140236349509632 Logo attached to email
+[INFO] 2025-10-14 13:00:35,131 tasks 6455 140236349509632 ✓ [SUCCESS] Registration email sent to web.rafidabdullahsami+5@gmail.com
+[INFO] 2025-10-14 13:00:35,143 tasks 6455 140236349509632 [TASK START] Registration email for participant 21
+[INFO] 2025-10-14 13:00:35,326 utils 6455 140236349509632 Logo attached to email
+[INFO] 2025-10-14 13:00:57,376 tasks 6455 140236349509632 ✓ [SUCCESS] Registration email sent to web.rafidabdullahsami+6@gmail.com
+[INFO] 2025-10-14 13:00:57,386 tasks 6455 140236349509632 [TASK START] Registration email for participant 22
+[INFO] 2025-10-14 13:00:57,582 utils 6455 140236349509632 Logo attached to email
+[INFO] 2025-10-14 13:01:20,181 tasks 6455 140236349509632 ✓ [SUCCESS] Registration email sent to web.rafidabdullahsami+6@gmail.com
+[INFO] 2025-10-14 13:01:20,194 tasks 6455 140236349509632 [TASK START] Registration email for participant 23
+[INFO] 2025-10-14 13:01:20,380 utils 6455 140236349509632 Logo attached to email
+[INFO] 2025-10-14 13:01:42,342 tasks 6455 140236349509632 ✓ [SUCCESS] Registration email sent to photos.rafidabdullahsami+16@gmail.com
+[INFO] 2025-10-14 13:01:42,355 tasks 6455 140236349509632 [TASK START] Payment verification email for participant 17
+[INFO] 2025-10-14 13:01:42,357 tasks 6455 140236349509632 Generating QR code for p_17
+[INFO] 2025-10-14 13:01:42,358 tasks 6455 140236349509632 Generating QR code for: p_17
+[INFO] 2025-10-14 13:01:42,420 tasks 6455 140236349509632 QR code saved to /home/sailo/innoverse/innoverse/media/qr_codes/p_17.png
+[INFO] 2025-10-14 13:01:42,421 tasks 6455 140236349509632 QR buffer size: 441 bytes
+[INFO] 2025-10-14 13:01:42,625 tasks 6455 140236349509632 Logo attached
+[INFO] 2025-10-14 13:01:42,627 tasks 6455 140236349509632 QR data size: 441 bytes
+[INFO] 2025-10-14 13:01:42,628 tasks 6455 140236349509632 Sending email to ['videos.rafidabdullahsami+2@gmail.com']...
+[INFO] 2025-10-14 13:02:04,524 tasks 6455 140236349509632 ✓ [SUCCESS] Email sent to ['videos.rafidabdullahsami+2@gmail.com']
+[INFO] 2025-10-14 13:02:04,537 tasks 6455 140236349509632 [TASK START] Payment verification email for participant 20
+[INFO] 2025-10-14 13:02:04,538 tasks 6455 140236349509632 Generating QR code for p_20
+[INFO] 2025-10-14 13:02:04,539 tasks 6455 140236349509632 Generating QR code for: p_20
+[INFO] 2025-10-14 13:02:04,555 tasks 6455 140236349509632 QR code saved to /home/sailo/innoverse/innoverse/media/qr_codes/p_20.png
+[INFO] 2025-10-14 13:02:04,556 tasks 6455 140236349509632 QR buffer size: 424 bytes
+[INFO] 2025-10-14 13:02:04,754 tasks 6455 140236349509632 Logo attached
+[INFO] 2025-10-14 13:02:04,755 tasks 6455 140236349509632 QR data size: 424 bytes
+[INFO] 2025-10-14 13:02:04,756 tasks 6455 140236349509632 Sending email to ['web.rafidabdullahsami+5@gmail.com']...
+[INFO] 2025-10-14 13:02:26,479 tasks 6455 140236349509632 ✓ [SUCCESS] Email sent to ['web.rafidabdullahsami+5@gmail.com']
+[INFO] 2025-10-14 13:02:26,492 tasks 6455 140236349509632 [TASK START] Payment verification email for participant 20
+[INFO] 2025-10-14 13:02:26,494 tasks 6455 140236349509632 Email already sent for participant 20, skipping
+[INFO] 2025-10-14 13:02:26,500 tasks 6455 140236349509632 [TASK START] Payment verification email for participant 20
+[INFO] 2025-10-14 13:02:26,502 tasks 6455 140236349509632 Email already sent for participant 20, skipping
+[INFO] 2025-10-14 13:02:26,508 tasks 6455 140236349509632 [TASK START] Registration email for participant 24
+[INFO] 2025-10-14 13:02:26,697 utils 6455 140236349509632 Logo attached to email
+[INFO] 2025-10-14 13:02:48,805 tasks 6455 140236349509632 ✓ [SUCCESS] Registration email sent to photos.rafidabdullahsami@gmail.com
+[INFO] 2025-10-14 13:02:48,816 tasks 6455 140236349509632 [TASK START] Registration email for participant 25
+[INFO] 2025-10-14 13:02:49,011 utils 6455 140236349509632 Logo attached to email
+[INFO] 2025-10-14 13:03:10,859 tasks 6455 140236349509632 ✓ [SUCCESS] Registration email sent to photos.rafidabdullahsami@gmail.com
+[INFO] 2025-10-14 13:03:10,869 tasks 6455 140236349509632 [TASK START] Registration email for participant 26
+[INFO] 2025-10-14 13:03:11,060 utils 6455 140236349509632 Logo attached to email
+[INFO] 2025-10-14 13:03:33,122 tasks 6455 140236349509632 ✓ [SUCCESS] Registration email sent to photos.rafidabdullahsami+1@gmail.com
+[INFO] 2025-10-14 13:03:33,133 tasks 6455 140236349509632 [TASK START] Payment verification email for participant 25
+[INFO] 2025-10-14 13:03:33,135 tasks 6455 140236349509632 Generating QR code for p_25
+[INFO] 2025-10-14 13:03:33,136 tasks 6455 140236349509632 Generating QR code for: p_25
+[INFO] 2025-10-14 13:03:33,152 tasks 6455 140236349509632 QR code saved to /home/sailo/innoverse/innoverse/media/qr_codes/p_25.png
+[INFO] 2025-10-14 13:03:33,152 tasks 6455 140236349509632 QR buffer size: 439 bytes
+[INFO] 2025-10-14 13:03:33,343 tasks 6455 140236349509632 Logo attached
+[INFO] 2025-10-14 13:03:33,347 tasks 6455 140236349509632 QR data size: 439 bytes
+[INFO] 2025-10-14 13:03:33,348 tasks 6455 140236349509632 Sending email to ['photos.rafidabdullahsami@gmail.com']...
+[INFO] 2025-10-14 13:03:55,317 tasks 6455 140236349509632 ✓ [SUCCESS] Email sent to ['photos.rafidabdullahsami@gmail.com']
+[INFO] 2025-10-14 13:03:55,328 tasks 6455 140236349509632 [TASK START] Registration email for participant 27
+[INFO] 2025-10-14 13:03:55,526 utils 6455 140236349509632 Logo attached to email
+[INFO] 2025-10-14 13:04:17,350 tasks 6455 140236349509632 ✓ [SUCCESS] Registration email sent to photos.rafidabdullahsami+2@gmail.com
+[WARNING] 2025-10-14 13:12:15,319 log 1109 140617856735232 Bad Request: /api/register/
+[INFO] 2025-10-14 13:12:22,621 views 1129 140617857751360 Queueing registration email for participant 28
+[INFO] 2025-10-14 13:12:22,836 views 1129 140617857751360 ✓ Team registration email queued for participant 28
+[INFO] 2025-10-14 13:24:55,635 views 1119 140617857733376 Queueing participant email for 27
+[INFO] 2025-10-14 13:24:55,789 views 1119 140617857733376 ✓ Participant email task queued for 27
+[INFO] 2025-10-14 13:25:30,738 tasks 9978 140301014597632 [TASK START] Registration email for participant 28
+[INFO] 2025-10-14 13:25:31,021 utils 9978 140301014597632 Logo attached to email
+[INFO] 2025-10-14 13:25:53,123 tasks 9978 140301014597632 ✓ [SUCCESS] Registration email sent to photos.rafidabdullahsami+20@gmail.com
+[INFO] 2025-10-14 13:25:53,131 tasks 9978 140301014597632 [TASK START] Payment verification email for participant 27
+[INFO] 2025-10-14 13:25:53,133 tasks 9978 140301014597632 Generating QR code for p_27
+[INFO] 2025-10-14 13:25:53,134 tasks 9978 140301014597632 Generating QR code for: p_27
+[INFO] 2025-10-14 13:25:53,171 tasks 9978 140301014597632 QR code saved to /home/sailo/innoverse/innoverse/media/qr_codes/p_27.png
+[INFO] 2025-10-14 13:25:53,172 tasks 9978 140301014597632 QR buffer size: 446 bytes
+[INFO] 2025-10-14 13:25:53,360 tasks 9978 140301014597632 Logo attached
+[INFO] 2025-10-14 13:25:53,361 tasks 9978 140301014597632 QR data size: 446 bytes
+[INFO] 2025-10-14 13:25:53,362 tasks 9978 140301014597632 Sending email to ['photos.rafidabdullahsami+2@gmail.com']...
+[INFO] 2025-10-14 13:26:15,445 tasks 9978 140301014597632 ✓ [SUCCESS] Email sent to ['photos.rafidabdullahsami+2@gmail.com']
+[WARNING] 2025-10-14 13:54:09,477 log 1109 140617856735232 Bad Request: /api/register/
+[WARNING] 2025-10-14 13:54:25,258 log 1129 140617857751360 Bad Request: /api/register/
+[WARNING] 2025-10-14 13:54:31,246 log 1114 140617855857696 Bad Request: /api/register/
+[INFO] 2025-10-14 13:54:44,938 views 1119 140617857733376 Queueing registration email for participant 29
+[INFO] 2025-10-14 13:54:44,956 tasks 9978 140301014597632 [TASK START] Registration email for participant 29
+[INFO] 2025-10-14 13:54:44,991 views 1119 140617857733376 ✓ Team registration email queued for participant 29
+[INFO] 2025-10-14 13:54:45,192 utils 9978 140301014597632 Logo attached to email
+[INFO] 2025-10-14 13:55:07,251 tasks 9978 140301014597632 ✓ [SUCCESS] Registration email sent to photos.rafidabdullahsami+21@gmail.com
+[INFO] 2025-10-14 13:55:25,737 views 1111 140617889232544 Queueing participant email for 29
+[INFO] 2025-10-14 13:55:25,910 tasks 9978 140301014597632 [TASK START] Payment verification email for participant 29
+[INFO] 2025-10-14 13:55:25,910 views 1111 140617889232544 ✓ Participant email task queued for 29
+[INFO] 2025-10-14 13:55:25,915 tasks 9978 140301014597632 Generating QR code for p_29
+[INFO] 2025-10-14 13:55:25,916 tasks 9978 140301014597632 Generating QR code for: p_29
+[INFO] 2025-10-14 13:55:25,926 tasks 9978 140301014597632 QR code saved to /home/sailo/innoverse/innoverse/media/qr_codes/p_29.png
+[INFO] 2025-10-14 13:55:25,926 tasks 9978 140301014597632 QR buffer size: 455 bytes
+[INFO] 2025-10-14 13:55:26,078 tasks 9978 140301014597632 Logo attached
+[INFO] 2025-10-14 13:55:26,078 tasks 9978 140301014597632 QR data size: 455 bytes
+[INFO] 2025-10-14 13:55:26,079 tasks 9978 140301014597632 Sending email to ['photos.rafidabdullahsami+21@gmail.com']...
+[INFO] 2025-10-14 13:55:47,939 tasks 9978 140301014597632 ✓ [SUCCESS] Email sent to ['photos.rafidabdullahsami+21@gmail.com']
+[WARNING] 2025-10-14 13:58:06,253 log 1119 140617857733376 Bad Request: /api/register/
+[INFO] 2025-10-14 13:58:12,168 views 1129 140617857751360 Queueing participant email for 29
+[INFO] 2025-10-14 13:58:12,182 views 1129 140617857751360 ✓ Participant email task queued for 29
+[INFO] 2025-10-14 13:58:25,151 tasks 14143 140485856772096 [TASK START] Payment verification email for participant 29
+[INFO] 2025-10-14 13:58:25,158 tasks 14143 140485856772096 Email already sent for participant 29, skipping
+[INFO] 2025-10-14 13:58:41,344 views 1111 140617889232544 Queueing participant email for 28
+[INFO] 2025-10-14 13:58:41,364 tasks 14143 140485856772096 [TASK START] Payment verification email for participant 28
+[INFO] 2025-10-14 13:58:41,364 views 1111 140617889232544 ✓ Participant email task queued for 28
+[INFO] 2025-10-14 13:58:41,437 tasks 14143 140485856772096 Generating QR code for p_28
+[INFO] 2025-10-14 13:58:41,438 tasks 14143 140485856772096 Generating QR code for: p_28
+[INFO] 2025-10-14 13:58:41,475 tasks 14143 140485856772096 QR code saved to /home/sailo/innoverse/innoverse/media/qr_codes/p_28.png
+[INFO] 2025-10-14 13:58:41,476 tasks 14143 140485856772096 QR buffer size: 444 bytes
+[INFO] 2025-10-14 13:58:41,687 tasks 14143 140485856772096 Logo attached
+[INFO] 2025-10-14 13:58:41,688 tasks 14143 140485856772096 QR data size: 444 bytes
+[INFO] 2025-10-14 13:58:41,689 tasks 14143 140485856772096 Sending email to ['photos.rafidabdullahsami+20@gmail.com']...
+[INFO] 2025-10-14 13:59:04,346 tasks 14143 140485856772096 ✓ [SUCCESS] Email sent to ['photos.rafidabdullahsami+20@gmail.com']
+[WARNING] 2025-10-14 14:02:45,137 log 1119 140617857733376 Bad Request: /api/register/
+[INFO] 2025-10-14 14:02:56,205 views 1109 140617856735232 Queueing registration email for participant 30
+[INFO] 2025-10-14 14:02:56,224 tasks 14143 140485856772096 [TASK START] Registration email for participant 30
+[INFO] 2025-10-14 14:02:56,237 views 1109 140617856735232 ✓ Registration email queued for participant 30
+[INFO] 2025-10-14 14:02:56,436 utils 14143 140485856772096 Logo attached to email
+[INFO] 2025-10-14 14:03:18,535 tasks 14143 140485856772096 ✓ [SUCCESS] Registration email sent to aimanaousaf@gmail.com
+[INFO] 2025-10-14 14:03:34,555 views 1129 140617857751360 Queueing participant email for 30
+[INFO] 2025-10-14 14:03:34,578 views 1129 140617857751360 ✓ Participant email task queued for 30
+[INFO] 2025-10-14 14:03:34,577 tasks 14143 140485856772096 [TASK START] Payment verification email for participant 30
+[INFO] 2025-10-14 14:03:34,581 tasks 14143 140485856772096 Generating QR code for p_30
+[INFO] 2025-10-14 14:03:34,582 tasks 14143 140485856772096 Generating QR code for: p_30
+[INFO] 2025-10-14 14:03:34,597 tasks 14143 140485856772096 QR code saved to /home/sailo/innoverse/innoverse/media/qr_codes/p_30.png
+[INFO] 2025-10-14 14:03:34,598 tasks 14143 140485856772096 QR buffer size: 444 bytes
+[INFO] 2025-10-14 14:03:34,799 tasks 14143 140485856772096 Logo attached
+[INFO] 2025-10-14 14:03:34,800 tasks 14143 140485856772096 QR data size: 444 bytes
+[INFO] 2025-10-14 14:03:34,801 tasks 14143 140485856772096 Sending email to ['aimanaousaf@gmail.com']...
+[INFO] 2025-10-14 14:03:56,487 tasks 14143 140485856772096 ✓ [SUCCESS] Email sent to ['aimanaousaf@gmail.com']
+[WARNING] 2025-10-14 18:48:16,643 log 1114 140617855857696 Not Found: /
+[WARNING] 2025-10-14 19:19:04,934 log 1129 140617857751360 Bad Request: /api/register/
+[WARNING] 2025-10-14 19:28:17,605 log 1109 140617856735232 Bad Request: /api/register/
+[WARNING] 2025-10-14 19:46:00,660 log 1111 140617889232544 Bad Request: /api/register/
+[WARNING] 2025-10-14 19:47:01,247 log 1109 140617856735232 Bad Request: /api/register/
+[WARNING] 2025-10-14 19:47:26,231 log 1119 140617857733376 Bad Request: /api/register/
+[WARNING] 2025-10-14 19:47:51,573 log 1109 140617856735232 Bad Request: /api/register/
+[WARNING] 2025-10-14 19:49:23,723 log 1129 140617857751360 Bad Request: /api/register/
+[WARNING] 2025-10-14 20:09:19,278 log 1109 140617856735232 Not Found: /
+[WARNING] 2025-10-14 21:13:10,931 log 1114 140617855857696 Not Found: /
+[INFO] 2025-10-14 21:25:28,133 views 1119 140617857733376 Queueing registration email for participant 31
+[INFO] 2025-10-14 21:25:28,153 tasks 14143 140485856772096 [TASK START] Registration email for participant 31
+[INFO] 2025-10-14 21:25:28,211 views 1119 140617857733376 ✓ Registration email queued for participant 31
+[INFO] 2025-10-14 21:25:28,405 utils 14143 140485856772096 Logo attached to email
+[INFO] 2025-10-14 21:25:50,512 tasks 14143 140485856772096 ✓ [SUCCESS] Registration email sent to musabsaeedabdullah@gmail.com
+[WARNING] 2025-10-14 22:24:07,482 log 1111 140617889232544 Bad Request: /api/register/
+[WARNING] 2025-10-14 22:30:56,423 log 1111 140617889232544 Bad Request: /api/register/
+[WARNING] 2025-10-14 22:31:05,846 log 1119 140617857733376 Bad Request: /api/register/
+[WARNING] 2025-10-14 22:35:04,805 log 1114 140617855857696 Unauthorized: /api/register/
+[WARNING] 2025-10-14 22:35:23,806 log 1109 140617856735232 Bad Request: /api/register/
+[WARNING] 2025-10-14 22:35:51,649 log 1114 140617855857696 Bad Request: /api/register/
+[WARNING] 2025-10-14 22:44:19,400 log 1109 140617856735232 Bad Request: /api/register/
+[WARNING] 2025-10-14 22:44:26,255 log 1114 140617855857696 Bad Request: /api/register/
+[WARNING] 2025-10-14 22:48:27,057 log 1111 140617889232544 Bad Request: /api/register/
+[WARNING] 2025-10-14 22:51:20,936 log 87666 140711665644896 Bad Request: /api/register/
+[ERROR] 2025-10-14 22:52:32,224 views 87669 140711665644896 Registration failed: 'age'
+[ERROR] 2025-10-14 22:52:32,229 log 87669 140711665644896 Internal Server Error: /api/register/
+[ERROR] 2025-10-14 22:53:25,126 views 87668 140711665644896 Registration failed: 'age'
+[ERROR] 2025-10-14 22:53:25,130 log 87668 140711665644896 Internal Server Error: /api/register/
+[ERROR] 2025-10-14 22:53:26,938 views 87668 140711665644896 Registration failed: 'age'
+[ERROR] 2025-10-14 22:53:26,942 log 87668 140711665644896 Internal Server Error: /api/register/
+[WARNING] 2025-10-14 22:54:58,383 log 87666 140711665644896 Bad Request: /api/register/
+[ERROR] 2025-10-14 22:56:20,235 views 87668 140711665644896 Registration failed: 'age'
+[ERROR] 2025-10-14 22:56:20,239 log 87668 140711665644896 Internal Server Error: /api/register/
+[ERROR] 2025-10-14 22:56:22,318 views 87669 140711665644896 Registration failed: 'age'
+[ERROR] 2025-10-14 22:56:22,321 log 87669 140711665644896 Internal Server Error: /api/register/
+[ERROR] 2025-10-14 22:56:29,997 views 87667 140711665644896 Registration failed: 'age'
+[ERROR] 2025-10-14 22:56:30,001 log 87667 140711665644896 Internal Server Error: /api/register/
+[ERROR] 2025-10-14 22:56:31,666 views 87667 140711665644896 Registration failed: 'age'
+[ERROR] 2025-10-14 22:56:31,676 log 87667 140711665644896 Internal Server Error: /api/register/
+[ERROR] 2025-10-14 22:56:36,476 views 87665 140711665644896 Registration failed: 'age'
+[ERROR] 2025-10-14 22:56:36,481 log 87665 140711665644896 Internal Server Error: /api/register/
+[WARNING] 2025-10-14 22:58:03,738 log 87669 140711665644896 Bad Request: /api/register/
+[ERROR] 2025-10-14 23:00:05,200 log 87669 140711665644896 Internal Server Error: /admin/participant/teamparticipant/
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+psycopg2.errors.UndefinedColumn: column participant_teamparticipant.age does not exist
+LINE 1: ..."."email", "participant_teamparticipant"."phone", "participa...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 719, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 246, in inner
+    return view(request, *args, **kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 2163, in changelist_view
+    "selection_note": _("0 of %(cnt)s selected") % {"cnt": len(cl.result_list)},
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/models/query.py", line 366, in __len__
+    self._fetch_all()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+django.db.utils.ProgrammingError: column participant_teamparticipant.age does not exist
+LINE 1: ..."."email", "participant_teamparticipant"."phone", "participa...
+                                                             ^
+
+[ERROR] 2025-10-14 23:02:38,966 log 87665 140711665644896 Internal Server Error: /admin/participant/teamparticipant/
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+psycopg2.errors.UndefinedColumn: column participant_teamparticipant.age does not exist
+LINE 1: ..."."email", "participant_teamparticipant"."phone", "participa...
+                                                             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 719, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 246, in inner
+    return view(request, *args, **kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 2163, in changelist_view
+    "selection_note": _("0 of %(cnt)s selected") % {"cnt": len(cl.result_list)},
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/models/query.py", line 366, in __len__
+    self._fetch_all()
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+django.db.utils.ProgrammingError: column participant_teamparticipant.age does not exist
+LINE 1: ..."."email", "participant_teamparticipant"."phone", "participa...
+                                                             ^
+
+[INFO] 2025-10-14 23:08:26,693 views 90583 140060202153312 Queueing registration email for participant 32
+[INFO] 2025-10-14 23:08:26,838 views 90583 140060202153312 ✓ Team registration email queued for participant 32
+[WARNING] 2025-10-14 23:09:09,957 log 90582 140060202153312 Bad Request: /api/register/
+[WARNING] 2025-10-14 23:11:16,000 log 90580 140060202153312 Bad Request: /api/register/
+[INFO] 2025-10-14 23:11:22,106 views 90583 140060202153312 Queueing registration email for participant 33
+[INFO] 2025-10-14 23:11:22,126 views 90583 140060202153312 ✓ Team registration email queued for participant 33
+[INFO] 2025-10-14 23:13:44,302 tasks 91272 140348471672832 [TASK START] Registration email for participant 32
+[INFO] 2025-10-14 23:13:44,625 utils 91272 140348471672832 Logo attached to email
+[INFO] 2025-10-14 23:14:06,688 tasks 91272 140348471672832 ✓ [SUCCESS] Registration email sent to john@example.com
+[INFO] 2025-10-14 23:14:06,702 tasks 91272 140348471672832 [TASK START] Registration email for participant 33
+[INFO] 2025-10-14 23:14:06,894 utils 91272 140348471672832 Logo attached to email
+[INFO] 2025-10-14 23:14:28,623 tasks 91272 140348471672832 ✓ [SUCCESS] Registration email sent to asdf@gmail.com
+[WARNING] 2025-10-15 00:27:09,590 log 100093 140556809811296 Bad Request: /api/register/
+[INFO] 2025-10-15 00:27:36,049 views 100090 140556809811296 Queueing registration email for participant 34
+[INFO] 2025-10-15 00:27:36,157 tasks 101869 140470339870720 [TASK START] Registration email for participant 34
+[INFO] 2025-10-15 00:27:36,164 views 100090 140556809811296 ✓ Team registration email queued for participant 34
+[INFO] 2025-10-15 00:27:36,340 utils 101869 140470339870720 Logo attached to email
+[INFO] 2025-10-15 00:27:58,360 tasks 101869 140470339870720 ✓ [SUCCESS] Registration email sent to asdf@gmail.com
+[WARNING] 2025-10-15 00:27:58,544 log 100094 140556809811296 Bad Request: /api/register/
+[WARNING] 2025-10-15 00:28:07,015 log 100091 140556809811296 Not Found: /
+[INFO] 2025-10-15 00:29:01,445 views 100094 140556809811296 Queueing registration email for participant 35
+[INFO] 2025-10-15 00:29:01,685 tasks 101869 140470339870720 [TASK START] Registration email for participant 35
+[INFO] 2025-10-15 00:29:01,713 views 100094 140556809811296 ✓ Team registration email queued for participant 35
+[INFO] 2025-10-15 00:29:01,948 utils 101869 140470339870720 Logo attached to email
+[INFO] 2025-10-15 00:29:23,444 tasks 101869 140470339870720 ✓ [SUCCESS] Registration email sent to asdfc@gmail.com
+[WARNING] 2025-10-15 00:31:18,106 log 100091 140556809811296 Bad Request: /api/register/

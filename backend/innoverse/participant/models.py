@@ -24,7 +24,7 @@ class Participant(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
     email = models.EmailField(db_index=True)
     phone = models.CharField(max_length=20, blank=True, null=True)
-    age = models.IntegerField(blank=True, null=True)
+    
     institution = models.CharField(max_length=200, blank=True, null=True)
     grade = models.CharField(max_length=20, blank=True, null=True)
     guardian_phone = models.CharField(max_length=20, blank=True, null=True)    
@@ -68,7 +68,7 @@ class TeamParticipant(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
     email = models.EmailField(db_index=True)
     phone = models.CharField(max_length=20)
-    age = models.IntegerField()
+    
     institution = models.CharField(max_length=200)
     address = models.TextField(blank=True, null=True)
     t_shirt_size = models.CharField(max_length=3, choices=TSHIRT_SIZES, blank=True, null=True)

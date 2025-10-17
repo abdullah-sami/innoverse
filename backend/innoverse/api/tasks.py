@@ -10,45 +10,99 @@ logger = logging.getLogger(__name__)
     bind=True, 
     max_retries=3, 
     default_retry_delay=60,
-    time_limit=300,  # 5 minutes hard limit
-    soft_time_limit=240  # 4 minutes soft limit
+    time_limit=300,
+    soft_time_limit=240
 )
 def send_payment_verification_email_task(self, participant_data, team_data=None):
     """
     Celery task to send payment verification email with QR code
-    
-    Args:
-        participant_data: Dict with participant info
-        team_data: Optional dict with team info
     """
     try:
         logger.info(f"[TASK START] Payment verification email for participant {participant_data.get('id')}")
         
-        # Validate input data
         if not participant_data or not participant_data.get('email'):
             logger.error("Invalid participant data - missing email")
             return {'success': False, 'error': 'Invalid participant data'}
         
         participant_id = participant_data['id']
         
-        # Idempotency check - prevent duplicate sends
-        cache_key = f"payment_email_sent_{participant_id}"
-        if cache.get(cache_key):
-            logger.info(f"Email already sent for participant {participant_id}, skipping")
-            return {'success': True, 'message': 'Already sent', 'duplicate': True}
+        # Idempotency check (skip if cache fails)
+        try:
+            cache_key = f"payment_email_sent_{participant_id}"
+            if cache.get(cache_key):
+                logger.info(f"Email already sent for participant {participant_id}, skipping")
+                return {'success': True, 'message': 'Already sent', 'duplicate': True}
+        except Exception as cache_error:
+            logger.warning(f"Cache check failed, continuing anyway: {cache_error}")
         
-        # Import here to avoid circular imports
+        # Import email utilities
         from django.core.mail import EmailMultiAlternatives
         from django.template.loader import render_to_string
         from django.conf import settings
         from email.mime.image import MIMEImage
-        from .utils import generate_qr_code, attach_logo
+        import qrcode
+        from io import BytesIO
+        import os
         
-        # Prepare email data
+        # Inline QR generation to avoid serialization issues
+        def generate_qr_inline(data, save_filename=None):
+            """Generate QR code inline"""
+            try:
+                logger.info(f"Generating QR code for: {data}")
+                
+                qr = qrcode.QRCode(
+                    version=1,
+                    error_correction=qrcode.constants.ERROR_CORRECT_H,
+                    box_size=10,
+                    border=4,
+                )
+                qr.add_data(data)
+                qr.make(fit=True)
+                
+                img = qr.make_image(fill_color="black", back_color="white")
+                
+                # Save to buffer
+                buffer = BytesIO()
+                img.save(buffer, format='PNG')
+                buffer.seek(0)
+                
+                # Save to disk if needed
+                if save_filename:
+                    qr_dir = settings.QR_CODE_ROOT
+                    os.makedirs(qr_dir, exist_ok=True)
+                    filepath = os.path.join(qr_dir, f"{save_filename}.png")
+                    
+                    with open(filepath, 'wb') as f:
+                        img.save(f, format='PNG')
+                    
+                    logger.info(f"QR code saved to {filepath}")
+                
+                return buffer
+                
+            except Exception as e:
+                logger.error(f"QR generation failed: {str(e)}", exc_info=True)
+                return None
+        
+        # Inline logo attachment
+        def attach_logo_inline(email):
+            """Attach logo inline"""
+            logo_path = os.path.join(settings.MEDIA_ROOT, 'logo.png')
+            
+            if os.path.exists(logo_path):
+                with open(logo_path, 'rb') as f:
+                    logo_image = MIMEImage(f.read())
+                    logo_image.add_header('Content-ID', '<logo>')
+                    logo_image.add_header('Content-Disposition', 'inline', filename='logo.png')
+                    email.attach(logo_image)
+                    logger.info("Logo attached")
+            else:
+                logger.warning(f"Logo not found at {logo_path}")
+            
+            return email
+        
+        # Prepare email recipients and context
         qr_id = f"p_{participant_id}"
         recipients = [participant_data['email']]
-        
-        logger.info(f"Preparing context for participant {participant_id}")
         
         context = {
             'participant_name': participant_data.get('name', 'Participant'),
@@ -59,44 +113,25 @@ def send_payment_verification_email_task(self, participant_data, team_data=None)
             'competitions': participant_data.get('competitions', []),
         }
         
-        # Handle team data
+        # Handle team data (should NOT be present for participant emails)
         if team_data:
-            qr_id = f"t_{team_data['id']}"
-            context.update({
-                'team_name': team_data.get('name', ''),
-                'team_id': team_data['id'],
-                'qr_id': qr_id,
-                'team_competitions': team_data.get('competitions', []),
-            })
-            
-            # Add team member emails
-            member_emails = team_data.get('member_emails', [])
-            for email in member_emails:
-                if email and email not in recipients:
-                    recipients.append(email)
-            
-            logger.info(f"Team email - {len(recipients)} recipients")
+            logger.warning("Team data should not be in participant email task!")
+            # Ignore team_data in this task
         
         # Generate QR code
         logger.info(f"Generating QR code for {qr_id}")
-        qr_buffer = generate_qr_code(qr_id, qr_id)
+        qr_buffer = generate_qr_inline(qr_id, qr_id)
         
         if not qr_buffer:
             raise ValueError("QR code generation failed")
         
-        qr_buffer_size = qr_buffer.getbuffer().nbytes
-        logger.info(f"QR code generated: {qr_buffer_size} bytes")
+        logger.info(f"QR buffer size: {qr_buffer.getbuffer().nbytes} bytes")
         
         # Render email template
-        logger.info("Rendering email template")
         html_content = render_to_string('email_template.html', context)
         
         # Create email
         subject = "Payment Verified - Innoverse Registration"
-        if team_data:
-            subject = f"Payment Verified - Team {team_data.get('name')} - Innoverse"
-        
-        logger.info(f"Creating email for {len(recipients)} recipients")
         
         email = EmailMultiAlternatives(
             subject=subject,
@@ -109,39 +144,37 @@ def send_payment_verification_email_task(self, participant_data, team_data=None)
         
         # Attach logo
         try:
-            email = attach_logo(email)
-            logger.info("Logo attached")
+            email = attach_logo_inline(email)
         except Exception as logo_error:
             logger.warning(f"Logo attachment failed: {logo_error}")
         
         # Attach QR code
-        logger.info("Attaching QR code")
-        qr_buffer.seek(0)  # CRITICAL: Reset buffer
+        qr_buffer.seek(0)
         qr_data = qr_buffer.read()
         
         if not qr_data:
-            raise ValueError("QR buffer is empty after read")
+            raise ValueError("QR buffer is empty")
         
-        logger.info(f"QR data read: {len(qr_data)} bytes")
+        logger.info(f"QR data size: {len(qr_data)} bytes")
         
-        # Inline QR code
+        # Inline QR
         qr_image = MIMEImage(qr_data)
         qr_image.add_header('Content-ID', '<qr_code>')
         qr_image.add_header('Content-Disposition', 'inline', filename=f'{qr_id}_qr.png')
         email.attach(qr_image)
         
-        # Downloadable QR code
+        # Downloadable QR
         email.attach(f'{qr_id}_qr.png', qr_data, 'image/png')
         
-        logger.info("QR code attached, sending email...")
+        logger.info(f"Sending email to {recipients}...")
         
         # Send email
         email.send(fail_silently=False)
         
-        # Mark as sent in cache (7 days)
+        # Mark as sent
         cache.set(cache_key, True, timeout=604800)
         
-        logger.info(f"✓ [SUCCESS] Email sent to {len(recipients)} recipients")
+        logger.info(f"✓ [SUCCESS] Email sent to {recipients}")
         
         return {
             'success': True,
@@ -151,31 +184,20 @@ def send_payment_verification_email_task(self, participant_data, team_data=None)
         }
         
     except SoftTimeLimitExceeded:
-        logger.error(f"Task exceeded soft time limit for participant {participant_data.get('id')}")
-        return {
-            'success': False,
-            'error': 'Task timeout',
-            'participant_id': participant_data.get('id')
-        }
+        logger.error(f"Task timeout for participant {participant_data.get('id')}")
+        return {'success': False, 'error': 'Task timeout'}
         
     except Exception as e:
-        logger.error(f"[ERROR] Payment email task failed: {str(e)}", exc_info=True)
+        logger.error(f"[ERROR] Payment email failed: {str(e)}", exc_info=True)
         
-        # Retry with exponential backoff
         try:
             retry_count = self.request.retries
-            countdown = 60 * (2 ** retry_count)  # 60s, 120s, 240s
-            
-            logger.warning(
-                f"Retrying in {countdown}s (attempt {retry_count + 1}/{self.max_retries})"
-            )
-            
+            countdown = 60 * (2 ** retry_count)
+            logger.warning(f"Retrying in {countdown}s (attempt {retry_count + 1}/{self.max_retries})")
             raise self.retry(exc=e, countdown=countdown)
             
         except MaxRetriesExceededError:
-            logger.critical(
-                f"Max retries exceeded for participant {participant_data.get('id')}"
-            )
+            logger.critical(f"Max retries exceeded for participant {participant_data.get('id')}")
             return {
                 'success': False,
                 'error': str(e),
@@ -183,21 +205,16 @@ def send_payment_verification_email_task(self, participant_data, team_data=None)
                 'participant_id': participant_data.get('id')
             }
 
-
 @shared_task(
     bind=True,
     max_retries=3,
     default_retry_delay=60,
-    time_limit=600,  # 10 minutes for team emails
+    time_limit=600,
     soft_time_limit=540
 )
 def send_team_payment_verification_emails_task(self, team_data, team_members_data):
     """
     Send payment verification emails to all team members
-    
-    Args:
-        team_data: Dict with team info
-        team_members_data: List of dicts with member info
     """
     try:
         logger.info(f"[TASK START] Team verification emails for team {team_data.get('id')}")
@@ -208,31 +225,84 @@ def send_team_payment_verification_emails_task(self, team_data, team_members_dat
         
         team_id = team_data['id']
         
-        # Idempotency check
-        cache_key = f"team_payment_email_sent_{team_id}"
-        if cache.get(cache_key):
-            logger.info(f"Team emails already sent for {team_id}, skipping")
-            return {'success': True, 'message': 'Already sent', 'duplicate': True}
+        # Idempotency check (skip if cache fails)
+        try:
+            cache_key = f"team_payment_email_sent_{team_id}"
+            if cache.get(cache_key):
+                logger.info(f"Team emails already sent for {team_id}, skipping")
+                return {'success': True, 'message': 'Already sent', 'duplicate': True}
+        except Exception as cache_error:
+            logger.warning(f"Cache check failed, continuing anyway: {cache_error}")
         
         from django.core.mail import EmailMultiAlternatives
         from django.template.loader import render_to_string
         from django.conf import settings
         from email.mime.image import MIMEImage
-        from .utils import generate_qr_code, attach_logo
+        import qrcode
+        from io import BytesIO
+        import os
+        
+        # Inline QR generation
+        def generate_qr_inline(data, save_filename=None):
+            try:
+                logger.info(f"Generating QR code for: {data}")
+                
+                qr = qrcode.QRCode(
+                    version=1,
+                    error_correction=qrcode.constants.ERROR_CORRECT_H,
+                    box_size=10,
+                    border=4,
+                )
+                qr.add_data(data)
+                qr.make(fit=True)
+                
+                img = qr.make_image(fill_color="black", back_color="white")
+                
+                buffer = BytesIO()
+                img.save(buffer, format='PNG')
+                buffer.seek(0)
+                
+                if save_filename:
+                    qr_dir = settings.QR_CODE_ROOT
+                    os.makedirs(qr_dir, exist_ok=True)
+                    filepath = os.path.join(qr_dir, f"{save_filename}.png")
+                    
+                    with open(filepath, 'wb') as f:
+                        img.save(f, format='PNG')
+                    
+                    logger.info(f"QR saved to {filepath}")
+                
+                return buffer
+                
+            except Exception as e:
+                logger.error(f"QR generation failed: {str(e)}", exc_info=True)
+                return None
+        
+        # Inline logo
+        def attach_logo_inline(email):
+            logo_path = os.path.join(settings.MEDIA_ROOT, 'logo.png')
+            
+            if os.path.exists(logo_path):
+                with open(logo_path, 'rb') as f:
+                    logo_image = MIMEImage(f.read())
+                    logo_image.add_header('Content-ID', '<logo>')
+                    logo_image.add_header('Content-Disposition', 'inline', filename='logo.png')
+                    email.attach(logo_image)
+            
+            return email
         
         qr_id = f"t_{team_id}"
         
-        # Generate QR code once
-        logger.info(f"Generating team QR code for {qr_id}")
-        qr_buffer = generate_qr_code(qr_id, qr_id)
+        # Generate team QR once
+        logger.info(f"Generating team QR for {qr_id}")
+        qr_buffer = generate_qr_inline(qr_id, qr_id)
         
         if not qr_buffer:
-            raise ValueError("Team QR code generation failed")
+            raise ValueError("Team QR generation failed")
         
-        # Read QR data once
         qr_buffer.seek(0)
         qr_data = qr_buffer.read()
-        logger.info(f"Team QR generated: {len(qr_data)} bytes")
+        logger.info(f"Team QR size: {len(qr_data)} bytes")
         
         sent_count = 0
         failed_emails = []
@@ -241,6 +311,7 @@ def send_team_payment_verification_emails_task(self, team_data, team_members_dat
         for member in team_members_data:
             member_email = member.get('email')
             if not member_email:
+                logger.warning(f"Skipping member without email: {member.get('name')}")
                 continue
             
             try:
@@ -264,7 +335,7 @@ def send_team_payment_verification_emails_task(self, team_data, team_members_dat
                 email.attach_alternative(html_content, "text/html")
                 
                 try:
-                    email = attach_logo(email)
+                    email = attach_logo_inline(email)
                 except Exception:
                     pass
                 
@@ -280,7 +351,7 @@ def send_team_payment_verification_emails_task(self, team_data, team_members_dat
                 logger.info(f"✓ Sent to {member_email}")
                 
             except Exception as member_error:
-                logger.error(f"Failed to send to {member_email}: {member_error}")
+                logger.error(f"Failed to send to {member_email}: {member_error}", exc_info=True)
                 failed_emails.append(member_email)
         
         # Mark as sent
@@ -311,6 +382,17 @@ def send_team_payment_verification_emails_task(self, team_data, team_members_dat
             }
 
 
+
+
+
+
+
+
+
+
+
+
+
 @shared_task(bind=True, max_retries=3, default_retry_delay=60)
 def send_registration_email_task(self, participant_data, payment_data, team_data=None, 
                                  team_members_data=None, team_competitions=None):
@@ -323,10 +405,14 @@ def send_registration_email_task(self, participant_data, payment_data, team_data
             return {'success': False, 'error': 'Invalid participant data'}
         
         # Idempotency check
-        cache_key = f"reg_email_{participant_data['id']}_{payment_data.get('trx_id')}"
-        if cache.get(cache_key):
-            logger.info("Registration email already sent")
-            return {'success': True, 'message': 'Already sent', 'duplicate': True}
+        try:
+            cache_key = f"reg_email_{participant_data['id']}_{payment_data.get('trx_id')}"
+            if cache.get(cache_key):
+                logger.info("Registration email already sent")
+                return {'success': True, 'message': 'Already sent', 'duplicate': True}
+        except Exception as cache_error:
+            logger.warning(f"Cache check failed, continuing anyway: {cache_error}")
+
         
         from django.template.loader import render_to_string
         from django.core.mail import EmailMultiAlternatives
@@ -372,7 +458,10 @@ def send_registration_email_task(self, participant_data, payment_data, team_data
         email.send(fail_silently=False)
         
         # Mark as sent
-        cache.set(cache_key, True, timeout=604800)
+        try:
+            cache.set(cache_key, True, timeout=604800)
+        except Exception as cache_error:
+            logger.warning(f"Failed to set cache: {cache_error}")
         
         logger.info(f"✓ [SUCCESS] Registration email sent to {participant_data['email']}")
         

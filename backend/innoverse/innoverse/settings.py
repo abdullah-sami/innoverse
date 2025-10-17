@@ -12,7 +12,9 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['www.innoversebd.bdix.cloud', '103.169.161.8', 'innoversebd.bdix.cloud', 'localhost', '127.0.0.1']
+# ALLOWED_HOSTS = ['*']
+CORS_ALLOW_ALL_ORIGINS = True
+ALLOWED_HOSTS = ['www.innoversebd.bdix.cloud', '103.169.161.8', 'innoversebd.bdix.cloud', 'localhost', 'localhost:3000', '127.0.0.1:3000', '127.0.0.1', 'innoversebd.net', 'http://www.innoversebd.net', 'https://www.innoversebd.net', 'https://localhost:3000', 'https://innoverse-orcin.vercel.app']
 
 
 
@@ -45,7 +47,6 @@ MIDDLEWARE = [
 ]
 
 
-CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'innoverse.urls'
 
@@ -66,7 +67,42 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'innoverse.wsgi.application'
 
-CSRF_TRUSTED_ORIGINS = ['http://103.169.161.8', 'http://innoversebd.bdix.cloud']
+# CSRF_TRUSTED_ORIGINS = ['*']
+CSRF_TRUSTED_ORIGINS = ['http://103.169.161.8', 'http://innoversebd.bdix.cloud', 'https://innoversebd.bdix.cloud', 'http://localhost:3000', 'http://127.0.0.1:3000', 'http://www.innoversebd.net', 'https://www.innoversebd.net', 'https://localhost:3000', 'https://127.0.0.1:3000', 'https://innoverse-orcin.vercel.app']
+
+
+
+# Trust proxy headers from Litespeed
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Force HTTPS redirect
+SECURE_SSL_REDIRECT = True
+
+# Secure cookies
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+
+# HSTS (HTTP Strict Transport Security)
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Prevent browser from guessing content type
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# XSS protection
+SECURE_BROWSER_XSS_FILTER = True
+
+
+
+# Cookie settings
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_AGE = 86400  # 24 hours
+
+
 
 # Database
 
@@ -267,14 +303,10 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
         'LOCATION': 'redis://127.0.0.1:6379/1',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        },
         'KEY_PREFIX': 'innoverse',
         'TIMEOUT': 300, 
     }
 }
-
 
 LOGGING = {
     'version': 1,
@@ -354,3 +386,5 @@ os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
 # Add this at the end of settings.py
 # This is important for Celery to work
 from celery.schedules import crontab
+
+
