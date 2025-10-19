@@ -156,6 +156,7 @@ The API uses JWT (JSON Web Token) authentication for protected endpoints.
   "payment": {
     "amount": "500.00",
     "phone": "1234567890",
+    "method": "bkash",
     "trx_id": "TRX123456789"
   },
   "competition": ["sc_olym", "programming"],
@@ -235,6 +236,7 @@ Team Competitions:
     "payment": {
       "coupon": "SAVE20",
       "trx_id": "TRX123456789",
+      "method": "bkash",
       "amount": "500.00"
     },
     "competitions": ["m_auction", "res_abs"],
@@ -420,6 +422,7 @@ GET /api/participant/?segment=expo&payment_verified=true&search=john
         "id": 1,
         "phone": "1234567890",
         "amount": "500.00",
+        "method": "bkash",
         "trx_id": "TRX123456789",
         "datetime": "2025-01-15T10:30:00Z"
       }
@@ -516,6 +519,7 @@ GET /api/team/?competition=pr_show&payment_verified=true
           "id": 1,
           "phone": "1234567890",
           "amount": "1000.00",
+          "method": "bkash",
           "trx_id": "TRX987654321",
           "datetime": "2025-01-15T10:30:00Z"
         }
@@ -1516,4 +1520,4 @@ or
 
 
 **Version:** 1.4
-**Last Updated:** 13 October 2025
+**Last Updated:** 19 October 2025
