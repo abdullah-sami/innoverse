@@ -1369,6 +1369,92 @@ GET /api/check/team/pr_show/t_1/
 
 ---
 
+
+### 26. Manage Coupons
+
+**Endpoint:** `GET /api/coupon/`
+
+**Description:** Get list of coupons
+
+**Authentication:** Required (Admin)
+
+**Example:**
+```bash
+GET /api/coupon/
+```
+
+**Response:**
+```bash
+{
+    "success": true,
+    "count": 2,
+    "data": [
+        {
+            "id": 1,
+            "coupon_code": "BUP10",
+            "discount": 10.0,
+            "registered_count": 907
+        },
+        {
+            "id": 2,
+            "coupon_code": "MSC10",
+            "discount": 10.0,
+            "registered_count": 0
+        }
+    ]
+}
+```
+
+```bash
+GET /api/coupon/1
+```
+
+**Response:**
+```bash
+{
+    "success": true,
+    "data": {
+        "id": 2,
+        "coupon_code": "MSC10",
+        "discount": 10.0,
+        "registered_count": 0
+    }
+}
+```
+
+
+**Endpoint:** `POST /api/coupon/`
+
+**Description:** Create new coupon
+
+**Authentication:** Required (Admin)
+
+```bash
+{
+  "coupon_code": "INNOVERSE2025",
+  "discount": 20.0
+}
+```
+
+**Response:**
+```bash
+{
+  "success": true,
+  "message": "Coupon created successfully",
+  "data": {
+    "id": 3,
+    "coupon_code": "INNOVERSE2025",
+    "discount": 20.0
+  }
+}
+```
+
+
+
+
+
+
+
 ## Error Responses
 
 All endpoints may return the following error responses:
