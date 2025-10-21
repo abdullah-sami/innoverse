@@ -1450,7 +1450,7 @@ GET /api/coupon/1
 ```
 
 
-### 26. Manage Tanvin Award
+### 27. Manage Tanvin Award
 
 **Endpoint:** `GET /api/tanvin-award/`
 
