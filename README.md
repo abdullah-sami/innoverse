@@ -1450,6 +1450,193 @@ GET /api/coupon/1
 ```
 
 
+### 26. Manage Tanvin Award
+
+**Endpoint:** `GET /api/tanvin-award/`
+
+**Description:** Get info about entries
+
+**Authentication:** Required (Admin)
+
+**Example:**
+```bash
+GET /api/tanvin-award/
+```
+
+**Response:**
+```bash
+{
+    "success": true,
+    "count": 1,
+    "data": [
+        {
+            "id": 2,
+            "team_id": 59,
+            "team_name": "Team Alpha 23",
+            "project_name": "Innovative Project",
+            "project_type": "cs",
+            "project_type_display": "Computer Science & Programming",
+            "member_count": 2
+        }
+    ]
+}
+```
+
+```bash
+GET /api/tanvin-award/2
+```
+
+**Response:**
+```bash
+{
+    "success": true,
+    "data": {
+        "id": 2,
+        "team": {
+            "id": 59,
+            "team_name": "Team Alpha 23",
+            "payment_verified": false,
+            "member_count": 2,
+            "members": [
+                {
+                    "id": 146,
+                    "full_name": "John Doe",
+                    "f_name": "John",
+                    "l_name": "Doe",
+                    "gender": "M",
+                    "email": "rafidabdullahsami+6@gmail.com",
+                    "phone": "1234567890",
+                    "institution": "Example University",
+                    "grade": null,
+                    "t_shirt_size": "L",
+                    "is_leader": true
+                },
+                {
+                    "id": 147,
+                    "full_name": "Alice Johnson",
+                    "f_name": "Alice",
+                    "l_name": "Johnson",
+                    "gender": "F",
+                    "email": "abdullahsami4103+4@gmail.com",
+                    "phone": "9876543210",
+                    "institution": "Example University",
+                    "grade": null,
+                    "t_shirt_size": "M",
+                    "is_leader": false
+                }
+            ],
+            "competitions": [
+                "Shahid Tanvin Award"
+            ]
+        },
+        "project_name": "Innovative Project",
+        "project_type": "cs",
+        "project_type_display": "Computer Science & Programming",
+        "project_description": "A brief description of the innovative project.",
+        "pitch_deck": "http://example.com/pitchdeck.pdf",
+        "video_link": "http://example.com/presentation.mp4"
+    }
+}
+```
+
+
+**Endpoint:** `POST /api/register/`
+
+**Description:** Create new Tanvin Award entry
+
+**Authentication:** Required (Admin)
+
+```bash
+{
+  "participant": {
+    "full_name": "John Doe",
+    "gender": "M",
+    "email": "rafidabdullahsami+6@gmail.com",
+    "phone": "1234567890",
+    "grade": "12",
+    "institution": "Example University",
+    "guardian_phone": "1234567890",
+    "address": "123 Main St",
+    "t_shirt_size": "L"
+  },
+  "payment": {
+    "amount": "500.00",
+    "phone": "1234567890",
+    "method": "bkash",
+    "trx_id": "TRX123456d7d89"
+  },
+  "team_competition": {
+    "team": {
+      "team_name": "Team Alpha 23",
+      "participant": [
+        {
+          "full_name": "Alice Johnson",
+          "gender": "F",
+          "email": "abdullahsami4103+4@gmail.com",
+          "phone": "9876543210",
+          "age": 21,
+          "institution": "Example University",
+          "address": "456 Elm St",
+          "t_shirt_size": "M"
+        }
+      ]
+    },
+    "competition": ["tanvin"]
+  },
+  "tanvin_award": {
+    "project_name": "Innovative Project",
+    "project_type": "cs",
+    "project_description": "A brief description of the innovative project.",
+    "pitch_deck": "http://example.com/pitchdeck.pdf",
+    "video_link": "http://example.com/presentation.mp4"
+  },
+  "coupon": {
+    "coupon_code": "BUP10"
+  }
+}
+```
+
+**Response:**
+```bash
+{
+    "success": true,
+    "message": "Registration completed successfully. Check your email for confirmation. If mail is not received within a few minutes, please check your spam folder. Confirmation email will be sent shortly.",
+    "data": {
+        "participant": {
+            "id": 113,
+            "name": "John Doe",
+            "email": "rafidabdullahsami+6@gmail.com",
+            "payment_verified": false
+        },
+        "payment": {
+            "coupon": "BUP10",
+            "discount": "10.0",
+            "trx_id": "TRX123456d7d89",
+            "amount": "500.00",
+            "method": "bkash"
+        },
+        "segments": [],
+        "competitions": [],
+        "team": {
+            "id": 59,
+            "name": "Team Alpha 23",
+            "payment_verified": false,
+            "members_count": 0,
+            "competitions": [
+                "tanvin"
+            ]
+        },
+        "team_payment": {
+            "trx_id": "TRX123456d7d89",
+            "amount": "500.00",
+            "method": "bkash"
+        }
+    },
+    "email_queued": true
+}
+```
+
+
 
 
 
@@ -1605,5 +1792,5 @@ or
 
 
 
-**Version:** 1.4
-**Last Updated:** 19 October 2025
+**Version:** 1.5
+**Last Updated:** 21 October 2025
