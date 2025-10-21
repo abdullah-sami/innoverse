@@ -3,6 +3,7 @@ from .models import Coupons, Segment, Gift, Competition, TeamCompetition
 from participant.models import Registration, CompetitionRegistration, TeamCompetitionRegistration
 from participant.serializers import ParticipantSerializer, TeamSerializer
 from api.models import GiftStatus
+from rest_framework.serializers import SerializerMethodField
 
 
 
@@ -95,6 +96,15 @@ class TeamGiftStatusSerializer(serializers.ModelSerializer):
 
 
 class CouponSerializer(serializers.ModelSerializer):
+    registered_count = serializers.SerializerMethodField()
     class Meta:
         model = Coupons
-        fields = "__all__"
+        fields = ["id", "coupon_code", "discount", "registered_count"]
+
+
+    def get_registered_count(self, obj):
+        used_count = 1000 -obj.coupon_number
+        return used_count
+    
+    def create(self, validated_data):
+        return super().create(validated_data)

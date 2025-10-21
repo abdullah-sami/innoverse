@@ -1,1072 +1,586 @@
-[INFO] 2025-10-14 10:46:25,500 views 6069 140312002999648 Queueing payment verification email for participant 17
-[INFO] 2025-10-14 10:46:25,517 views 6069 140312002999648 ✓ Email task queued for participant 17
-[WARNING] 2025-10-14 10:46:41,757 log 6068 140312002999648 Not Found: /api/payment/verify/
-[INFO] 2025-10-14 10:46:47,453 views 6069 140312002999648 Queueing payment verification email for participant 20
-[INFO] 2025-10-14 10:46:47,466 views 6069 140312002999648 ✓ Email task queued for participant 20
-[INFO] 2025-10-14 11:22:36,805 views 8368 139892262160320 Queueing payment verification email for participant 20
-[INFO] 2025-10-14 11:22:36,982 views 8368 139892262160320 ✓ Email task queued for participant 20
-[INFO] 2025-10-14 11:43:45,599 views 8368 139892262160320 Queueing payment verification email for participant 20
-[INFO] 2025-10-14 11:43:45,619 views 8368 139892262160320 ✓ Email task queued for participant 20
-[INFO] 2025-10-14 12:11:49,568 tasks 18933 139794781130752 [TASK START] Registration email for participant 20
-[ERROR] 2025-10-14 12:11:49,571 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[INFO] 2025-10-14 12:11:49,610 tasks 18933 139794781130752 [TASK START] Registration email for participant 21
-[ERROR] 2025-10-14 12:11:49,611 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[INFO] 2025-10-14 12:11:49,624 tasks 18933 139794781130752 [TASK START] Registration email for participant 17
-[ERROR] 2025-10-14 12:11:49,624 tasks 18933 139794781130752 Invalid participant data
-[INFO] 2025-10-14 12:11:49,630 tasks 18933 139794781130752 [TASK START] Registration email for participant 22
-[ERROR] 2025-10-14 12:11:49,631 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[INFO] 2025-10-14 12:11:49,643 tasks 18933 139794781130752 [TASK START] Registration email for participant 18
-[ERROR] 2025-10-14 12:11:49,644 tasks 18933 139794781130752 Invalid participant data
-[INFO] 2025-10-14 12:11:49,649 tasks 18933 139794781130752 [TASK START] Registration email for participant 23
-[ERROR] 2025-10-14 12:11:49,651 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[INFO] 2025-10-14 12:11:49,663 tasks 18933 139794781130752 [TASK START] Registration email for participant 19
-[ERROR] 2025-10-14 12:11:49,663 tasks 18933 139794781130752 Invalid participant data
-[INFO] 2025-10-14 12:11:49,668 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 17
-[ERROR] 2025-10-14 12:11:49,669 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[WARNING] 2025-10-14 12:11:49,672 tasks 18933 139794781130752 Retrying in 60s (attempt 1/3)
-[INFO] 2025-10-14 12:11:49,680 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
-[ERROR] 2025-10-14 12:11:49,681 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[WARNING] 2025-10-14 12:11:49,685 tasks 18933 139794781130752 Retrying in 60s (attempt 1/3)
-[INFO] 2025-10-14 12:11:49,693 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
-[ERROR] 2025-10-14 12:11:49,694 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[WARNING] 2025-10-14 12:11:49,697 tasks 18933 139794781130752 Retrying in 60s (attempt 1/3)
-[INFO] 2025-10-14 12:11:49,706 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
-[ERROR] 2025-10-14 12:11:49,707 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[WARNING] 2025-10-14 12:11:49,711 tasks 18933 139794781130752 Retrying in 60s (attempt 1/3)
-[INFO] 2025-10-14 12:11:49,720 tasks 18933 139794781130752 [TASK START] Registration email for participant 24
-[ERROR] 2025-10-14 12:11:49,722 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[INFO] 2025-10-14 12:11:49,734 tasks 18933 139794781130752 [TASK START] Registration email for participant 20
-[ERROR] 2025-10-14 12:11:49,735 tasks 18933 139794781130752 Invalid participant data
-[INFO] 2025-10-14 12:12:49,595 tasks 18933 139794781130752 [TASK START] Registration email for participant 20
-[ERROR] 2025-10-14 12:12:49,597 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[INFO] 2025-10-14 12:12:49,617 tasks 18933 139794781130752 [TASK START] Registration email for participant 21
-[ERROR] 2025-10-14 12:12:49,618 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[INFO] 2025-10-14 12:12:49,637 tasks 18933 139794781130752 [TASK START] Registration email for participant 22
-[ERROR] 2025-10-14 12:12:49,638 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[INFO] 2025-10-14 12:12:49,656 tasks 18933 139794781130752 [TASK START] Registration email for participant 23
-[ERROR] 2025-10-14 12:12:49,657 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[INFO] 2025-10-14 12:12:49,675 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 17
-[ERROR] 2025-10-14 12:12:49,676 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[WARNING] 2025-10-14 12:12:49,680 tasks 18933 139794781130752 Retrying in 120s (attempt 2/3)
-[INFO] 2025-10-14 12:12:49,686 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
-[ERROR] 2025-10-14 12:12:49,687 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[WARNING] 2025-10-14 12:12:49,691 tasks 18933 139794781130752 Retrying in 120s (attempt 2/3)
-[INFO] 2025-10-14 12:12:49,701 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
-[ERROR] 2025-10-14 12:12:49,702 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[WARNING] 2025-10-14 12:12:49,706 tasks 18933 139794781130752 Retrying in 120s (attempt 2/3)
-[INFO] 2025-10-14 12:12:49,715 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
-[ERROR] 2025-10-14 12:12:49,716 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[WARNING] 2025-10-14 12:12:49,720 tasks 18933 139794781130752 Retrying in 120s (attempt 2/3)
-[INFO] 2025-10-14 12:12:49,728 tasks 18933 139794781130752 [TASK START] Registration email for participant 24
-[ERROR] 2025-10-14 12:12:49,729 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[INFO] 2025-10-14 12:14:49,605 tasks 18933 139794781130752 [TASK START] Registration email for participant 20
-[ERROR] 2025-10-14 12:14:49,608 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[INFO] 2025-10-14 12:14:49,624 tasks 18933 139794781130752 [TASK START] Registration email for participant 21
-[ERROR] 2025-10-14 12:14:49,625 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[INFO] 2025-10-14 12:14:49,644 tasks 18933 139794781130752 [TASK START] Registration email for participant 22
-[ERROR] 2025-10-14 12:14:49,645 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[INFO] 2025-10-14 12:14:49,663 tasks 18933 139794781130752 [TASK START] Registration email for participant 23
-[ERROR] 2025-10-14 12:14:49,664 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[INFO] 2025-10-14 12:14:49,682 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 17
-[ERROR] 2025-10-14 12:14:49,684 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[WARNING] 2025-10-14 12:14:49,687 tasks 18933 139794781130752 Retrying in 240s (attempt 3/3)
-[INFO] 2025-10-14 12:14:49,693 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
-[ERROR] 2025-10-14 12:14:49,694 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[WARNING] 2025-10-14 12:14:49,697 tasks 18933 139794781130752 Retrying in 240s (attempt 3/3)
-[INFO] 2025-10-14 12:14:49,710 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
-[ERROR] 2025-10-14 12:14:49,711 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[WARNING] 2025-10-14 12:14:49,714 tasks 18933 139794781130752 Retrying in 240s (attempt 3/3)
-[INFO] 2025-10-14 12:14:49,723 tasks 18933 139794781130752 [TASK START] Payment verification email for participant 20
-[ERROR] 2025-10-14 12:14:49,724 tasks 18933 139794781130752 [ERROR] Payment email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 31, in send_payment_verification_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[WARNING] 2025-10-14 12:14:49,727 tasks 18933 139794781130752 Retrying in 240s (attempt 3/3)
-[INFO] 2025-10-14 12:14:49,736 tasks 18933 139794781130752 [TASK START] Registration email for participant 24
-[ERROR] 2025-10-14 12:14:49,737 tasks 18933 139794781130752 [ERROR] Registration email failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1079, in get_connection
-    connection = self._available_connections.pop()
-IndexError: pop from empty list
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/innoverse/api/tasks.py", line 408, in send_registration_email_task
-    if cache.get(cache_key):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 188, in get
-    return self._cache.get(key, default)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/cache/backends/redis.py", line 100, in get
-    value = client.get(key)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/commands/core.py", line 1829, in get
-    return self.execute_command("GET", name)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/client.py", line 533, in execute_command
-    conn = self.connection or pool.get_connection(command_name, **options)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1081, in get_connection
-    connection = self.make_connection()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 1121, in make_connection
-    return self.connection_class(**self.connection_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/redis/connection.py", line 581, in __init__
-    super().__init__(**kwargs)
-TypeError: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
-[INFO] 2025-10-14 12:18:21,696 views 19850 139697350784352 Queueing registration email for participant 25
-[INFO] 2025-10-14 12:18:21,844 views 19850 139697350784352 ✓ Team registration email queued for participant 25
-[WARNING] 2025-10-14 12:28:00,063 log 1129 140617889232224 Bad Request: /api/register/
-[INFO] 2025-10-14 12:40:37,554 views 1109 140617889232224 Queueing registration email for participant 26
-[INFO] 2025-10-14 12:40:37,673 views 1109 140617889232224 ✓ Team registration email queued for participant 26
-[INFO] 2025-10-14 12:43:03,021 views 1114 140617889232224 Queueing participant email for 25
-[INFO] 2025-10-14 12:43:03,191 views 1114 140617889232224 ✓ Participant email task queued for 25
-[INFO] 2025-10-14 12:49:21,594 views 1114 140617855857696 Queueing registration email for participant 27
-[INFO] 2025-10-14 12:49:21,614 views 1114 140617855857696 ✓ Registration email queued for participant 27
-[INFO] 2025-10-14 13:00:12,155 tasks 6455 140236349509632 [TASK START] Registration email for participant 20
-[INFO] 2025-10-14 13:00:12,816 utils 6455 140236349509632 Logo attached to email
-[INFO] 2025-10-14 13:00:35,131 tasks 6455 140236349509632 ✓ [SUCCESS] Registration email sent to web.rafidabdullahsami+5@gmail.com
-[INFO] 2025-10-14 13:00:35,143 tasks 6455 140236349509632 [TASK START] Registration email for participant 21
-[INFO] 2025-10-14 13:00:35,326 utils 6455 140236349509632 Logo attached to email
-[INFO] 2025-10-14 13:00:57,376 tasks 6455 140236349509632 ✓ [SUCCESS] Registration email sent to web.rafidabdullahsami+6@gmail.com
-[INFO] 2025-10-14 13:00:57,386 tasks 6455 140236349509632 [TASK START] Registration email for participant 22
-[INFO] 2025-10-14 13:00:57,582 utils 6455 140236349509632 Logo attached to email
-[INFO] 2025-10-14 13:01:20,181 tasks 6455 140236349509632 ✓ [SUCCESS] Registration email sent to web.rafidabdullahsami+6@gmail.com
-[INFO] 2025-10-14 13:01:20,194 tasks 6455 140236349509632 [TASK START] Registration email for participant 23
-[INFO] 2025-10-14 13:01:20,380 utils 6455 140236349509632 Logo attached to email
-[INFO] 2025-10-14 13:01:42,342 tasks 6455 140236349509632 ✓ [SUCCESS] Registration email sent to photos.rafidabdullahsami+16@gmail.com
-[INFO] 2025-10-14 13:01:42,355 tasks 6455 140236349509632 [TASK START] Payment verification email for participant 17
-[INFO] 2025-10-14 13:01:42,357 tasks 6455 140236349509632 Generating QR code for p_17
-[INFO] 2025-10-14 13:01:42,358 tasks 6455 140236349509632 Generating QR code for: p_17
-[INFO] 2025-10-14 13:01:42,420 tasks 6455 140236349509632 QR code saved to /home/sailo/innoverse/innoverse/media/qr_codes/p_17.png
-[INFO] 2025-10-14 13:01:42,421 tasks 6455 140236349509632 QR buffer size: 441 bytes
-[INFO] 2025-10-14 13:01:42,625 tasks 6455 140236349509632 Logo attached
-[INFO] 2025-10-14 13:01:42,627 tasks 6455 140236349509632 QR data size: 441 bytes
-[INFO] 2025-10-14 13:01:42,628 tasks 6455 140236349509632 Sending email to ['videos.rafidabdullahsami+2@gmail.com']...
-[INFO] 2025-10-14 13:02:04,524 tasks 6455 140236349509632 ✓ [SUCCESS] Email sent to ['videos.rafidabdullahsami+2@gmail.com']
-[INFO] 2025-10-14 13:02:04,537 tasks 6455 140236349509632 [TASK START] Payment verification email for participant 20
-[INFO] 2025-10-14 13:02:04,538 tasks 6455 140236349509632 Generating QR code for p_20
-[INFO] 2025-10-14 13:02:04,539 tasks 6455 140236349509632 Generating QR code for: p_20
-[INFO] 2025-10-14 13:02:04,555 tasks 6455 140236349509632 QR code saved to /home/sailo/innoverse/innoverse/media/qr_codes/p_20.png
-[INFO] 2025-10-14 13:02:04,556 tasks 6455 140236349509632 QR buffer size: 424 bytes
-[INFO] 2025-10-14 13:02:04,754 tasks 6455 140236349509632 Logo attached
-[INFO] 2025-10-14 13:02:04,755 tasks 6455 140236349509632 QR data size: 424 bytes
-[INFO] 2025-10-14 13:02:04,756 tasks 6455 140236349509632 Sending email to ['web.rafidabdullahsami+5@gmail.com']...
-[INFO] 2025-10-14 13:02:26,479 tasks 6455 140236349509632 ✓ [SUCCESS] Email sent to ['web.rafidabdullahsami+5@gmail.com']
-[INFO] 2025-10-14 13:02:26,492 tasks 6455 140236349509632 [TASK START] Payment verification email for participant 20
-[INFO] 2025-10-14 13:02:26,494 tasks 6455 140236349509632 Email already sent for participant 20, skipping
-[INFO] 2025-10-14 13:02:26,500 tasks 6455 140236349509632 [TASK START] Payment verification email for participant 20
-[INFO] 2025-10-14 13:02:26,502 tasks 6455 140236349509632 Email already sent for participant 20, skipping
-[INFO] 2025-10-14 13:02:26,508 tasks 6455 140236349509632 [TASK START] Registration email for participant 24
-[INFO] 2025-10-14 13:02:26,697 utils 6455 140236349509632 Logo attached to email
-[INFO] 2025-10-14 13:02:48,805 tasks 6455 140236349509632 ✓ [SUCCESS] Registration email sent to photos.rafidabdullahsami@gmail.com
-[INFO] 2025-10-14 13:02:48,816 tasks 6455 140236349509632 [TASK START] Registration email for participant 25
-[INFO] 2025-10-14 13:02:49,011 utils 6455 140236349509632 Logo attached to email
-[INFO] 2025-10-14 13:03:10,859 tasks 6455 140236349509632 ✓ [SUCCESS] Registration email sent to photos.rafidabdullahsami@gmail.com
-[INFO] 2025-10-14 13:03:10,869 tasks 6455 140236349509632 [TASK START] Registration email for participant 26
-[INFO] 2025-10-14 13:03:11,060 utils 6455 140236349509632 Logo attached to email
-[INFO] 2025-10-14 13:03:33,122 tasks 6455 140236349509632 ✓ [SUCCESS] Registration email sent to photos.rafidabdullahsami+1@gmail.com
-[INFO] 2025-10-14 13:03:33,133 tasks 6455 140236349509632 [TASK START] Payment verification email for participant 25
-[INFO] 2025-10-14 13:03:33,135 tasks 6455 140236349509632 Generating QR code for p_25
-[INFO] 2025-10-14 13:03:33,136 tasks 6455 140236349509632 Generating QR code for: p_25
-[INFO] 2025-10-14 13:03:33,152 tasks 6455 140236349509632 QR code saved to /home/sailo/innoverse/innoverse/media/qr_codes/p_25.png
-[INFO] 2025-10-14 13:03:33,152 tasks 6455 140236349509632 QR buffer size: 439 bytes
-[INFO] 2025-10-14 13:03:33,343 tasks 6455 140236349509632 Logo attached
-[INFO] 2025-10-14 13:03:33,347 tasks 6455 140236349509632 QR data size: 439 bytes
-[INFO] 2025-10-14 13:03:33,348 tasks 6455 140236349509632 Sending email to ['photos.rafidabdullahsami@gmail.com']...
-[INFO] 2025-10-14 13:03:55,317 tasks 6455 140236349509632 ✓ [SUCCESS] Email sent to ['photos.rafidabdullahsami@gmail.com']
-[INFO] 2025-10-14 13:03:55,328 tasks 6455 140236349509632 [TASK START] Registration email for participant 27
-[INFO] 2025-10-14 13:03:55,526 utils 6455 140236349509632 Logo attached to email
-[INFO] 2025-10-14 13:04:17,350 tasks 6455 140236349509632 ✓ [SUCCESS] Registration email sent to photos.rafidabdullahsami+2@gmail.com
-[WARNING] 2025-10-14 13:12:15,319 log 1109 140617856735232 Bad Request: /api/register/
-[INFO] 2025-10-14 13:12:22,621 views 1129 140617857751360 Queueing registration email for participant 28
-[INFO] 2025-10-14 13:12:22,836 views 1129 140617857751360 ✓ Team registration email queued for participant 28
-[INFO] 2025-10-14 13:24:55,635 views 1119 140617857733376 Queueing participant email for 27
-[INFO] 2025-10-14 13:24:55,789 views 1119 140617857733376 ✓ Participant email task queued for 27
-[INFO] 2025-10-14 13:25:30,738 tasks 9978 140301014597632 [TASK START] Registration email for participant 28
-[INFO] 2025-10-14 13:25:31,021 utils 9978 140301014597632 Logo attached to email
-[INFO] 2025-10-14 13:25:53,123 tasks 9978 140301014597632 ✓ [SUCCESS] Registration email sent to photos.rafidabdullahsami+20@gmail.com
-[INFO] 2025-10-14 13:25:53,131 tasks 9978 140301014597632 [TASK START] Payment verification email for participant 27
-[INFO] 2025-10-14 13:25:53,133 tasks 9978 140301014597632 Generating QR code for p_27
-[INFO] 2025-10-14 13:25:53,134 tasks 9978 140301014597632 Generating QR code for: p_27
-[INFO] 2025-10-14 13:25:53,171 tasks 9978 140301014597632 QR code saved to /home/sailo/innoverse/innoverse/media/qr_codes/p_27.png
-[INFO] 2025-10-14 13:25:53,172 tasks 9978 140301014597632 QR buffer size: 446 bytes
-[INFO] 2025-10-14 13:25:53,360 tasks 9978 140301014597632 Logo attached
-[INFO] 2025-10-14 13:25:53,361 tasks 9978 140301014597632 QR data size: 446 bytes
-[INFO] 2025-10-14 13:25:53,362 tasks 9978 140301014597632 Sending email to ['photos.rafidabdullahsami+2@gmail.com']...
-[INFO] 2025-10-14 13:26:15,445 tasks 9978 140301014597632 ✓ [SUCCESS] Email sent to ['photos.rafidabdullahsami+2@gmail.com']
-[WARNING] 2025-10-14 13:54:09,477 log 1109 140617856735232 Bad Request: /api/register/
-[WARNING] 2025-10-14 13:54:25,258 log 1129 140617857751360 Bad Request: /api/register/
-[WARNING] 2025-10-14 13:54:31,246 log 1114 140617855857696 Bad Request: /api/register/
-[INFO] 2025-10-14 13:54:44,938 views 1119 140617857733376 Queueing registration email for participant 29
-[INFO] 2025-10-14 13:54:44,956 tasks 9978 140301014597632 [TASK START] Registration email for participant 29
-[INFO] 2025-10-14 13:54:44,991 views 1119 140617857733376 ✓ Team registration email queued for participant 29
-[INFO] 2025-10-14 13:54:45,192 utils 9978 140301014597632 Logo attached to email
-[INFO] 2025-10-14 13:55:07,251 tasks 9978 140301014597632 ✓ [SUCCESS] Registration email sent to photos.rafidabdullahsami+21@gmail.com
-[INFO] 2025-10-14 13:55:25,737 views 1111 140617889232544 Queueing participant email for 29
-[INFO] 2025-10-14 13:55:25,910 tasks 9978 140301014597632 [TASK START] Payment verification email for participant 29
-[INFO] 2025-10-14 13:55:25,910 views 1111 140617889232544 ✓ Participant email task queued for 29
-[INFO] 2025-10-14 13:55:25,915 tasks 9978 140301014597632 Generating QR code for p_29
-[INFO] 2025-10-14 13:55:25,916 tasks 9978 140301014597632 Generating QR code for: p_29
-[INFO] 2025-10-14 13:55:25,926 tasks 9978 140301014597632 QR code saved to /home/sailo/innoverse/innoverse/media/qr_codes/p_29.png
-[INFO] 2025-10-14 13:55:25,926 tasks 9978 140301014597632 QR buffer size: 455 bytes
-[INFO] 2025-10-14 13:55:26,078 tasks 9978 140301014597632 Logo attached
-[INFO] 2025-10-14 13:55:26,078 tasks 9978 140301014597632 QR data size: 455 bytes
-[INFO] 2025-10-14 13:55:26,079 tasks 9978 140301014597632 Sending email to ['photos.rafidabdullahsami+21@gmail.com']...
-[INFO] 2025-10-14 13:55:47,939 tasks 9978 140301014597632 ✓ [SUCCESS] Email sent to ['photos.rafidabdullahsami+21@gmail.com']
-[WARNING] 2025-10-14 13:58:06,253 log 1119 140617857733376 Bad Request: /api/register/
-[INFO] 2025-10-14 13:58:12,168 views 1129 140617857751360 Queueing participant email for 29
-[INFO] 2025-10-14 13:58:12,182 views 1129 140617857751360 ✓ Participant email task queued for 29
-[INFO] 2025-10-14 13:58:25,151 tasks 14143 140485856772096 [TASK START] Payment verification email for participant 29
-[INFO] 2025-10-14 13:58:25,158 tasks 14143 140485856772096 Email already sent for participant 29, skipping
-[INFO] 2025-10-14 13:58:41,344 views 1111 140617889232544 Queueing participant email for 28
-[INFO] 2025-10-14 13:58:41,364 tasks 14143 140485856772096 [TASK START] Payment verification email for participant 28
-[INFO] 2025-10-14 13:58:41,364 views 1111 140617889232544 ✓ Participant email task queued for 28
-[INFO] 2025-10-14 13:58:41,437 tasks 14143 140485856772096 Generating QR code for p_28
-[INFO] 2025-10-14 13:58:41,438 tasks 14143 140485856772096 Generating QR code for: p_28
-[INFO] 2025-10-14 13:58:41,475 tasks 14143 140485856772096 QR code saved to /home/sailo/innoverse/innoverse/media/qr_codes/p_28.png
-[INFO] 2025-10-14 13:58:41,476 tasks 14143 140485856772096 QR buffer size: 444 bytes
-[INFO] 2025-10-14 13:58:41,687 tasks 14143 140485856772096 Logo attached
-[INFO] 2025-10-14 13:58:41,688 tasks 14143 140485856772096 QR data size: 444 bytes
-[INFO] 2025-10-14 13:58:41,689 tasks 14143 140485856772096 Sending email to ['photos.rafidabdullahsami+20@gmail.com']...
-[INFO] 2025-10-14 13:59:04,346 tasks 14143 140485856772096 ✓ [SUCCESS] Email sent to ['photos.rafidabdullahsami+20@gmail.com']
-[WARNING] 2025-10-14 14:02:45,137 log 1119 140617857733376 Bad Request: /api/register/
-[INFO] 2025-10-14 14:02:56,205 views 1109 140617856735232 Queueing registration email for participant 30
-[INFO] 2025-10-14 14:02:56,224 tasks 14143 140485856772096 [TASK START] Registration email for participant 30
-[INFO] 2025-10-14 14:02:56,237 views 1109 140617856735232 ✓ Registration email queued for participant 30
-[INFO] 2025-10-14 14:02:56,436 utils 14143 140485856772096 Logo attached to email
-[INFO] 2025-10-14 14:03:18,535 tasks 14143 140485856772096 ✓ [SUCCESS] Registration email sent to aimanaousaf@gmail.com
-[INFO] 2025-10-14 14:03:34,555 views 1129 140617857751360 Queueing participant email for 30
-[INFO] 2025-10-14 14:03:34,578 views 1129 140617857751360 ✓ Participant email task queued for 30
-[INFO] 2025-10-14 14:03:34,577 tasks 14143 140485856772096 [TASK START] Payment verification email for participant 30
-[INFO] 2025-10-14 14:03:34,581 tasks 14143 140485856772096 Generating QR code for p_30
-[INFO] 2025-10-14 14:03:34,582 tasks 14143 140485856772096 Generating QR code for: p_30
-[INFO] 2025-10-14 14:03:34,597 tasks 14143 140485856772096 QR code saved to /home/sailo/innoverse/innoverse/media/qr_codes/p_30.png
-[INFO] 2025-10-14 14:03:34,598 tasks 14143 140485856772096 QR buffer size: 444 bytes
-[INFO] 2025-10-14 14:03:34,799 tasks 14143 140485856772096 Logo attached
-[INFO] 2025-10-14 14:03:34,800 tasks 14143 140485856772096 QR data size: 444 bytes
-[INFO] 2025-10-14 14:03:34,801 tasks 14143 140485856772096 Sending email to ['aimanaousaf@gmail.com']...
-[INFO] 2025-10-14 14:03:56,487 tasks 14143 140485856772096 ✓ [SUCCESS] Email sent to ['aimanaousaf@gmail.com']
-[WARNING] 2025-10-14 18:48:16,643 log 1114 140617855857696 Not Found: /
-[WARNING] 2025-10-14 19:19:04,934 log 1129 140617857751360 Bad Request: /api/register/
-[WARNING] 2025-10-14 19:28:17,605 log 1109 140617856735232 Bad Request: /api/register/
-[WARNING] 2025-10-14 19:46:00,660 log 1111 140617889232544 Bad Request: /api/register/
-[WARNING] 2025-10-14 19:47:01,247 log 1109 140617856735232 Bad Request: /api/register/
-[WARNING] 2025-10-14 19:47:26,231 log 1119 140617857733376 Bad Request: /api/register/
-[WARNING] 2025-10-14 19:47:51,573 log 1109 140617856735232 Bad Request: /api/register/
-[WARNING] 2025-10-14 19:49:23,723 log 1129 140617857751360 Bad Request: /api/register/
-[WARNING] 2025-10-14 20:09:19,278 log 1109 140617856735232 Not Found: /
-[WARNING] 2025-10-14 21:13:10,931 log 1114 140617855857696 Not Found: /
-[INFO] 2025-10-14 21:25:28,133 views 1119 140617857733376 Queueing registration email for participant 31
-[INFO] 2025-10-14 21:25:28,153 tasks 14143 140485856772096 [TASK START] Registration email for participant 31
-[INFO] 2025-10-14 21:25:28,211 views 1119 140617857733376 ✓ Registration email queued for participant 31
-[INFO] 2025-10-14 21:25:28,405 utils 14143 140485856772096 Logo attached to email
-[INFO] 2025-10-14 21:25:50,512 tasks 14143 140485856772096 ✓ [SUCCESS] Registration email sent to musabsaeedabdullah@gmail.com
-[WARNING] 2025-10-14 22:24:07,482 log 1111 140617889232544 Bad Request: /api/register/
-[WARNING] 2025-10-14 22:30:56,423 log 1111 140617889232544 Bad Request: /api/register/
-[WARNING] 2025-10-14 22:31:05,846 log 1119 140617857733376 Bad Request: /api/register/
-[WARNING] 2025-10-14 22:35:04,805 log 1114 140617855857696 Unauthorized: /api/register/
-[WARNING] 2025-10-14 22:35:23,806 log 1109 140617856735232 Bad Request: /api/register/
-[WARNING] 2025-10-14 22:35:51,649 log 1114 140617855857696 Bad Request: /api/register/
-[WARNING] 2025-10-14 22:44:19,400 log 1109 140617856735232 Bad Request: /api/register/
-[WARNING] 2025-10-14 22:44:26,255 log 1114 140617855857696 Bad Request: /api/register/
-[WARNING] 2025-10-14 22:48:27,057 log 1111 140617889232544 Bad Request: /api/register/
-[WARNING] 2025-10-14 22:51:20,936 log 87666 140711665644896 Bad Request: /api/register/
-[ERROR] 2025-10-14 22:52:32,224 views 87669 140711665644896 Registration failed: 'age'
-[ERROR] 2025-10-14 22:52:32,229 log 87669 140711665644896 Internal Server Error: /api/register/
-[ERROR] 2025-10-14 22:53:25,126 views 87668 140711665644896 Registration failed: 'age'
-[ERROR] 2025-10-14 22:53:25,130 log 87668 140711665644896 Internal Server Error: /api/register/
-[ERROR] 2025-10-14 22:53:26,938 views 87668 140711665644896 Registration failed: 'age'
-[ERROR] 2025-10-14 22:53:26,942 log 87668 140711665644896 Internal Server Error: /api/register/
-[WARNING] 2025-10-14 22:54:58,383 log 87666 140711665644896 Bad Request: /api/register/
-[ERROR] 2025-10-14 22:56:20,235 views 87668 140711665644896 Registration failed: 'age'
-[ERROR] 2025-10-14 22:56:20,239 log 87668 140711665644896 Internal Server Error: /api/register/
-[ERROR] 2025-10-14 22:56:22,318 views 87669 140711665644896 Registration failed: 'age'
-[ERROR] 2025-10-14 22:56:22,321 log 87669 140711665644896 Internal Server Error: /api/register/
-[ERROR] 2025-10-14 22:56:29,997 views 87667 140711665644896 Registration failed: 'age'
-[ERROR] 2025-10-14 22:56:30,001 log 87667 140711665644896 Internal Server Error: /api/register/
-[ERROR] 2025-10-14 22:56:31,666 views 87667 140711665644896 Registration failed: 'age'
-[ERROR] 2025-10-14 22:56:31,676 log 87667 140711665644896 Internal Server Error: /api/register/
-[ERROR] 2025-10-14 22:56:36,476 views 87665 140711665644896 Registration failed: 'age'
-[ERROR] 2025-10-14 22:56:36,481 log 87665 140711665644896 Internal Server Error: /api/register/
-[WARNING] 2025-10-14 22:58:03,738 log 87669 140711665644896 Bad Request: /api/register/
-[ERROR] 2025-10-14 23:00:05,200 log 87669 140711665644896 Internal Server Error: /admin/participant/teamparticipant/
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
-    return self.cursor.execute(sql, params)
-psycopg2.errors.UndefinedColumn: column participant_teamparticipant.age does not exist
-LINE 1: ..."."email", "participant_teamparticipant"."phone", "participa...
-                                                             ^
-
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 719, in wrapper
-    return self.admin_site.admin_view(view)(*args, **kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
-    result = _process_exception(request, e)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
-    response = view_func(request, *args, **kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
-    response = view_func(request, *args, **kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 246, in inner
-    return view(request, *args, **kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 48, in _wrapper
-    return bound_method(*args, **kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
-    result = _process_exception(request, e)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
-    response = view_func(request, *args, **kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 2163, in changelist_view
-    "selection_note": _("0 of %(cnt)s selected") % {"cnt": len(cl.result_list)},
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/models/query.py", line 366, in __len__
-    self._fetch_all()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1949, in _fetch_all
-    self._result_cache = list(self._iterable_class(self))
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/models/query.py", line 91, in __iter__
-    results = compiler.execute_sql(
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
-    cursor.execute(sql, params)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 79, in execute
-    return self._execute_with_wrappers(
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
-    return executor(sql, params, many, context)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 100, in _execute
-    with self.db.wrap_database_errors:
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
-    raise dj_exc_value.with_traceback(traceback) from exc_value
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
-    return self.cursor.execute(sql, params)
-django.db.utils.ProgrammingError: column participant_teamparticipant.age does not exist
-LINE 1: ..."."email", "participant_teamparticipant"."phone", "participa...
-                                                             ^
-
-[ERROR] 2025-10-14 23:02:38,966 log 87665 140711665644896 Internal Server Error: /admin/participant/teamparticipant/
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
-    return self.cursor.execute(sql, params)
-psycopg2.errors.UndefinedColumn: column participant_teamparticipant.age does not exist
-LINE 1: ..."."email", "participant_teamparticipant"."phone", "participa...
-                                                             ^
-
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 719, in wrapper
-    return self.admin_site.admin_view(view)(*args, **kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
-    result = _process_exception(request, e)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
-    response = view_func(request, *args, **kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
-    response = view_func(request, *args, **kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/contrib/admin/sites.py", line 246, in inner
-    return view(request, *args, **kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 48, in _wrapper
-    return bound_method(*args, **kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
-    result = _process_exception(request, e)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
-    response = view_func(request, *args, **kwargs)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/contrib/admin/options.py", line 2163, in changelist_view
-    "selection_note": _("0 of %(cnt)s selected") % {"cnt": len(cl.result_list)},
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/models/query.py", line 366, in __len__
-    self._fetch_all()
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1949, in _fetch_all
-    self._result_cache = list(self._iterable_class(self))
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/models/query.py", line 91, in __iter__
-    results = compiler.execute_sql(
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
-    cursor.execute(sql, params)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 79, in execute
-    return self._execute_with_wrappers(
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
-    return executor(sql, params, many, context)
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 100, in _execute
-    with self.db.wrap_database_errors:
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
-    raise dj_exc_value.with_traceback(traceback) from exc_value
-  File "/home/sailo/innoverse/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
-    return self.cursor.execute(sql, params)
-django.db.utils.ProgrammingError: column participant_teamparticipant.age does not exist
-LINE 1: ..."."email", "participant_teamparticipant"."phone", "participa...
-                                                             ^
-
-[INFO] 2025-10-14 23:08:26,693 views 90583 140060202153312 Queueing registration email for participant 32
-[INFO] 2025-10-14 23:08:26,838 views 90583 140060202153312 ✓ Team registration email queued for participant 32
-[WARNING] 2025-10-14 23:09:09,957 log 90582 140060202153312 Bad Request: /api/register/
-[WARNING] 2025-10-14 23:11:16,000 log 90580 140060202153312 Bad Request: /api/register/
-[INFO] 2025-10-14 23:11:22,106 views 90583 140060202153312 Queueing registration email for participant 33
-[INFO] 2025-10-14 23:11:22,126 views 90583 140060202153312 ✓ Team registration email queued for participant 33
-[INFO] 2025-10-14 23:13:44,302 tasks 91272 140348471672832 [TASK START] Registration email for participant 32
-[INFO] 2025-10-14 23:13:44,625 utils 91272 140348471672832 Logo attached to email
-[INFO] 2025-10-14 23:14:06,688 tasks 91272 140348471672832 ✓ [SUCCESS] Registration email sent to john@example.com
-[INFO] 2025-10-14 23:14:06,702 tasks 91272 140348471672832 [TASK START] Registration email for participant 33
-[INFO] 2025-10-14 23:14:06,894 utils 91272 140348471672832 Logo attached to email
-[INFO] 2025-10-14 23:14:28,623 tasks 91272 140348471672832 ✓ [SUCCESS] Registration email sent to asdf@gmail.com
-[WARNING] 2025-10-15 00:27:09,590 log 100093 140556809811296 Bad Request: /api/register/
-[INFO] 2025-10-15 00:27:36,049 views 100090 140556809811296 Queueing registration email for participant 34
-[INFO] 2025-10-15 00:27:36,157 tasks 101869 140470339870720 [TASK START] Registration email for participant 34
-[INFO] 2025-10-15 00:27:36,164 views 100090 140556809811296 ✓ Team registration email queued for participant 34
-[INFO] 2025-10-15 00:27:36,340 utils 101869 140470339870720 Logo attached to email
-[INFO] 2025-10-15 00:27:58,360 tasks 101869 140470339870720 ✓ [SUCCESS] Registration email sent to asdf@gmail.com
-[WARNING] 2025-10-15 00:27:58,544 log 100094 140556809811296 Bad Request: /api/register/
-[WARNING] 2025-10-15 00:28:07,015 log 100091 140556809811296 Not Found: /
-[INFO] 2025-10-15 00:29:01,445 views 100094 140556809811296 Queueing registration email for participant 35
-[INFO] 2025-10-15 00:29:01,685 tasks 101869 140470339870720 [TASK START] Registration email for participant 35
-[INFO] 2025-10-15 00:29:01,713 views 100094 140556809811296 ✓ Team registration email queued for participant 35
-[INFO] 2025-10-15 00:29:01,948 utils 101869 140470339870720 Logo attached to email
-[INFO] 2025-10-15 00:29:23,444 tasks 101869 140470339870720 ✓ [SUCCESS] Registration email sent to asdfc@gmail.com
-[WARNING] 2025-10-15 00:31:18,106 log 100091 140556809811296 Bad Request: /api/register/
+[WARNING] 2025-10-19 05:51:16,563 log 1086606 140379896166048 Not Found: /favicon.ico
+[WARNING] 2025-10-19 06:13:06,717 log 1086606 140379896166048 Bad Request: /api/register/
+[INFO] 2025-10-19 06:13:51,985 views 1086608 140379896166048 Queueing registration email for participant 75
+[INFO] 2025-10-19 06:13:52,015 tasks 1086752 140597995524096 [TASK START] Registration email for participant 75
+[INFO] 2025-10-19 06:13:52,026 views 1086608 140379896166048 ✓ Registration email queued for participant 75
+[INFO] 2025-10-19 06:13:52,027 views 1086608 140379896166048   - Team members will receive as CC: 1
+[INFO] 2025-10-19 06:14:46,256 tasks 1086752 140597995524096 ✓ [SUCCESS] Registration email sent to trimedofficial@gmail.com (CC: 1)
+[INFO] 2025-10-19 06:22:17,642 views 1086610 140379896166048 Queueing solo email for participant 75 (team_leader=True)
+[INFO] 2025-10-19 06:22:17,665 views 1086610 140379896166048 ✓ Solo email queued for 75
+[INFO] 2025-10-19 06:22:17,669 views 1086610 140379896166048 Queueing team email for team 50
+[INFO] 2025-10-19 06:22:17,668 tasks 1086752 140597995524096 [TASK START] Payment verification email for participant 75
+[INFO] 2025-10-19 06:22:17,678 tasks 1086752 140597995524096 Generating QR code for: p_75
+[INFO] 2025-10-19 06:22:17,684 views 1086610 140379896166048 ✓ Team email queued for 50 (2 members via CC)
+[INFO] 2025-10-19 06:22:17,684 views 1086610 140379896166048 ✓ Total 2 email task(s) queued for participant 75
+[INFO] 2025-10-19 06:22:17,811 tasks 1086750 140597995524096 [TASK START] Team verification email for team 50
+[INFO] 2025-10-19 06:22:17,894 tasks 1086752 140597995524096 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_75_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_75_ticket.jpg
+[INFO] 2025-10-19 06:22:18,053 tasks 1086752 140597995524096 Logo attached
+[INFO] 2025-10-19 06:22:18,055 tasks 1086752 140597995524096 Ticket attached (91445 bytes)
+[INFO] 2025-10-19 06:22:18,325 tasks 1086750 140597995524096 Generating QR code for: t_50
+[INFO] 2025-10-19 06:22:18,411 tasks 1086750 140597995524096 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/t_50_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/t_50_ticket.jpg
+[INFO] 2025-10-19 06:22:18,579 tasks 1086750 140597995524096 Logo attached
+[INFO] 2025-10-19 06:22:18,579 tasks 1086750 140597995524096 Team ticket attached (89582 bytes)
+[INFO] 2025-10-19 06:22:27,510 tasks 1086752 140597995524096 ✓ [SUCCESS] Participant email sent to trimedofficial@gmail.com
+[INFO] 2025-10-19 06:22:29,414 tasks 1086750 140597995524096 ✓ [SUCCESS] Team email sent to 2 members (1 TO + 1 CC)
+[INFO] 2025-10-19 07:14:36,784 views 1086607 140379863668576 Queueing registration email for participant 76
+[INFO] 2025-10-19 07:14:37,012 tasks 1086752 140597995524096 [TASK START] Registration email for participant 76
+[INFO] 2025-10-19 07:14:37,106 views 1086607 140379863668576 ✓ Registration email queued for participant 76
+[INFO] 2025-10-19 07:14:47,444 tasks 1086752 140597995524096 ✓ [SUCCESS] Registration email sent to rafidabdullahsami4103@gmail.com (CC: 0)
+[INFO] 2025-10-19 07:16:09,516 views 1086610 140379896166048 Queueing registration email for participant 77
+[INFO] 2025-10-19 07:16:09,532 tasks 1086752 140597995524096 [TASK START] Registration email for participant 77
+[INFO] 2025-10-19 07:16:09,551 views 1086610 140379896166048 ✓ Registration email queued for participant 77
+[INFO] 2025-10-19 07:16:19,082 tasks 1086752 140597995524096 ✓ [SUCCESS] Registration email sent to rafidabdullahsami@gmail.com (CC: 0)
+[INFO] 2025-10-19 07:24:37,529 views 1322295 139813190579552 Queueing registration email for participant 78
+[INFO] 2025-10-19 07:24:37,804 tasks 1086752 140597995524096 [TASK START] Registration email for participant 78
+[INFO] 2025-10-19 07:24:37,824 views 1322295 139813190579552 ✓ Registration email queued for participant 78
+[INFO] 2025-10-19 07:24:46,974 tasks 1086752 140597995524096 ✓ [SUCCESS] Registration email sent to rafidabdullahsami@gmail.com (CC: 0)
+[INFO] 2025-10-19 07:28:50,586 views 1322298 139813190579552 Queueing registration email for participant 79
+[INFO] 2025-10-19 07:28:50,738 tasks 1323888 140704595349504 [TASK START] Registration email for participant 79
+[INFO] 2025-10-19 07:28:50,751 views 1322298 139813190579552 ✓ Registration email queued for participant 79
+[INFO] 2025-10-19 07:29:00,579 tasks 1323888 140704595349504 ✓ [SUCCESS] Registration email sent to rafidabdullahsami@gmail.com (CC: 0)
+[WARNING] 2025-10-19 08:44:42,986 log 1325639 140070735410848 Not Found: /
+[WARNING] 2025-10-19 10:54:06,676 log 1325639 140070735410848 Not Found: /
+[WARNING] 2025-10-19 11:21:43,251 log 1325636 140070735410848 Not Found: /
+[INFO] 2025-10-19 12:16:46,873 views 1325640 140070735410848 Queueing registration email for participant 80
+[INFO] 2025-10-19 12:16:47,060 views 1325640 140070735410848 ✓ Registration email queued for participant 80
+[INFO] 2025-10-19 12:16:47,071 tasks 1325671 140568223645696 [TASK START] Registration email for participant 80
+[INFO] 2025-10-19 12:16:56,694 tasks 1325671 140568223645696 ✓ [SUCCESS] Registration email sent to taseenm159@gmail.com (CC: 0)
+[WARNING] 2025-10-19 16:13:44,882 log 1325636 140070735410848 Not Found: /favicon.ico
+[WARNING] 2025-10-19 16:39:20,541 log 1325637 140070735410848 Not Found: /favicon.ico
+[WARNING] 2025-10-19 17:53:40,346 log 1325640 140070735410848 Not Found: /favicon.ico
+[INFO] 2025-10-19 19:21:52,900 views 1325640 140070735410848 Queueing registration email for participant 81
+[INFO] 2025-10-19 19:21:52,931 tasks 1325671 140568223645696 [TASK START] Registration email for participant 81
+[INFO] 2025-10-19 19:21:53,063 views 1325640 140070735410848 ✓ Registration email queued for participant 81
+[INFO] 2025-10-19 19:22:02,780 tasks 1325671 140568223645696 ✓ [SUCCESS] Registration email sent to dev.rferdous@gmail.com (CC: 0)
+[WARNING] 2025-10-19 19:36:07,849 log 1325636 140070735410848 Not Found: /
+[WARNING] 2025-10-19 20:11:40,210 log 1325638 140070735410848 Not Found: /api/coupon/BUP/
+[WARNING] 2025-10-19 20:31:22,596 log 1325640 140070735410848 Not Found: /favicon.ico
+[WARNING] 2025-10-19 20:42:20,450 log 1325637 140070735410848 Not Found: /
+[INFO] 2025-10-19 20:56:12,424 views 1325640 140070735410848 Queueing registration email for participant 82
+[INFO] 2025-10-19 20:56:12,456 tasks 1325671 140568223645696 [TASK START] Registration email for participant 82
+[INFO] 2025-10-19 20:56:12,460 views 1325640 140070735410848 ✓ Registration email queued for participant 82
+[INFO] 2025-10-19 20:56:22,131 tasks 1325671 140568223645696 ✓ [SUCCESS] Registration email sent to shihabhaque2017@gmail.com (CC: 0)
+[INFO] 2025-10-19 20:57:22,423 views 1325637 140070735410848 Queueing solo email for participant 82 (team_leader=False)
+[INFO] 2025-10-19 20:57:22,751 views 1325637 140070735410848 ✓ Solo email queued for 82
+[INFO] 2025-10-19 20:57:22,753 views 1325637 140070735410848 ✓ Total 1 email task(s) queued for participant 82
+[INFO] 2025-10-19 20:57:22,764 tasks 1325671 140568223645696 [TASK START] Payment verification email for participant 82
+[INFO] 2025-10-19 20:57:23,015 tasks 1325671 140568223645696 Generating QR code for: p_82
+[INFO] 2025-10-19 20:57:23,114 tasks 1325671 140568223645696 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_82_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_82_ticket.jpg
+[INFO] 2025-10-19 20:57:23,180 tasks 1325671 140568223645696 Logo attached
+[INFO] 2025-10-19 20:57:23,181 tasks 1325671 140568223645696 Ticket attached (90086 bytes)
+[INFO] 2025-10-19 20:57:33,040 tasks 1325671 140568223645696 ✓ [SUCCESS] Participant email sent to shihabhaque2017@gmail.com
+[INFO] 2025-10-19 21:31:13,854 views 1325637 140070735410848 Queueing registration email for participant 83
+[INFO] 2025-10-19 21:31:13,877 tasks 1325671 140568223645696 [TASK START] Registration email for participant 83
+[INFO] 2025-10-19 21:31:13,893 views 1325637 140070735410848 ✓ Registration email queued for participant 83
+[INFO] 2025-10-19 21:31:13,894 views 1325637 140070735410848   - Team members will receive as CC: 2
+[INFO] 2025-10-19 21:31:24,336 tasks 1325671 140568223645696 ✓ [SUCCESS] Registration email sent to shihabhaque2020@gmail.com (CC: 2)
+[WARNING] 2025-10-19 22:57:28,683 log 1325640 140070735410848 Not Found: /favicon.ico
+[WARNING] 2025-10-19 23:12:20,448 log 1564523 140482430121312 Not Found: /
+[WARNING] 2025-10-19 23:15:28,721 log 1564520 140482430121312 Not Found: /
+[WARNING] 2025-10-19 23:39:37,492 log 1568952 140140330128128 Unauthorized: /login/
+[WARNING] 2025-10-20 00:29:59,778 log 1585616 140652523697664 Unauthorized: /login/
+[WARNING] 2025-10-20 00:30:36,140 log 1585618 140652523697664 Unauthorized: /login/
+[ERROR] 2025-10-20 00:46:44,110 views 1590482 140260501108224 Error creating coupon: Unsupported media type "text/plain" in request.
+[ERROR] 2025-10-20 00:46:44,116 log 1590482 140260501108224 Internal Server Error: /api/coupon/
+[ERROR] 2025-10-20 00:46:54,474 views 1590484 140260501108224 Error creating coupon: Unsupported media type "text/plain" in request.
+[ERROR] 2025-10-20 00:46:54,478 log 1590484 140260501108224 Internal Server Error: /api/coupon/
+[ERROR] 2025-10-20 00:47:17,193 views 1590480 140260501108224 Error creating coupon: Unsupported media type "text/plain" in request.
+[ERROR] 2025-10-20 00:47:17,197 log 1590480 140260501108224 Internal Server Error: /api/coupon/
+[WARNING] 2025-10-20 01:16:57,040 log 1590484 140260470267616 Unauthorized: /api/coupon/SHIHAB10/
+[WARNING] 2025-10-20 01:17:08,950 log 1590481 140260469646144 Unauthorized: /api/coupon/BUP10/
+[WARNING] 2025-10-20 01:17:10,074 log 1590481 140260469646144 Unauthorized: /api/coupon/BUP10/
+[ERROR] 2025-10-20 01:27:19,985 views 1590483 140260470282880 Error fetching coupon: No Coupons matches the given query.
+[ERROR] 2025-10-20 01:27:19,989 log 1590483 140260470282880 Internal Server Error: /api/coupon/3/
+[ERROR] 2025-10-20 01:27:23,891 views 1590484 140260470267616 Error fetching coupon: No Coupons matches the given query.
+[ERROR] 2025-10-20 01:27:23,894 log 1590484 140260470267616 Internal Server Error: /api/coupon/3/
+[ERROR] 2025-10-20 01:27:26,475 views 1590480 140260470262816 Error fetching coupon: No Coupons matches the given query.
+[ERROR] 2025-10-20 01:27:26,478 log 1590480 140260470262816 Internal Server Error: /api/coupon/3/
+[WARNING] 2025-10-20 01:36:55,208 log 1590480 140260470262816 Unauthorized: /api/coupon/SHIHAB10/
+[WARNING] 2025-10-20 01:37:04,031 log 1590482 140260470262176 Unauthorized: /api/coupon/BUP10/
+[WARNING] 2025-10-20 01:46:12,314 log 1590480 140260470262816 Unauthorized: /api/coupon/BUP10/
+[WARNING] 2025-10-20 01:48:50,897 log 1608966 140222032475648 Not Found: /api/coupon/
+[WARNING] 2025-10-20 01:48:57,740 log 1608967 140222032475648 Not Found: /api/coupon/manage/
+[WARNING] 2025-10-20 01:49:03,491 log 1608968 140222032475648 Not Found: /api/coupon/manage/
+[WARNING] 2025-10-20 01:49:48,553 log 1608969 140222032475648 Not Found: /api/manafe-coupon/
+[WARNING] 2025-10-20 01:49:55,692 log 1608967 140222032475648 Not Found: /api/manage-coupon/
+[WARNING] 2025-10-20 01:50:06,918 log 1609263 140579280664064 Not Found: /api/manage-coupon/
+[WARNING] 2025-10-20 02:01:11,847 log 1609498 140129880028672 Unauthorized: /login/
+[INFO] 2025-10-20 02:19:56,841 views 1609499 140129854666880 Queueing registration email for participant 84
+[INFO] 2025-10-20 02:19:57,177 views 1609499 140129854666880 ✓ Registration email queued for participant 84
+[INFO] 2025-10-20 02:19:57,175 tasks 1590518 140377138216960 [TASK START] Registration email for participant 84
+[INFO] 2025-10-20 02:20:06,893 tasks 1590518 140377138216960 ✓ [SUCCESS] Registration email sent to aousafhossain99@gmail.com (CC: 0)
+[INFO] 2025-10-20 02:20:33,724 views 1609497 140129854616928 Queueing solo email for participant 84 (team_leader=False)
+[INFO] 2025-10-20 02:20:33,991 views 1609497 140129854616928 ✓ Solo email queued for 84
+[INFO] 2025-10-20 02:20:33,992 views 1609497 140129854616928 ✓ Total 1 email task(s) queued for participant 84
+[INFO] 2025-10-20 02:20:33,996 tasks 1590518 140377138216960 [TASK START] Payment verification email for participant 84
+[INFO] 2025-10-20 02:20:34,142 tasks 1590518 140377138216960 Generating QR code for: p_84
+[INFO] 2025-10-20 02:20:34,228 tasks 1590518 140377138216960 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_84_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_84_ticket.jpg
+[INFO] 2025-10-20 02:20:34,287 tasks 1590518 140377138216960 Logo attached
+[INFO] 2025-10-20 02:20:34,287 tasks 1590518 140377138216960 Ticket attached (90074 bytes)
+[INFO] 2025-10-20 02:20:44,050 tasks 1590518 140377138216960 ✓ [SUCCESS] Participant email sent to aousafhossain99@gmail.com
+[INFO] 2025-10-20 02:27:55,741 views 1617144 140096690337280 Queueing registration email for participant 85
+[INFO] 2025-10-20 02:27:55,995 tasks 1590518 140377138216960 [TASK START] Registration email for participant 85
+[INFO] 2025-10-20 02:27:56,004 views 1617144 140096690337280 ✓ Registration email queued for participant 85
+[INFO] 2025-10-20 02:28:05,274 tasks 1590518 140377138216960 ✓ [SUCCESS] Registration email sent to rafidabdullahsami@gmail.com (CC: 0)
+[WARNING] 2025-10-20 02:40:36,664 log 1622273 139776409220608 Forbidden (CSRF cookie not set.): /logout/
+[INFO] 2025-10-20 02:42:39,992 views 1622275 139776409220608 Queueing registration email for participant 86
+[INFO] 2025-10-20 02:42:40,157 tasks 1622308 140533558009856 [TASK START] Registration email for participant 86
+[INFO] 2025-10-20 02:42:40,167 views 1622275 139776409220608 ✓ Registration email queued for participant 86
+[INFO] 2025-10-20 02:42:49,544 tasks 1622308 140533558009856 ✓ [SUCCESS] Registration email sent to rafidabdullahsami@gmail.com (CC: 0)
+[INFO] 2025-10-20 02:45:56,135 views 1623661 140090429781504 Queueing solo email for participant 86 (team_leader=False)
+[INFO] 2025-10-20 02:45:56,286 views 1623661 140090429781504 ✓ Solo email queued for 86
+[INFO] 2025-10-20 02:45:56,289 views 1623661 140090429781504 ✓ Total 1 email task(s) queued for participant 86
+[INFO] 2025-10-20 02:45:56,288 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 86
+[INFO] 2025-10-20 02:45:56,335 tasks 1623681 140141172338688 Generating QR code for: p_86
+[INFO] 2025-10-20 02:45:56,369 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_86_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_86_ticket.jpg
+[INFO] 2025-10-20 02:45:56,413 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-20 02:45:56,414 tasks 1623681 140141172338688 Ticket attached (89688 bytes)
+[INFO] 2025-10-20 02:46:06,125 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to rafidabdullahsami@gmail.com
+[INFO] 2025-10-20 04:01:57,420 views 1623663 140090429781824 Queueing registration email for participant 87
+[INFO] 2025-10-20 04:01:57,547 tasks 1623681 140141172338688 [TASK START] Registration email for participant 87
+[INFO] 2025-10-20 04:01:57,572 views 1623663 140090429781824 ✓ Registration email queued for participant 87
+[INFO] 2025-10-20 04:02:06,870 tasks 1623681 140141172338688 ✓ [SUCCESS] Registration email sent to astronomyspace3@gmail.com (CC: 0)
+[WARNING] 2025-10-20 04:40:51,956 log 1623663 140090429781824 Not Found: /
+[WARNING] 2025-10-20 04:40:52,582 log 1623663 140090429781824 Not Found: /favicon.ico
+[WARNING] 2025-10-20 04:40:59,799 log 1623664 140090405091136 Not Found: /
+[INFO] 2025-10-20 09:16:16,471 views 1623661 140090394860160 Queueing solo email for participant 73 (team_leader=False)
+[INFO] 2025-10-20 09:16:16,517 views 1623661 140090394860160 ✓ Solo email queued for 73
+[INFO] 2025-10-20 09:16:16,518 views 1623661 140090394860160 ✓ Total 1 email task(s) queued for participant 73
+[INFO] 2025-10-20 09:16:16,526 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 73
+[INFO] 2025-10-20 09:16:16,534 tasks 1623681 140141172338688 Generating QR code for: p_73
+[INFO] 2025-10-20 09:16:16,596 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_73_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_73_ticket.jpg
+[INFO] 2025-10-20 09:16:16,656 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-20 09:16:16,657 tasks 1623681 140141172338688 Ticket attached (90090 bytes)
+[INFO] 2025-10-20 09:16:27,693 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to sharminsultana80@gmail.com
+[INFO] 2025-10-20 09:17:04,850 views 1623665 140090429781824 Queueing solo email for participant 74 (team_leader=False)
+[INFO] 2025-10-20 09:17:05,237 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 74
+[INFO] 2025-10-20 09:17:05,238 views 1623665 140090429781824 ✓ Solo email queued for 74
+[INFO] 2025-10-20 09:17:05,239 views 1623665 140090429781824 ✓ Total 1 email task(s) queued for participant 74
+[INFO] 2025-10-20 09:17:05,242 tasks 1623681 140141172338688 Generating QR code for: p_74
+[INFO] 2025-10-20 09:17:05,279 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_74_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_74_ticket.jpg
+[INFO] 2025-10-20 09:17:05,348 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-20 09:17:05,349 tasks 1623681 140141172338688 Ticket attached (90117 bytes)
+[INFO] 2025-10-20 09:17:16,493 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to humayra1692@gmail.com
+[INFO] 2025-10-20 09:17:16,701 views 1623664 140090405091136 Queueing solo email for participant 80 (team_leader=False)
+[INFO] 2025-10-20 09:17:16,956 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 80
+[INFO] 2025-10-20 09:17:16,958 views 1623664 140090405091136 ✓ Solo email queued for 80
+[INFO] 2025-10-20 09:17:16,959 views 1623664 140090405091136 ✓ Total 1 email task(s) queued for participant 80
+[INFO] 2025-10-20 09:17:16,961 tasks 1623681 140141172338688 Generating QR code for: p_80
+[INFO] 2025-10-20 09:17:17,004 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_80_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_80_ticket.jpg
+[INFO] 2025-10-20 09:17:17,058 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-20 09:17:17,058 tasks 1623681 140141172338688 Ticket attached (90744 bytes)
+[INFO] 2025-10-20 09:17:27,547 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to taseenm159@gmail.com
+[INFO] 2025-10-20 09:17:32,066 views 1623662 140090429781824 Queueing solo email for participant 81 (team_leader=False)
+[INFO] 2025-10-20 09:17:32,248 views 1623662 140090429781824 ✓ Solo email queued for 81
+[INFO] 2025-10-20 09:17:32,251 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 81
+[INFO] 2025-10-20 09:17:32,249 views 1623662 140090429781824 ✓ Total 1 email task(s) queued for participant 81
+[INFO] 2025-10-20 09:17:32,265 tasks 1623681 140141172338688 Generating QR code for: p_81
+[INFO] 2025-10-20 09:17:32,306 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_81_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_81_ticket.jpg
+[INFO] 2025-10-20 09:17:32,365 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-20 09:17:32,366 tasks 1623681 140141172338688 Ticket attached (89795 bytes)
+[INFO] 2025-10-20 09:17:41,904 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to dev.rferdous@gmail.com
+[WARNING] 2025-10-20 11:57:26,371 log 1623662 140090429781824 Not Found: /favicon.ico
+[WARNING] 2025-10-20 12:30:10,118 log 1623665 140090429781824 Not Found: /api/coupon/msc10/
+[WARNING] 2025-10-20 12:38:21,679 log 1623665 140090429781824 Not Found: /api/coupon/MSC20/
+[WARNING] 2025-10-20 12:42:03,342 log 1623665 140090429781824 Not Found: /api/coupon/MSC20/
+[WARNING] 2025-10-20 12:46:44,427 log 1623664 140090405091136 Not Found: /
+[INFO] 2025-10-20 12:47:22,574 views 1623662 140090429781824 Queueing registration email for participant 88
+[INFO] 2025-10-20 12:47:22,602 tasks 1623681 140141172338688 [TASK START] Registration email for participant 88
+[INFO] 2025-10-20 12:47:22,611 views 1623662 140090429781824 ✓ Registration email queued for participant 88
+[INFO] 2025-10-20 12:47:32,020 tasks 1623681 140141172338688 ✓ [SUCCESS] Registration email sent to tahmidmdic@gmail.com (CC: 0)
+[WARNING] 2025-10-20 12:47:38,468 log 1623665 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 12:49:05,358 log 1623664 140090405091136 Not Found: /
+[WARNING] 2025-10-20 12:49:05,760 log 1623664 140090405091136 Not Found: /favicon.ico
+[WARNING] 2025-10-20 13:29:32,171 log 1623662 140090429781824 Unauthorized: /login/
+[WARNING] 2025-10-20 13:29:49,192 log 1623663 140090429781824 Unauthorized: /login/
+[WARNING] 2025-10-20 13:35:09,494 log 1623665 140090429781824 Bad Request: /api/manage-coupon/
+[WARNING] 2025-10-20 13:35:22,962 log 1623662 140090429781824 Bad Request: /api/manage-coupon/
+[WARNING] 2025-10-20 13:37:43,364 log 1623664 140090405091136 Bad Request: /api/manage-coupon/
+[WARNING] 2025-10-20 13:37:46,322 log 1623665 140090429781824 Bad Request: /api/manage-coupon/
+[WARNING] 2025-10-20 13:40:46,978 log 1623664 140090405091136 Bad Request: /api/manage-coupon/
+[WARNING] 2025-10-20 13:40:48,558 log 1623664 140090405091136 Bad Request: /api/manage-coupon/
+[WARNING] 2025-10-20 13:44:04,546 log 1623662 140090429781824 Bad Request: /api/manage-coupon/
+[WARNING] 2025-10-20 13:44:06,818 log 1623665 140090429781824 Bad Request: /api/manage-coupon/
+[INFO] 2025-10-20 13:45:28,098 views 1623661 140090394860160 Queueing solo email for participant 88 (team_leader=False)
+[INFO] 2025-10-20 13:45:28,119 views 1623661 140090394860160 ✓ Solo email queued for 88
+[INFO] 2025-10-20 13:45:28,122 views 1623661 140090394860160 ✓ Total 1 email task(s) queued for participant 88
+[INFO] 2025-10-20 13:45:28,125 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 88
+[INFO] 2025-10-20 13:45:28,129 tasks 1623681 140141172338688 Generating QR code for: p_88
+[INFO] 2025-10-20 13:45:28,166 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_88_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_88_ticket.jpg
+[INFO] 2025-10-20 13:45:28,229 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-20 13:45:28,230 tasks 1623681 140141172338688 Ticket attached (91230 bytes)
+[INFO] 2025-10-20 13:45:38,170 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to tahmidmdic@gmail.com
+[WARNING] 2025-10-20 13:47:59,239 log 1623664 140090405091136 Not Found: /
+[WARNING] 2025-10-20 14:19:22,340 log 1623665 140090429781824 Not Found: /favicon.ico
+[WARNING] 2025-10-20 14:25:06,208 log 1623662 140090429781824 Not Found: /favicon.ico
+[WARNING] 2025-10-20 14:57:41,199 log 1623664 140090405091136 Not Found: /favicon.ico
+[INFO] 2025-10-20 15:40:28,749 views 1623665 140090429781824 Queueing registration email for participant 89
+[INFO] 2025-10-20 15:40:28,773 tasks 1623681 140141172338688 [TASK START] Registration email for participant 89
+[INFO] 2025-10-20 15:40:28,782 views 1623665 140090429781824 ✓ Registration email queued for participant 89
+[INFO] 2025-10-20 15:40:29,262 views 1623665 140090429781824 Queueing registration email for participant 90
+[INFO] 2025-10-20 15:40:29,270 views 1623665 140090429781824 ✓ Registration email queued for participant 90
+[INFO] 2025-10-20 15:40:29,325 tasks 1623679 140141172338688 [TASK START] Registration email for participant 90
+[INFO] 2025-10-20 15:40:38,288 tasks 1623681 140141172338688 ✓ [SUCCESS] Registration email sent to ahnaffarhan121@gmail.com (CC: 0)
+[INFO] 2025-10-20 15:40:39,625 tasks 1623679 140141172338688 ✓ [SUCCESS] Registration email sent to simrahrahman218@gmail.com (CC: 0)
+[WARNING] 2025-10-20 17:39:28,190 log 1623663 140090429781824 Not Found: /api/coupon/MDIC10/
+[WARNING] 2025-10-20 17:43:11,693 log 1623664 140090405091136 Bad Request: /api/register/
+[WARNING] 2025-10-20 17:43:30,929 log 1623662 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 17:45:43,020 log 1623663 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 17:45:52,743 log 1623665 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 17:45:52,790 log 1623661 140090394860160 Bad Request: /api/register/
+[INFO] 2025-10-20 17:46:57,896 views 1623665 140090429781824 Queueing registration email for participant 91
+[INFO] 2025-10-20 17:46:57,918 tasks 1623681 140141172338688 [TASK START] Registration email for participant 91
+[INFO] 2025-10-20 17:46:57,930 views 1623665 140090429781824 ✓ Registration email queued for participant 91
+[INFO] 2025-10-20 17:46:57,932 views 1623665 140090429781824   - Team members will receive as CC: 1
+[INFO] 2025-10-20 17:47:07,918 tasks 1623681 140141172338688 ✓ [SUCCESS] Registration email sent to samirahafiz2311@gmail.com (CC: 1)
+[INFO] 2025-10-20 18:43:43,881 views 1623664 140090405091136 Queueing registration email for participant 92
+[INFO] 2025-10-20 18:43:43,915 tasks 1623681 140141172338688 [TASK START] Registration email for participant 92
+[INFO] 2025-10-20 18:43:43,925 views 1623664 140090405091136 ✓ Registration email queued for participant 92
+[INFO] 2025-10-20 18:43:53,362 tasks 1623681 140141172338688 ✓ [SUCCESS] Registration email sent to farhalaila8@gmail.com (CC: 0)
+[WARNING] 2025-10-20 19:24:41,763 log 1623663 140090429781824 Not Found: /api/coupon/Farheen Hasnat/
+[WARNING] 2025-10-20 19:25:09,152 log 1623665 140090429781824 Not Found: /api/coupon/Farheen Hasnat/
+[INFO] 2025-10-20 19:38:57,426 views 1623665 140090429781824 Queueing registration email for participant 93
+[INFO] 2025-10-20 19:38:57,448 tasks 1623681 140141172338688 [TASK START] Registration email for participant 93
+[INFO] 2025-10-20 19:38:57,474 views 1623665 140090429781824 ✓ Registration email queued for participant 93
+[INFO] 2025-10-20 19:39:07,010 tasks 1623681 140141172338688 ✓ [SUCCESS] Registration email sent to ayanakhanmanha1@gmail.com (CC: 0)
+[WARNING] 2025-10-20 19:41:15,424 log 1623663 140090429781824 Not Found: /api/coupon/msc10/
+[WARNING] 2025-10-20 20:21:12,417 log 1623665 140090429781824 Not Found: /api/coupon/MSC20/
+[INFO] 2025-10-20 20:23:30,891 views 1623665 140090429781824 Queueing registration email for participant 94
+[INFO] 2025-10-20 20:23:30,923 tasks 1623681 140141172338688 [TASK START] Registration email for participant 94
+[INFO] 2025-10-20 20:23:30,926 views 1623665 140090429781824 ✓ Registration email queued for participant 94
+[INFO] 2025-10-20 20:23:41,636 tasks 1623681 140141172338688 ✓ [SUCCESS] Registration email sent to sk8437075@gmail.com (CC: 0)
+[INFO] 2025-10-20 20:28:57,825 views 1623665 140090429781824 Queueing registration email for participant 95
+[INFO] 2025-10-20 20:28:57,854 tasks 1623681 140141172338688 [TASK START] Registration email for participant 95
+[INFO] 2025-10-20 20:28:57,865 views 1623665 140090429781824 ✓ Registration email queued for participant 95
+[INFO] 2025-10-20 20:29:07,079 tasks 1623681 140141172338688 ✓ [SUCCESS] Registration email sent to hossainrupak70@gmail.com (CC: 0)
+[INFO] 2025-10-20 20:41:20,689 views 1623661 140090394860160 Queueing registration email for participant 96
+[INFO] 2025-10-20 20:41:20,712 tasks 1623681 140141172338688 [TASK START] Registration email for participant 96
+[INFO] 2025-10-20 20:41:20,724 views 1623661 140090394860160 ✓ Registration email queued for participant 96
+[INFO] 2025-10-20 20:41:29,816 tasks 1623681 140141172338688 ✓ [SUCCESS] Registration email sent to yasarahman83@gmail.com (CC: 0)
+[WARNING] 2025-10-20 21:31:29,825 log 1623663 140090429781824 Not Found: /favicon.ico
+[WARNING] 2025-10-20 21:51:08,180 log 1623661 140090394860160 Bad Request: /api/register/
+[WARNING] 2025-10-20 21:51:27,198 log 1623664 140090405091136 Bad Request: /api/register/
+[WARNING] 2025-10-20 21:53:06,407 log 1623663 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 21:54:25,272 log 1623665 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 21:54:47,147 log 1623661 140090394860160 Bad Request: /api/register/
+[WARNING] 2025-10-20 21:54:52,560 log 1623662 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 21:57:40,846 log 1623663 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 21:57:59,655 log 1623664 140090405091136 Bad Request: /api/register/
+[WARNING] 2025-10-20 21:58:40,892 log 1623662 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:05:25,982 log 1623665 140090429781824 Not Found: /api/coupon/MSC-10/
+[WARNING] 2025-10-20 22:05:42,078 log 1623664 140090405091136 Not Found: /api/coupon/MSC20/
+[WARNING] 2025-10-20 22:09:33,501 log 1623665 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:18:10,832 log 1623665 140090429781824 Not Found: /api/coupon/MESSI3310/
+[WARNING] 2025-10-20 22:18:22,843 log 1623663 140090429781824 Not Found: /api/coupon/MESSI3310/
+[WARNING] 2025-10-20 22:19:58,012 log 1623663 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:20:13,212 log 1623665 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:20:14,197 log 1623665 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:20:15,217 log 1623665 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:20:15,376 log 1623665 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:20:15,516 log 1623665 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:20:15,661 log 1623665 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:20:15,892 log 1623665 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:25:17,378 log 1623665 140090429781824 Bad Request: /api/register/
+[INFO] 2025-10-20 22:25:58,289 views 1623663 140090429781824 Queueing registration email for participant 97
+[INFO] 2025-10-20 22:25:58,540 tasks 1623681 140141172338688 [TASK START] Registration email for participant 97
+[INFO] 2025-10-20 22:25:58,625 views 1623663 140090429781824 ✓ Registration email queued for participant 97
+[INFO] 2025-10-20 22:25:58,627 views 1623663 140090429781824   - Team members will receive as CC: 1
+[INFO] 2025-10-20 22:26:08,278 tasks 1623681 140141172338688 ✓ [SUCCESS] Registration email sent to tasfiatasnim.2222@gmail.com (CC: 1)
+[WARNING] 2025-10-20 22:29:23,348 log 1623663 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:29:46,448 log 1623663 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:39:36,332 log 1623665 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:40:06,889 log 1623663 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:40:34,288 log 1623664 140090405091136 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:40:35,966 log 1623664 140090405091136 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:41:00,504 log 1623665 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:45:13,342 log 1623665 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:46:54,243 log 1623662 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-20 22:48:15,186 log 1623665 140090429781824 Bad Request: /api/register/
+[INFO] 2025-10-20 23:34:49,743 views 1623665 140090429781824 Queueing registration email for participant 98
+[INFO] 2025-10-20 23:34:49,765 tasks 1623681 140141172338688 [TASK START] Registration email for participant 98
+[INFO] 2025-10-20 23:34:49,775 views 1623665 140090429781824 ✓ Registration email queued for participant 98
+[INFO] 2025-10-20 23:34:59,273 tasks 1623681 140141172338688 ✓ [SUCCESS] Registration email sent to muzaddidarrubaiyat@gmail.com (CC: 0)
+[INFO] 2025-10-20 23:43:52,798 views 1623664 140090405091136 Queueing registration email for participant 99
+[INFO] 2025-10-20 23:43:52,828 tasks 1623681 140141172338688 [TASK START] Registration email for participant 99
+[INFO] 2025-10-20 23:43:52,840 views 1623664 140090405091136 ✓ Registration email queued for participant 99
+[INFO] 2025-10-20 23:44:01,877 tasks 1623681 140141172338688 ✓ [SUCCESS] Registration email sent to shariqahhossain@gmail.com (CC: 0)
+[WARNING] 2025-10-20 23:48:30,437 log 1623661 140090394860160 Unauthorized: /login/
+[WARNING] 2025-10-20 23:48:49,148 log 1623664 140090405091136 Unauthorized: /login/
+[WARNING] 2025-10-20 23:52:30,115 log 1623664 140090405091136 Not Found: /api/coupon/msc10/
+[WARNING] 2025-10-20 23:52:30,126 log 1623665 140090429781824 Unauthorized: /login/
+[WARNING] 2025-10-20 23:52:36,093 log 1623663 140090429781824 Not Found: /api/coupon/Msc10/
+[WARNING] 2025-10-20 23:52:44,884 log 1623665 140090429781824 Not Found: /api/coupon/msc10/
+[WARNING] 2025-10-21 00:27:44,821 log 1623662 140090429781824 Not Found: /
+[WARNING] 2025-10-21 00:27:50,563 log 1623665 140090429781824 Not Found: /favicon.ico
+[WARNING] 2025-10-21 01:12:24,230 log 1623662 140090429781824 Bad Request: /api/register/
+[INFO] 2025-10-21 01:15:13,493 views 1623665 140090429781824 Queueing registration email for participant 100
+[INFO] 2025-10-21 01:15:13,516 tasks 1623681 140141172338688 [TASK START] Registration email for participant 100
+[INFO] 2025-10-21 01:15:13,532 views 1623665 140090429781824 ✓ Registration email queued for participant 100
+[INFO] 2025-10-21 01:15:13,533 views 1623665 140090429781824   - Team members will receive as CC: 3
+[INFO] 2025-10-21 01:15:23,626 tasks 1623681 140141172338688 ✓ [SUCCESS] Registration email sent to aishasalaba@gmail.com (CC: 3)
+[WARNING] 2025-10-21 01:27:08,009 log 1623663 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-21 01:27:08,742 log 1623663 140090429781824 Bad Request: /api/register/
+[WARNING] 2025-10-21 07:59:25,244 log 1623662 140090429781824 Unauthorized: /api/team-competition/
+[WARNING] 2025-10-21 07:59:29,821 log 1623665 140090429781824 Unauthorized: /api/team-competition/
+[WARNING] 2025-10-21 07:59:34,200 log 1623663 140090429781824 Unauthorized: /api/competition/
+[WARNING] 2025-10-21 07:59:39,230 log 1623664 140090405091136 Unauthorized: /api/competition/
+[WARNING] 2025-10-21 07:59:42,647 log 1623665 140090429781824 Unauthorized: /api/participant/
+[WARNING] 2025-10-21 09:44:09,415 log 1623663 140090429781824 Not Found: /
+[WARNING] 2025-10-21 10:15:54,530 log 1623665 140090429781824 Unauthorized: /api/competition/3m-res/
+[WARNING] 2025-10-21 10:59:07,896 log 1623664 140090405091136 Not Found: /
+[INFO] 2025-10-21 11:07:04,894 views 1623662 140090429781824 Queueing registration email for participant 101
+[INFO] 2025-10-21 11:07:04,981 tasks 1623681 140141172338688 [TASK START] Registration email for participant 101
+[INFO] 2025-10-21 11:07:05,008 views 1623662 140090429781824 ✓ Registration email queued for participant 101
+[INFO] 2025-10-21 11:07:14,531 tasks 1623681 140141172338688 ✓ [SUCCESS] Registration email sent to tawsifgmabu@gmail.com (CC: 0)
+[INFO] 2025-10-21 11:09:25,473 views 1623664 140090405091136 Queueing registration email for participant 102
+[INFO] 2025-10-21 11:09:25,502 tasks 1623681 140141172338688 [TASK START] Registration email for participant 102
+[INFO] 2025-10-21 11:09:25,514 views 1623664 140090405091136 ✓ Registration email queued for participant 102
+[INFO] 2025-10-21 11:09:34,602 tasks 1623681 140141172338688 ✓ [SUCCESS] Registration email sent to mahadiabdullahal95@gmail.com (CC: 0)
+[WARNING] 2025-10-21 11:38:19,518 log 1623663 140090429781824 Unauthorized: /api/competition/3m-res/
+[WARNING] 2025-10-21 11:38:27,187 log 1623665 140090429781824 Unauthorized: /api/competition/3m-res/
+[WARNING] 2025-10-21 11:38:31,538 log 1623662 140090429781824 Unauthorized: /api/participant/
+[WARNING] 2025-10-21 11:39:42,399 log 1623662 140090429781824 Not Found: /favicon.ico
+[INFO] 2025-10-21 11:44:46,134 views 1623661 140090394860160 Queueing registration email for participant 103
+[INFO] 2025-10-21 11:44:46,156 tasks 1623681 140141172338688 [TASK START] Registration email for participant 103
+[INFO] 2025-10-21 11:44:46,168 views 1623661 140090394860160 ✓ Registration email queued for participant 103
+[INFO] 2025-10-21 11:44:55,418 tasks 1623681 140141172338688 ✓ [SUCCESS] Registration email sent to smunira2k@gmail.com (CC: 0)
+[INFO] 2025-10-21 12:06:25,260 views 1623663 140090429781824 Queueing registration email for participant 104
+[INFO] 2025-10-21 12:06:25,280 tasks 1623681 140141172338688 [TASK START] Registration email for participant 104
+[INFO] 2025-10-21 12:06:25,289 views 1623663 140090429781824 ✓ Registration email queued for participant 104
+[WARNING] 2025-10-21 12:06:27,287 log 1623663 140090429781824 Bad Request: /api/register/
+[INFO] 2025-10-21 12:06:34,356 tasks 1623681 140141172338688 ✓ [SUCCESS] Registration email sent to rafidabdullahsami@gmail.com (CC: 0)
+[INFO] 2025-10-21 12:09:07,105 views 1623664 140090405090816 Queueing solo email for participant 104 (team_leader=False)
+[INFO] 2025-10-21 12:09:07,128 views 1623664 140090405090816 ✓ Solo email queued for 104
+[INFO] 2025-10-21 12:09:07,129 views 1623664 140090405090816 ✓ Total 1 email task(s) queued for participant 104
+[INFO] 2025-10-21 12:09:07,135 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 104
+[INFO] 2025-10-21 12:09:07,143 tasks 1623681 140141172338688 Generating QR code for: p_104
+[INFO] 2025-10-21 12:09:07,217 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_104_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_104_ticket.jpg
+[INFO] 2025-10-21 12:09:07,274 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-21 12:09:07,274 tasks 1623681 140141172338688 Ticket attached (89459 bytes)
+[INFO] 2025-10-21 12:09:16,888 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to rafidabdullahsami@gmail.com
+[WARNING] 2025-10-21 12:38:31,349 log 1623664 140090405090816 Unauthorized: /api/participant/
+[WARNING] 2025-10-21 13:14:33,076 log 1623664 140090405090816 Not Found: /favicon.ico
+[INFO] 2025-10-21 13:39:05,221 views 1623662 140090429781824 Queueing solo email for participant 101 (team_leader=False)
+[INFO] 2025-10-21 13:39:05,249 views 1623662 140090429781824 ✓ Solo email queued for 101
+[INFO] 2025-10-21 13:39:05,253 views 1623662 140090429781824 ✓ Total 1 email task(s) queued for participant 101
+[INFO] 2025-10-21 13:39:05,256 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 101
+[INFO] 2025-10-21 13:39:05,263 tasks 1623681 140141172338688 Generating QR code for: p_101
+[INFO] 2025-10-21 13:39:05,302 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_101_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_101_ticket.jpg
+[INFO] 2025-10-21 13:39:05,357 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-21 13:39:05,357 tasks 1623681 140141172338688 Ticket attached (91135 bytes)
+[INFO] 2025-10-21 13:39:15,216 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to tawsifgmabu@gmail.com
+[INFO] 2025-10-21 13:39:56,671 views 1623663 140090429781824 Queueing solo email for participant 102 (team_leader=False)
+[INFO] 2025-10-21 13:39:56,696 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 102
+[INFO] 2025-10-21 13:39:56,697 views 1623663 140090429781824 ✓ Solo email queued for 102
+[INFO] 2025-10-21 13:39:56,698 views 1623663 140090429781824 ✓ Total 1 email task(s) queued for participant 102
+[INFO] 2025-10-21 13:39:56,701 tasks 1623681 140141172338688 Generating QR code for: p_102
+[INFO] 2025-10-21 13:39:56,743 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_102_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_102_ticket.jpg
+[INFO] 2025-10-21 13:39:56,796 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-21 13:39:56,798 tasks 1623681 140141172338688 Ticket attached (90269 bytes)
+[INFO] 2025-10-21 13:40:06,296 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to mahadiabdullahal95@gmail.com
+[INFO] 2025-10-21 13:40:24,103 views 1623662 140090429781824 Queueing solo email for participant 103 (team_leader=False)
+[INFO] 2025-10-21 13:40:24,122 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 103
+[INFO] 2025-10-21 13:40:24,124 views 1623662 140090429781824 ✓ Solo email queued for 103
+[INFO] 2025-10-21 13:40:24,125 views 1623662 140090429781824 ✓ Total 1 email task(s) queued for participant 103
+[INFO] 2025-10-21 13:40:24,126 tasks 1623681 140141172338688 Generating QR code for: p_103
+[INFO] 2025-10-21 13:40:24,178 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_103_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_103_ticket.jpg
+[INFO] 2025-10-21 13:40:24,231 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-21 13:40:24,232 tasks 1623681 140141172338688 Ticket attached (91093 bytes)
+[INFO] 2025-10-21 13:40:34,231 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to smunira2k@gmail.com
+[INFO] 2025-10-21 13:40:50,161 views 1623665 140090429781824 Queueing solo email for participant 99 (team_leader=False)
+[INFO] 2025-10-21 13:40:50,181 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 99
+[INFO] 2025-10-21 13:40:50,183 views 1623665 140090429781824 ✓ Solo email queued for 99
+[INFO] 2025-10-21 13:40:50,189 views 1623665 140090429781824 ✓ Total 1 email task(s) queued for participant 99
+[INFO] 2025-10-21 13:40:50,190 tasks 1623681 140141172338688 Generating QR code for: p_99
+[INFO] 2025-10-21 13:40:50,235 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_99_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_99_ticket.jpg
+[INFO] 2025-10-21 13:40:50,289 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-21 13:40:50,290 tasks 1623681 140141172338688 Ticket attached (90013 bytes)
+[INFO] 2025-10-21 13:40:59,258 views 1623661 140090394860160 Queueing solo email for participant 98 (team_leader=False)
+[INFO] 2025-10-21 13:40:59,279 views 1623661 140090394860160 ✓ Solo email queued for 98
+[INFO] 2025-10-21 13:40:59,280 views 1623661 140090394860160 ✓ Total 1 email task(s) queued for participant 98
+[INFO] 2025-10-21 13:40:59,295 tasks 1623679 140141172338688 [TASK START] Payment verification email for participant 98
+[INFO] 2025-10-21 13:40:59,685 tasks 1623679 140141172338688 Generating QR code for: p_98
+[INFO] 2025-10-21 13:40:59,760 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to shariqahhossain@gmail.com
+[INFO] 2025-10-21 13:40:59,833 tasks 1623679 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_98_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_98_ticket.jpg
+[INFO] 2025-10-21 13:40:59,881 tasks 1623679 140141172338688 Logo attached
+[INFO] 2025-10-21 13:40:59,881 tasks 1623679 140141172338688 Ticket attached (91480 bytes)
+[INFO] 2025-10-21 13:41:09,413 tasks 1623679 140141172338688 ✓ [SUCCESS] Participant email sent to muzaddidarrubaiyat@gmail.com
+[INFO] 2025-10-21 13:41:23,174 views 1623662 140090429781824 Queueing solo email for participant 100 (team_leader=True)
+[INFO] 2025-10-21 13:41:23,191 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 100
+[INFO] 2025-10-21 13:41:23,192 views 1623662 140090429781824 ✓ Solo email queued for 100
+[INFO] 2025-10-21 13:41:23,193 views 1623662 140090429781824 Queueing team email for team 54
+[INFO] 2025-10-21 13:41:23,196 tasks 1623681 140141172338688 Generating QR code for: p_100
+[INFO] 2025-10-21 13:41:23,208 views 1623662 140090429781824 ✓ Team email queued for 54 (4 members via CC)
+[INFO] 2025-10-21 13:41:23,210 views 1623662 140090429781824 ✓ Total 2 email task(s) queued for participant 100
+[INFO] 2025-10-21 13:41:23,229 tasks 1623679 140141172338688 [TASK START] Team verification email for team 54
+[INFO] 2025-10-21 13:41:23,230 tasks 1623679 140141172338688 Generating QR code for: t_54
+[INFO] 2025-10-21 13:41:23,282 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_100_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_100_ticket.jpg
+[INFO] 2025-10-21 13:41:23,303 tasks 1623679 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/t_54_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/t_54_ticket.jpg
+[INFO] 2025-10-21 13:41:23,387 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-21 13:41:23,387 tasks 1623681 140141172338688 Ticket attached (89816 bytes)
+[INFO] 2025-10-21 13:41:23,402 tasks 1623679 140141172338688 Logo attached
+[INFO] 2025-10-21 13:41:23,402 tasks 1623679 140141172338688 Team ticket attached (89919 bytes)
+[INFO] 2025-10-21 13:41:32,853 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to aishasalaba@gmail.com
+[INFO] 2025-10-21 13:41:34,029 tasks 1623679 140141172338688 ✓ [SUCCESS] Team email sent to 4 members (1 TO + 3 CC)
+[INFO] 2025-10-21 13:41:47,181 views 1623665 140090429781824 Queueing solo email for participant 97 (team_leader=True)
+[INFO] 2025-10-21 13:41:47,199 views 1623665 140090429781824 ✓ Solo email queued for 97
+[INFO] 2025-10-21 13:41:47,201 views 1623665 140090429781824 Queueing team email for team 53
+[INFO] 2025-10-21 13:41:47,205 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 97
+[INFO] 2025-10-21 13:41:47,210 tasks 1623681 140141172338688 Generating QR code for: p_97
+[INFO] 2025-10-21 13:41:47,217 views 1623665 140090429781824 ✓ Team email queued for 53 (2 members via CC)
+[INFO] 2025-10-21 13:41:47,218 views 1623665 140090429781824 ✓ Total 2 email task(s) queued for participant 97
+[INFO] 2025-10-21 13:41:47,224 tasks 1623679 140141172338688 [TASK START] Team verification email for team 53
+[INFO] 2025-10-21 13:41:47,226 tasks 1623679 140141172338688 Generating QR code for: t_53
+[INFO] 2025-10-21 13:41:47,302 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_97_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_97_ticket.jpg
+[INFO] 2025-10-21 13:41:47,306 tasks 1623679 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/t_53_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/t_53_ticket.jpg
+[INFO] 2025-10-21 13:41:47,396 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-21 13:41:47,396 tasks 1623681 140141172338688 Ticket attached (90484 bytes)
+[INFO] 2025-10-21 13:41:47,405 tasks 1623679 140141172338688 Logo attached
+[INFO] 2025-10-21 13:41:47,406 tasks 1623679 140141172338688 Team ticket attached (90469 bytes)
+[INFO] 2025-10-21 13:41:57,044 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to tasfiatasnim.2222@gmail.com
+[INFO] 2025-10-21 13:41:57,585 tasks 1623679 140141172338688 ✓ [SUCCESS] Team email sent to 2 members (1 TO + 1 CC)
+[INFO] 2025-10-21 13:42:05,222 views 1623662 140090429781824 Queueing solo email for participant 96 (team_leader=False)
+[INFO] 2025-10-21 13:42:05,241 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 96
+[INFO] 2025-10-21 13:42:05,243 views 1623662 140090429781824 ✓ Solo email queued for 96
+[INFO] 2025-10-21 13:42:05,243 views 1623662 140090429781824 ✓ Total 1 email task(s) queued for participant 96
+[INFO] 2025-10-21 13:42:05,245 tasks 1623681 140141172338688 Generating QR code for: p_96
+[INFO] 2025-10-21 13:42:05,288 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_96_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_96_ticket.jpg
+[INFO] 2025-10-21 13:42:05,342 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-21 13:42:05,343 tasks 1623681 140141172338688 Ticket attached (89884 bytes)
+[INFO] 2025-10-21 13:42:14,797 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to yasarahman83@gmail.com
+[INFO] 2025-10-21 13:42:22,131 views 1623665 140090429781824 Queueing solo email for participant 95 (team_leader=False)
+[INFO] 2025-10-21 13:42:22,149 views 1623665 140090429781824 ✓ Solo email queued for 95
+[INFO] 2025-10-21 13:42:22,149 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 95
+[INFO] 2025-10-21 13:42:22,150 views 1623665 140090429781824 ✓ Total 1 email task(s) queued for participant 95
+[INFO] 2025-10-21 13:42:22,154 tasks 1623681 140141172338688 Generating QR code for: p_95
+[INFO] 2025-10-21 13:42:22,191 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_95_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_95_ticket.jpg
+[INFO] 2025-10-21 13:42:22,248 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-21 13:42:22,249 tasks 1623681 140141172338688 Ticket attached (90094 bytes)
+[INFO] 2025-10-21 13:42:31,726 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to hossainrupak70@gmail.com
+[INFO] 2025-10-21 13:42:45,268 views 1623661 140090394860160 Queueing solo email for participant 94 (team_leader=False)
+[INFO] 2025-10-21 13:42:45,288 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 94
+[INFO] 2025-10-21 13:42:45,290 views 1623661 140090394860160 ✓ Solo email queued for 94
+[INFO] 2025-10-21 13:42:45,290 views 1623661 140090394860160 ✓ Total 1 email task(s) queued for participant 94
+[INFO] 2025-10-21 13:42:45,293 tasks 1623681 140141172338688 Generating QR code for: p_94
+[INFO] 2025-10-21 13:42:45,338 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_94_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_94_ticket.jpg
+[INFO] 2025-10-21 13:42:45,393 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-21 13:42:45,393 tasks 1623681 140141172338688 Ticket attached (89257 bytes)
+[INFO] 2025-10-21 13:42:54,892 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to sk8437075@gmail.com
+[INFO] 2025-10-21 13:43:14,199 views 1623665 140090429781824 Queueing solo email for participant 92 (team_leader=False)
+[INFO] 2025-10-21 13:43:14,220 views 1623665 140090429781824 ✓ Solo email queued for 92
+[INFO] 2025-10-21 13:43:14,221 views 1623665 140090429781824 ✓ Total 1 email task(s) queued for participant 92
+[INFO] 2025-10-21 13:43:14,224 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 92
+[INFO] 2025-10-21 13:43:14,225 tasks 1623681 140141172338688 Generating QR code for: p_92
+[INFO] 2025-10-21 13:43:14,266 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_92_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_92_ticket.jpg
+[INFO] 2025-10-21 13:43:14,321 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-21 13:43:14,321 tasks 1623681 140141172338688 Ticket attached (91008 bytes)
+[INFO] 2025-10-21 13:43:22,157 views 1623663 140090429781824 Queueing solo email for participant 93 (team_leader=False)
+[INFO] 2025-10-21 13:43:22,177 views 1623663 140090429781824 ✓ Solo email queued for 93
+[INFO] 2025-10-21 13:43:22,178 views 1623663 140090429781824 ✓ Total 1 email task(s) queued for participant 93
+[INFO] 2025-10-21 13:43:22,177 tasks 1623679 140141172338688 [TASK START] Payment verification email for participant 93
+[INFO] 2025-10-21 13:43:22,183 tasks 1623679 140141172338688 Generating QR code for: p_93
+[INFO] 2025-10-21 13:43:22,224 tasks 1623679 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_93_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_93_ticket.jpg
+[INFO] 2025-10-21 13:43:22,279 tasks 1623679 140141172338688 Logo attached
+[INFO] 2025-10-21 13:43:22,279 tasks 1623679 140141172338688 Ticket attached (90926 bytes)
+[INFO] 2025-10-21 13:43:23,881 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to farhalaila8@gmail.com
+[INFO] 2025-10-21 13:43:31,767 tasks 1623679 140141172338688 ✓ [SUCCESS] Participant email sent to ayanakhanmanha1@gmail.com
+[INFO] 2025-10-21 13:48:58,592 views 1623662 140090429781824 Queueing solo email for participant 90 (team_leader=False)
+[INFO] 2025-10-21 13:48:58,618 views 1623662 140090429781824 ✓ Solo email queued for 90
+[INFO] 2025-10-21 13:48:58,619 views 1623662 140090429781824 ✓ Total 1 email task(s) queued for participant 90
+[INFO] 2025-10-21 13:48:58,627 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 90
+[INFO] 2025-10-21 13:48:58,633 tasks 1623681 140141172338688 Generating QR code for: p_90
+[INFO] 2025-10-21 13:48:58,674 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_90_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_90_ticket.jpg
+[INFO] 2025-10-21 13:48:58,731 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-21 13:48:58,732 tasks 1623681 140141172338688 Ticket attached (91316 bytes)
+[INFO] 2025-10-21 13:49:08,556 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to simrahrahman218@gmail.com
+[INFO] 2025-10-21 13:49:14,330 views 1623664 140090405090816 Queueing solo email for participant 89 (team_leader=False)
+[INFO] 2025-10-21 13:49:14,356 tasks 1623681 140141172338688 [TASK START] Payment verification email for participant 89
+[INFO] 2025-10-21 13:49:14,361 views 1623664 140090405090816 ✓ Solo email queued for 89
+[INFO] 2025-10-21 13:49:14,363 tasks 1623681 140141172338688 Generating QR code for: p_89
+[INFO] 2025-10-21 13:49:14,362 views 1623664 140090405090816 ✓ Total 1 email task(s) queued for participant 89
+[INFO] 2025-10-21 13:49:14,466 tasks 1623681 140141172338688 QR and ticket saved: /home/sailo/innoverse/innoverse/media/qr_codes/p_89_qr.png, /home/sailo/innoverse/innoverse/media/qr_codes/p_89_ticket.jpg
+[INFO] 2025-10-21 13:49:14,519 tasks 1623681 140141172338688 Logo attached
+[INFO] 2025-10-21 13:49:14,520 tasks 1623681 140141172338688 Ticket attached (89788 bytes)
+[INFO] 2025-10-21 13:49:24,258 tasks 1623681 140141172338688 ✓ [SUCCESS] Participant email sent to ahnaffarhan121@gmail.com
+[INFO] 2025-10-21 13:51:40,742 views 1623662 140090429781824 ✓ Total 0 email task(s) queued for participant 72
+[WARNING] 2025-10-21 13:57:43,206 log 1623663 140090429781824 Unauthorized: /api/manage-coupon/
+[WARNING] 2025-10-21 13:57:47,000 log 1623664 140090405090816 Unauthorized: /api/manage-coupon/
+[WARNING] 2025-10-21 13:57:49,348 log 1623665 140090429781824 Unauthorized: /api/team/
+[WARNING] 2025-10-21 13:58:02,868 log 1623663 140090429781824 Unauthorized: /api/participant/
+[WARNING] 2025-10-21 13:58:21,277 log 1623665 140090429781824 Not Found: /favicon.ico
+[WARNING] 2025-10-21 14:04:13,485 log 2186596 139705044710912 Bad Request: /api/register/
+[WARNING] 2025-10-21 14:04:32,079 log 2186593 139705044710912 Bad Request: /api/register/
+[INFO] 2025-10-21 14:05:21,565 views 2186595 139705044710912 Queueing registration email for participant 105
+[INFO] 2025-10-21 14:05:21,744 tasks 2186632 140164491022336 [TASK START] Registration email for participant 105
+[INFO] 2025-10-21 14:05:21,756 views 2186595 139705044710912 ✓ Registration email queued for participant 105
+[INFO] 2025-10-21 14:05:31,136 tasks 2186632 140164491022336 ✓ [SUCCESS] Registration email sent to rafidabdullahsami+1@gmail.com (CC: 0)
+[WARNING] 2025-10-21 14:55:32,971 log 2187488 140469345970880 Not Found: /favicon.ico
+[WARNING] 2025-10-21 15:35:49,613 log 2187489 140469346002528 Not Found: /
+[WARNING] 2025-10-21 15:35:50,099 log 2187489 140469346002528 Not Found: //wp-includes/wlwmanifest.xml
+[WARNING] 2025-10-21 15:35:50,394 log 2187489 140469346002528 Not Found: //xmlrpc.php
+[WARNING] 2025-10-21 15:35:50,685 log 2187489 140469346002528 Not Found: /
+[WARNING] 2025-10-21 15:35:50,977 log 2187489 140469346002528 Not Found: //blog/wp-includes/wlwmanifest.xml
+[WARNING] 2025-10-21 15:35:51,265 log 2187489 140469346002528 Not Found: //web/wp-includes/wlwmanifest.xml
+[WARNING] 2025-10-21 15:35:51,559 log 2187489 140469346002528 Not Found: //wordpress/wp-includes/wlwmanifest.xml
+[WARNING] 2025-10-21 15:35:51,848 log 2187489 140469346002528 Not Found: //website/wp-includes/wlwmanifest.xml
+[WARNING] 2025-10-21 15:35:52,137 log 2187489 140469346002528 Not Found: //wp/wp-includes/wlwmanifest.xml
+[WARNING] 2025-10-21 15:35:52,508 log 2187489 140469346002528 Not Found: //news/wp-includes/wlwmanifest.xml
+[WARNING] 2025-10-21 15:35:52,797 log 2187489 140469346002528 Not Found: //2020/wp-includes/wlwmanifest.xml
+[WARNING] 2025-10-21 15:35:53,312 log 2187489 140469346002528 Not Found: //2019/wp-includes/wlwmanifest.xml
+[WARNING] 2025-10-21 15:35:53,603 log 2187489 140469346002528 Not Found: //shop/wp-includes/wlwmanifest.xml
+[WARNING] 2025-10-21 15:35:53,892 log 2187489 140469346002528 Not Found: //wp1/wp-includes/wlwmanifest.xml
+[WARNING] 2025-10-21 15:35:54,181 log 2187489 140469346002528 Not Found: //test/wp-includes/wlwmanifest.xml
+[WARNING] 2025-10-21 15:35:54,471 log 2187489 140469346002528 Not Found: //wp2/wp-includes/wlwmanifest.xml
+[WARNING] 2025-10-21 15:35:54,762 log 2187489 140469346002528 Not Found: //site/wp-includes/wlwmanifest.xml
+[WARNING] 2025-10-21 15:35:55,053 log 2187489 140469346002528 Not Found: //cms/wp-includes/wlwmanifest.xml
+[WARNING] 2025-10-21 15:35:55,342 log 2187489 140469346002528 Not Found: //sito/wp-includes/wlwmanifest.xml
+[WARNING] 2025-10-21 16:25:46,324 log 2187486 140469346036576 Unauthorized: /api/manage-coupon/
+[WARNING] 2025-10-21 16:25:49,569 log 2187489 140469346002528 Unauthorized: /api/manage-coupon/
+[WARNING] 2025-10-21 16:25:53,801 log 2187485 140469346002208 Unauthorized: /api/manage-coupon/
+[WARNING] 2025-10-21 16:25:54,959 log 2187485 140469346002208 Unauthorized: /api/manage-coupon/
+[WARNING] 2025-10-21 16:26:26,188 log 2187486 140469346036576 Unauthorized: /api/participant/
+[WARNING] 2025-10-21 16:37:18,181 log 2187487 140469346016512 Unauthorized: /login/
+[WARNING] 2025-10-21 16:37:55,177 log 2187489 140469346002528 Unauthorized: /login/
+[WARNING] 2025-10-21 17:05:01,260 log 2187489 140469346002528 Not Found: /favicon.ico
+[INFO] 2025-10-21 17:16:20,857 views 2187489 140469346002528 Queueing registration email for participant 106
+[INFO] 2025-10-21 17:16:21,164 views 2187489 140469346002528 ✓ Registration email queued for participant 106
+[INFO] 2025-10-21 17:16:21,166 tasks 2187520 139973185454080 [TASK START] Registration email for participant 106
+[INFO] 2025-10-21 17:16:30,964 tasks 2187520 139973185454080 ✓ [SUCCESS] Registration email sent to hannan43000@gmail.com (CC: 0)
+[INFO] 2025-10-21 17:24:03,927 views 2187486 140469346036576 Queueing registration email for participant 107
+[INFO] 2025-10-21 17:24:04,279 tasks 2187520 139973185454080 [TASK START] Registration email for participant 107
+[INFO] 2025-10-21 17:24:04,292 views 2187486 140469346036576 ✓ Registration email queued for participant 107
+[INFO] 2025-10-21 17:24:04,305 views 2187486 140469346036576   - Team members will receive as CC: 1
+[INFO] 2025-10-21 17:24:13,919 tasks 2187520 139973185454080 ✓ [SUCCESS] Registration email sent to test@gmail.com (CC: 1)
+[WARNING] 2025-10-21 18:12:03,233 log 2187488 140469345970880 Not Found: /api/coupon/MSC10 /
+[WARNING] 2025-10-21 18:12:04,946 log 2187488 140469345970880 Not Found: /api/coupon/MSC10 /
+[WARNING] 2025-10-21 18:12:07,626 log 2187486 140469346036576 Not Found: /api/coupon/MSC10 /
+[INFO] 2025-10-21 18:14:42,820 views 2187486 140469346036576 Queueing registration email for participant 108
+[INFO] 2025-10-21 18:14:42,836 tasks 2187520 139973185454080 [TASK START] Registration email for participant 108
+[INFO] 2025-10-21 18:14:42,859 views 2187486 140469346036576 ✓ Registration email queued for participant 108
+[INFO] 2025-10-21 18:14:52,296 tasks 2187520 139973185454080 ✓ [SUCCESS] Registration email sent to kamrulhasan95t@gmail.com (CC: 0)
+[INFO] 2025-10-21 18:19:57,286 views 2252016 140259532224000 Queueing registration email for participant 109
+[INFO] 2025-10-21 18:19:57,516 tasks 2252048 140132090023936 [TASK START] Registration email for participant 109
+[INFO] 2025-10-21 18:19:57,527 views 2252016 140259532224000 ✓ Registration email queued for participant 109
+[INFO] 2025-10-21 18:20:07,032 tasks 2252048 140132090023936 ✓ [SUCCESS] Registration email sent to rafidabdullahsami+2@gmail.com (CC: 0)
+[WARNING] 2025-10-21 18:22:15,978 log 2252018 140259532224000 Bad Request: /api/register/
+[INFO] 2025-10-21 18:22:31,944 views 2252015 140259532224000 Queueing registration email for participant 110
+[INFO] 2025-10-21 18:22:32,065 tasks 2252048 140132090023936 [TASK START] Registration email for participant 110
+[INFO] 2025-10-21 18:22:32,082 views 2252015 140259532224000 ✓ Registration email queued for participant 110
+[INFO] 2025-10-21 18:22:32,085 views 2252015 140259532224000   - Team members will receive as CC: 1
+[INFO] 2025-10-21 18:22:41,342 tasks 2252048 140132090023936 ✓ [SUCCESS] Registration email sent to rafidabdullahsami+4@gmail.com (CC: 1)
+[WARNING] 2025-10-21 18:29:18,094 log 2254772 139865991165440 Bad Request: /api/register/
+[WARNING] 2025-10-21 18:29:24,240 log 2254771 139865991165440 Bad Request: /api/register/
+[INFO] 2025-10-21 18:29:29,061 views 2254772 139865991165440 Queueing registration email for participant 111
+[INFO] 2025-10-21 18:29:29,236 tasks 2252048 140132090023936 [TASK START] Registration email for participant 111
+[INFO] 2025-10-21 18:29:29,248 views 2254772 139865991165440 ✓ Registration email queued for participant 111
+[INFO] 2025-10-21 18:29:29,253 views 2254772 139865991165440   - Team members will receive as CC: 1
+[INFO] 2025-10-21 18:29:38,541 tasks 2252048 140132090023936 ✓ [SUCCESS] Registration email sent to rafidabdullahsami+5@gmail.com (CC: 1)
+[INFO] 2025-10-21 18:36:17,761 views 2256512 139621559744000 Creating Tanvin Award entry for team 58: Innovative Project
+[INFO] 2025-10-21 18:36:17,767 views 2256512 139621559744000 ✓ Tanvin Award entry created successfully (ID: 1) for team 58
+[INFO] 2025-10-21 18:36:17,776 views 2256512 139621559744000 Queueing registration email for participant 112
+[INFO] 2025-10-21 18:36:17,904 tasks 2256486 139717344178176 [TASK START] Registration email for participant 112
+[INFO] 2025-10-21 18:36:17,916 views 2256512 139621559744000 ✓ Registration email queued for participant 112
+[INFO] 2025-10-21 18:36:17,921 views 2256512 139621559744000   - Team members will receive as CC: 1
+[INFO] 2025-10-21 18:36:27,378 tasks 2256486 139717344178176 ✓ [SUCCESS] Registration email sent to rafidabdullahsami+6@gmail.com (CC: 1)
+[WARNING] 2025-10-21 18:43:21,300 log 2256513 139621559744000 Not Found: /api/coupon/Farheen Hasnat/
+[WARNING] 2025-10-21 18:45:49,448 log 2256514 139621559744000 Unauthorized: /api/participant/

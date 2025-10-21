@@ -10,6 +10,7 @@ from event.models import Coupons, Segment, Competition, TeamCompetition
 
 from django.core.cache import cache
 from django.db.models import Q
+from participant.models import TanvinAward
 
 
 class RoleSerializer(serializers.ModelSerializer):
@@ -58,6 +59,7 @@ class ParticipantRegistrationSerializer(serializers.Serializer):
 class PaymentRegistrationSerializer(serializers.Serializer):
     amount = serializers.DecimalField(max_digits=10, decimal_places=2)
     phone = serializers.CharField(max_length=20)
+    method = serializers.CharField(max_length=50)
     trx_id = serializers.CharField(max_length=100)
 
 
@@ -86,6 +88,27 @@ class TeamCompetitionInfoSerializer(serializers.Serializer):
     competition = serializers.ListField(child=serializers.CharField(max_length=20))
 
 
+
+class TanvinAwardSerializer(serializers.Serializer):
+    """Serializer for Tanvin Award project details"""
+    project_name = serializers.CharField(max_length=200)
+    project_type = serializers.ChoiceField(choices=[
+        ("robotics", "Robotics"),
+        ("ai", "Artificial Intelligence"),
+        ("cs", "Computer Science & Programming"),
+        ("data_science", "Data Science & Analytics"),
+        ("environment", "Environment & Sustainability"),
+        ("health", "Health & Life Sciences"),
+        ("engineering", "Engineering & Design"),
+        ("education", "Education & Social Development"),
+        ("media", "Media & Communication"),
+        ("other", "Other")
+    ])
+    project_description = serializers.CharField()
+    pitch_deck = serializers.URLField(required=False, allow_blank=True)
+    video_link = serializers.URLField(required=False, allow_blank=True)
+
+
 class CompleteRegistrationSerializer(serializers.Serializer):
     participant = ParticipantRegistrationSerializer()
     payment = PaymentRegistrationSerializer()
@@ -102,12 +125,12 @@ class CompleteRegistrationSerializer(serializers.Serializer):
         default=list
     )
     team_competition = TeamCompetitionInfoSerializer(required=False, allow_null=True)
+    tanvin_award = TanvinAwardSerializer(required=False, allow_null=True)  # ADD THIS LINE
     coupon = serializers.DictField(required=False, allow_null=True)
 
     def validate_payment(self, value):
         """Check if transaction ID already exists - OPTIMIZED"""
         trx_id = value.get('trx_id')
-        # Use only() to fetch only the field we need
         if Payment.objects.filter(trx_id=trx_id).only('id').exists():
             raise serializers.ValidationError(f"Transaction ID {trx_id} already exists")
         return value
@@ -117,12 +140,10 @@ class CompleteRegistrationSerializer(serializers.Serializer):
         if not value:
             return value
         
-        # Get all valid codes in a single query
         valid_codes = set(
             Segment.objects.filter(code__in=value).values_list('code', flat=True)
         )
         
-        # Find invalid codes
         invalid_codes = [code for code in value if code not in valid_codes]
         
         if invalid_codes:
@@ -137,12 +158,10 @@ class CompleteRegistrationSerializer(serializers.Serializer):
         if not value:
             return value
         
-        # Get all valid codes in a single query
         valid_codes = set(
             Competition.objects.filter(code__in=value).values_list('code', flat=True)
         )
         
-        # Find invalid codes
         invalid_codes = [code for code in value if code not in valid_codes]
         
         if invalid_codes:
@@ -159,14 +178,12 @@ class CompleteRegistrationSerializer(serializers.Serializer):
         
         competition_codes = value['competition']
         
-        # Get all valid codes in a single query
         valid_codes = set(
             TeamCompetition.objects.filter(
                 code__in=competition_codes
             ).values_list('code', flat=True)
         )
         
-        # Find invalid codes
         invalid_codes = [code for code in competition_codes if code not in valid_codes]
         
         if invalid_codes:
@@ -186,7 +203,6 @@ class CompleteRegistrationSerializer(serializers.Serializer):
             raise serializers.ValidationError("coupon_code is required")
         
         try:
-            # Use only() to fetch only required fields
             coupon = Coupons.objects.only(
                 'id', 'coupon_code', 'coupon_number', 'discount'
             ).get(coupon_code=coupon_code)
@@ -204,10 +220,34 @@ class CompleteRegistrationSerializer(serializers.Serializer):
     def validate(self, data):
         """
         Cross-field validation - OPTIMIZED
-        Combines all existence checks into minimal queries
+        Now includes Tanvin Award validation
         """
         participant = data.get('participant', {})
         team_competition = data.get('team_competition')
+        tanvin_award = data.get('tanvin_award')
+        
+        # Validate Tanvin Award logic
+        if tanvin_award:
+            # Tanvin Award requires team_competition
+            if not team_competition:
+                raise serializers.ValidationError({
+                    "tanvin_award": "Tanvin Award requires team competition registration"
+                })
+            
+            # Check if 'tanvin' is in competition codes
+            competition_codes = team_competition.get('competition', [])
+            if 'tanvin' not in competition_codes:
+                raise serializers.ValidationError({
+                    "tanvin_award": "Tanvin Award data provided but 'tanvin' not in team competitions"
+                })
+        
+        # If 'tanvin' is in competitions, tanvin_award should be provided
+        if team_competition:
+            competition_codes = team_competition.get('competition', [])
+            if 'tanvin' in competition_codes and not tanvin_award:
+                raise serializers.ValidationError({
+                    "tanvin_award": "Tanvin Award project details are required when registering for 'tanvin' competition"
+                })
         
         # Collect all emails to check in one query
         emails_to_check = [participant.get('email')]
@@ -248,6 +288,7 @@ class CompleteRegistrationSerializer(serializers.Serializer):
             raise serializers.ValidationError(errors)
         
         return data
+    
 
 
 # BONUS: Add caching for frequently accessed codes (optional but powerful)
@@ -347,7 +388,7 @@ class CompleteRegistrationSerializerWithCache(CompleteRegistrationSerializer):
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
-        fields = ['id', 'phone', 'amount', 'trx_id', 'datetime']
+        fields = ['id', 'phone', 'amount', 'method', 'trx_id', 'datetime']
 
 
 class RegistrationInfoSerializer(serializers.ModelSerializer):
@@ -383,12 +424,13 @@ class ParticipantListSerializer(serializers.ModelSerializer):
     segments = serializers.SerializerMethodField()
     competitions = serializers.SerializerMethodField()
     has_entry = serializers.SerializerMethodField()
+    payments = PaymentSerializer(many=True, read_only=True) 
     
     class Meta:
         model = Participant
         fields = [
             'id', 'full_name', 'email', 'phone', 'institution',
-            'payment_verified', 'segments', 'competitions', 'has_entry'
+            'payment_verified', 'payments', 'segments', 'competitions', 'has_entry'
         ]
     
     def get_full_name(self, obj):
@@ -417,7 +459,7 @@ class ParticipantDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Participant
         fields = [
-            'id', 'f_name', 'l_name', 'full_name', 'email', 'phone', 'institution', 'address',
+            'id', 'f_name', 'l_name', 'full_name', 'email', 'phone', 'grade', 'institution', 'address',
             'payment_verified', 'segment_registrations', 
             'competition_registrations', 'gifts_received', 'payments',
             'has_entry', 'entry_datetime', 'team_info'
@@ -572,3 +614,82 @@ class TeamCompetitionRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = TeamCompetitionRegistration
         fields = "__all__"
+
+
+
+
+
+
+
+
+class TeamMemberDetailSerializer(serializers.ModelSerializer):
+    """Serializer for team member details"""
+    full_name = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = TeamParticipant
+        fields = [
+            'id', 'full_name', 'f_name', 'l_name', 'gender', 
+            'email', 'phone', 'institution', 'grade', 
+            't_shirt_size', 'is_leader'
+        ]
+    
+    def get_full_name(self, obj):
+        return f"{obj.f_name} {obj.l_name}"
+
+
+class TeamDetailSerializer(serializers.ModelSerializer):
+    """Serializer for team details"""
+    members = TeamMemberDetailSerializer(many=True, read_only=True)
+    member_count = serializers.SerializerMethodField()
+    competitions = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Team
+        fields = [
+            'id', 'team_name', 'payment_verified', 
+            'member_count', 'members', 'competitions'
+        ]
+    
+    def get_member_count(self, obj):
+        return obj.members.count()
+    
+    def get_competitions(self, obj):
+        """Get all team competitions"""
+        return list(
+            obj.team_competition_registrations
+            .select_related('competition')
+            .values_list('competition__competition', flat=True)
+        )
+
+
+class TanvinAwardDetailSerializer(serializers.ModelSerializer):
+    """Detailed serializer for Tanvin Award with team information"""
+    team = TeamDetailSerializer(read_only=True)
+    project_type_display = serializers.CharField(source='get_project_type_display', read_only=True)
+    
+    class Meta:
+        model = TanvinAward
+        fields = [
+            'id', 'team', 'project_name', 'project_type', 
+            'project_type_display', 'project_description', 
+            'pitch_deck', 'video_link'
+        ]
+
+
+class TanvinAwardListSerializer(serializers.ModelSerializer):
+    """Minimal serializer for list view"""
+    team_name = serializers.CharField(source='team.team_name', read_only=True)
+    team_id = serializers.IntegerField(source='team.id', read_only=True)
+    project_type_display = serializers.CharField(source='get_project_type_display', read_only=True)
+    member_count = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = TanvinAward
+        fields = [
+            'id', 'team_id', 'team_name', 'project_name', 
+            'project_type', 'project_type_display', 'member_count'
+        ]
+    
+    def get_member_count(self, obj):
+        return obj.team.members.count()

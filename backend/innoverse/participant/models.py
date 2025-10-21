@@ -65,9 +65,11 @@ class TeamParticipant(models.Model):
     
     f_name = models.CharField(max_length=100, db_index=True)
     l_name = models.CharField(max_length=100, db_index=True)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M', blank=True, null=True)
     email = models.EmailField(db_index=True)
     phone = models.CharField(max_length=20)
+
+    grade = models.CharField(max_length=20, blank=True, null=True)
     
     institution = models.CharField(max_length=200)
     address = models.TextField(blank=True, null=True)
@@ -93,6 +95,7 @@ class Payment(models.Model):
     phone = models.CharField(max_length=20, db_index=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, db_index=True)
     trx_id = models.CharField(max_length=100, db_index=True)
+    method = models.CharField(max_length=50, db_index=True)
     coupon = models.ForeignKey(Coupons, on_delete=models.SET_NULL, null=True, blank=True, db_index=True)
     datetime = models.DateTimeField(auto_now_add=True, db_index=True)
 
@@ -131,3 +134,28 @@ class TeamCompetitionRegistration(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='team_competition_registrations', db_index=True)
     competition = models.ForeignKey(TeamCompetition, on_delete=models.CASCADE, related_name='team_competitions', db_index=True)
     datetime = models.DateTimeField(auto_now_add=True, null=True, blank=True, db_index=True)
+
+
+
+
+
+class TanvinAward(models.Model):
+    TYPES = [
+        ("robotics", "Robotics"), 
+        ("ai", "Artificial Intelligence"),
+        ("cs", "Computer Science & Programming"),
+        ("data_science", "Data Science & Analytics"),
+        ("environment", "Environment & Sustainability"),
+        ("health", "Health & Life Sciences"),
+        ("engineering", "Engineering & Design"),
+        ("education", "Education & Social Development"),
+        ("media", "Media & Communication"),
+        ("other", "Other")
+    ]
+
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='tanvin_awards', db_index=True)
+    project_name = models.CharField(max_length=200, db_index=True)
+    project_type = models.CharField(max_length=50, choices=TYPES, db_index=True)
+    project_description = models.TextField()
+    pitch_deck = models.TextField(blank=True, null=True)
+    video_link = models.TextField(blank=True, null=True)

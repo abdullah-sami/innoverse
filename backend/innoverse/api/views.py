@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from event.serializers import CouponSerializer
 
 
 from .models import Participant, Team, EntryStatus, Gift, GiftStatus
@@ -22,9 +23,9 @@ from .serializers import (
 from event.models import Coupons, Segment, Competition, TeamCompetition
 from event.serializers import SegmentSerializer, CompetitionSerializer, TeamCompetitionSerializer
 from api.models import Volunteer
-from participant.models import Registration, CompetitionRegistration, TeamCompetitionRegistration, Payment, TeamParticipant
+from participant.models import Registration, CompetitionRegistration, TanvinAward, TeamCompetitionRegistration, Payment, TeamParticipant
 from participant.serializers import ParticipantSerializer, TeamSerializer
-
+from api.serializers import TanvinAwardListSerializer, TanvinAwardDetailSerializer
 from .tasks import (
     send_registration_email_task,
     send_payment_verification_email_task,
@@ -176,6 +177,7 @@ class RegisterViewSet(viewsets.ViewSet):
                     team, team_payment, team_members_list, team_competitions_list = self._handle_team_competition(
                         validated_data['team_competition'],
                         validated_data['payment'],
+                        validated_data.get('tanvin_award'),  # Now properly validated
                         participant,
                         coupon,
                         team_competitions_dict
@@ -203,12 +205,15 @@ class RegisterViewSet(viewsets.ViewSet):
                 return Response(response_data, status=status.HTTP_201_CREATED)
                 
         except Exception as e:
-            logger.error(f"Registration failed: {str(e)}")
+            logger.error(f"Registration failed: {str(e)}", exc_info=True)
             return Response({
                 "success": False,
                 "error": "Registration failed",
                 "details": str(e)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+    
     
     def _prefetch_competition_data(self, validated_data):
         """
@@ -256,11 +261,13 @@ class RegisterViewSet(viewsets.ViewSet):
         )
     
     def _create_payment(self, payment_data, participant=None, team=None, coupon=None):
+        
         return Payment.objects.create(
             participant=participant,
             team=team,
             phone=payment_data['phone'],
             amount=payment_data['amount'],
+            method=payment_data['method'],
             trx_id=payment_data['trx_id'],
             coupon=coupon
         )
@@ -287,8 +294,12 @@ class RegisterViewSet(viewsets.ViewSet):
         ]
         CompetitionRegistration.objects.bulk_create(registrations)
     
-    def _handle_team_competition(self, team_competition_data, payment_data, leader_participant, coupon, team_competitions_dict):
+    def _handle_team_competition(self, team_competition_data, payment_data, tanvin_award_data, leader_participant, coupon, team_competitions_dict):
+        """
+        Handle team competition registration with Tanvin Award support
+        """
         team_info = team_competition_data['team']
+        competition_codes = team_competition_data['competition']
         
         # Create team
         team = Team.objects.create(
@@ -339,18 +350,42 @@ class RegisterViewSet(viewsets.ViewSet):
         team_payment = self._create_payment(payment_data, team=team, coupon=coupon)
         
         # Bulk create team competition registrations
-        competition_codes = team_competition_data['competition']
         team_comp_registrations = [
             TeamCompetitionRegistration(team=team, competition=team_competitions_dict[code])
             for code in competition_codes
         ]
         TeamCompetitionRegistration.objects.bulk_create(team_comp_registrations)
         
+        # Handle Tanvin Award registration if "tanvin" is in competitions AND tanvin_award_data is provided
+        if 'tanvin' in competition_codes and tanvin_award_data:
+            from participant.models import TanvinAward
+            
+            logger.info(f"Creating Tanvin Award entry for team {team.id}: {tanvin_award_data.get('project_name')}")
+            
+            try:
+                tanvin_award = TanvinAward.objects.create(
+                    team=team,
+                    project_name=tanvin_award_data['project_name'],
+                    project_type=tanvin_award_data['project_type'],
+                    project_description=tanvin_award_data['project_description'],
+                    pitch_deck=tanvin_award_data.get('pitch_deck', ''),
+                    video_link=tanvin_award_data.get('video_link', '')
+                )
+                
+                logger.info(f"✓ Tanvin Award entry created successfully (ID: {tanvin_award.id}) for team {team.id}")
+                
+            except Exception as e:
+                logger.error(f"Failed to create Tanvin Award entry: {str(e)}", exc_info=True)
+                raise  # Re-raise to trigger transaction rollback
+        
+        elif 'tanvin' in competition_codes and not tanvin_award_data:
+            logger.warning(f"Team {team.id} registered for 'tanvin' but no tanvin_award_data provided")
+        
         # Prepare lists for email (avoid additional queries later)
         team_competitions_list = [team_competitions_dict[code].competition for code in competition_codes]
         
         return team, team_payment, team_members, team_competitions_list
-    
+
     def _update_coupon(self, coupon):
         if coupon and coupon.coupon_number > 0:
             coupon.coupon_number -= 1
@@ -361,7 +396,7 @@ class RegisterViewSet(viewsets.ViewSet):
     def _build_response_data(self, participant, participant_payment, team, team_payment, validated_data, coupon):
         response_data = {
             "success": True,
-            "message": "Registration completed successfully",
+            "message": "Registration completed successfully. Check your email for confirmation. If mail is not received within a few minutes, please check your spam folder.",
             "data": {
                 "participant": {
                     "id": participant.id,
@@ -373,7 +408,8 @@ class RegisterViewSet(viewsets.ViewSet):
                     "coupon": coupon.coupon_code if coupon else None,
                     "discount": str(coupon.discount) if coupon else None,
                     "trx_id": participant_payment.trx_id,
-                    "amount": str(participant_payment.amount)
+                    "amount": str(participant_payment.amount),
+                    "method": participant_payment.method
                 },
                 "segments": validated_data.get('segment', []),
                 "competitions": validated_data.get('competition', [])
@@ -390,7 +426,8 @@ class RegisterViewSet(viewsets.ViewSet):
             }
             response_data["data"]["team_payment"] = {
                 "trx_id": team_payment.trx_id,
-                "amount": str(team_payment.amount)
+                "amount": str(team_payment.amount),
+                "method": team_payment.method
             }
         
         return response_data
@@ -399,11 +436,11 @@ class RegisterViewSet(viewsets.ViewSet):
                                team, team_members_list, team_competitions_list, team_payment,
                                validated_data):
         """
-        Queue email sending tasks asynchronously without waiting
-        Data is prepared in-memory to avoid additional queries
+        Queue registration confirmation emails with CC support for team members
+        Uses in-memory data to avoid additional queries
         """
         try:
-            # Prepare participant data (no additional queries)
+            # Prepare participant data
             participant_data = {
                 'id': participant.id,
                 'name': f"{participant.f_name} {participant.l_name}",
@@ -419,49 +456,52 @@ class RegisterViewSet(viewsets.ViewSet):
                 'trx_id': participant_payment.trx_id,
                 'amount': str(participant_payment.amount),
                 'phone': participant_payment.phone,
+                'method': participant_payment.method,
             }
             
-            # Queue participant registration email
-            logger.info(f"Queueing registration email for participant {participant.id}")
+            # Prepare team data if exists
+            team_data = None
+            team_members_data = None
             
-            if team:
-                # Prepare team data
+            if team and team_members_list:
                 team_data = {
                     'id': team.id,
                     'name': team.team_name,
                 }
                 
-                # Prepare team members data (excluding leader for display)
-                team_members_data = []
-                if team_members_list:
-                    team_members_data = [
-                        {
-                            'name': f"{member.f_name} {member.l_name}",
-                            'institution': member.institution
-                        }
-                        for member in team_members_list if not member.is_leader
-                    ]
-                
-                # Queue registration email with team info
-                send_registration_email_task.apply_async(
-                    args=[participant_data, payment_data, team_data, team_members_data, team_competitions_list],
-                    queue='emails',
-                    ignore_result=True
-                )
-                logger.info(f"✓ Team registration email queued for participant {participant.id}")
-                
-            else:
-                # Queue registration email without team
-                send_registration_email_task.apply_async(
-                    args=[participant_data, payment_data, None, None, None],
-                    queue='emails',
-                    ignore_result=True
-                )
-                logger.info(f"✓ Registration email queued for participant {participant.id}")
-                        
+                # Prepare team members data (excluding leader for display, but including for CC)
+                team_members_data = [
+                    {
+                        'name': f"{member.f_name} {member.l_name}",
+                        'institution': member.institution,
+                        'email': member.email  # Include email for CC
+                    }
+                    for member in team_members_list if not member.is_leader
+                ]
+            
+            # Queue registration email
+            # This will use CC for team members automatically
+            logger.info(f"Queueing registration email for participant {participant.id}")
+            
+            send_registration_email_task.apply_async(
+                args=[
+                    participant_data, 
+                    payment_data, 
+                    team_data, 
+                    team_members_data, 
+                    team_competitions_list
+                ],
+                queue='emails',
+                ignore_result=True
+            )
+            
+            logger.info(f"✓ Registration email queued for participant {participant.id}")
+            
+            if team:
+                logger.info(f"  - Team members will receive as CC: {len(team_members_data) if team_members_data else 0}")
+                            
         except Exception as e:
             logger.error(f"Email queueing failed: {str(e)}", exc_info=True)
-
 
 
 class ParticipantViewSet(viewsets.ReadOnlyModelViewSet):
@@ -745,14 +785,11 @@ class CouponValidationViewSet(viewsets.ViewSet):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-
 class PaymentVerificationViewSet(viewsets.ViewSet):
     """
     Optimized payment verification endpoint
-    - Handles both participant and team payments
-    - Async email processing via Celery
-    - Minimal database queries
-    - Fast response time
+    - Team leaders get TWO emails: solo + team
+    - Team emails use CC for efficiency
     """
     
     permission_classes = [IsAdminVolunteer]
@@ -787,12 +824,13 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
                     'error': f'Participant with ID {participant_id} not found'
                 }, status=status.HTTP_404_NOT_FOUND)
             
-            # Get payment record (could be linked to participant or their team)
+            # Get payment record
             payment = participant.payments.first()
             
-            # If no direct payment, check if participant is part of a team with payment
+            # Check if participant is part of a team
             team = None
             team_member = None
+            is_team_leader = False
             
             if not payment:
                 team_member = TeamParticipant.objects.select_related('team').filter(
@@ -802,11 +840,22 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
                 if team_member:
                     team = team_member.team
                     payment = team.payments.first()
+                    is_team_leader = team_member.is_leader
+            else:
+                # Check if participant is also a team leader
+                team_member = TeamParticipant.objects.select_related('team').filter(
+                    email=participant.email,
+                    is_leader=True
+                ).first()
+                
+                if team_member:
+                    team = team_member.team
+                    is_team_leader = True
             
             if not payment:
                 return Response({
                     'success': False,
-                    'error': 'No payment record found for this participant or their team'
+                    'error': 'No payment record found'
                 }, status=status.HTTP_400_BAD_REQUEST)
             
             # Toggle verification status
@@ -815,53 +864,57 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
             participant.payment_verified = new_status
             participant.save(update_fields=['payment_verified'])
             
+            # Update team verification if exists
+            if team:
+                team.payment_verified = new_status
+                team.save(update_fields=['payment_verified'])
+            
             # Prepare response
             response_data = {
                 'participant': {
                     'id': participant.id,
                     'name': f'{participant.f_name} {participant.l_name}',
                     'email': participant.email,
-                    'payment_verified': new_status
+                    'payment_verified': new_status,
+                    'is_team_leader': is_team_leader
                 },
                 'payment': {
                     'trx_id': payment.trx_id,
                     'amount': str(payment.amount),
-                    'phone': payment.phone
+                    'phone': payment.phone,
+                    'method': payment.method
                 }
             }
             
-            # Update team verification if team exists
-            if not team and team_member:
-                team = team_member.team
-            
             if team:
-                team.payment_verified = new_status
-                team.save(update_fields=['payment_verified'])
-                
                 response_data['team'] = {
                     'id': team.id,
                     'name': team.team_name,
-                    'payment_verified': new_status
+                    'payment_verified': new_status,
+                    'member_count': team.members.count()
                 }
             
-            # Build status message
+            # Build message
             action = 'verified' if new_status else 'unverified'
             message = f'Payment {action} for {participant.f_name} {participant.l_name}'
             if team:
                 message += f' and team {team.team_name}'
             
-            # Queue emails ONLY when verifying (not unverifying)
+            # Queue emails ONLY when verifying
             if new_status and not was_verified:
                 email_queued = self._queue_verification_emails_async(
-                    participant, team
+                    participant, team, is_team_leader
                 )
                 
                 if email_queued:
                     response_data['email_status'] = 'queued'
-                    message += '. Confirmation emails are being sent.'
+                    if is_team_leader:
+                        message += '. Two confirmation emails are being sent (solo + team).'
+                    else:
+                        message += '. Confirmation email is being sent.'
                 else:
                     response_data['email_status'] = 'failed'
-                    message += '. Warning: Failed to queue confirmation emails.'
+                    message += '. Warning: Failed to queue emails.'
             
             return Response({
                 'success': True,
@@ -873,17 +926,19 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
             logger.error(f"Payment verification error: {str(e)}", exc_info=True)
             return Response({
                 'success': False,
-                'error': 'Internal server error during payment verification',
+                'error': 'Internal server error',
                 'details': str(e) if request.user.is_superuser else None
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-    def _queue_verification_emails_async(self, participant, team=None):
+    def _queue_verification_emails_async(self, participant, team=None, is_team_leader=False):
         """
-        Queue email tasks asynchronously via Celery
-        This method returns immediately without blocking
+        Queue email tasks efficiently
+        - Solo participants: 1 email
+        - Team members (not leader): 1 team email via CC
+        - Team leaders: 2 emails (solo + team via CC)
         
         Returns:
-            bool: True if tasks queued successfully, False otherwise
+            bool: True if queued successfully
         """
         try:
             from .tasks import (
@@ -891,7 +946,9 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
                 send_team_payment_verification_emails_task
             )
             
-            # Prepare minimal participant data (avoid serialization issues)
+            emails_queued = 0
+            
+            # Prepare participant data for solo email
             participant_data = {
                 'id': participant.id,
                 'name': f'{participant.f_name} {participant.l_name}',
@@ -906,32 +963,46 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
                 ]
             }
             
-            # ALWAYS send participant email
-            logger.info(f"Queueing participant email for {participant.id}")
-            send_payment_verification_email_task.apply_async(
-                args=[participant_data, None],  # No team data for participant email
-                queue='emails',
-                retry=True,
-                retry_policy={
-                    'max_retries': 3,
-                    'interval_start': 60,
-                    'interval_step': 60,
-                    'interval_max': 180,
-                }
+            # Check if participant has solo competitions
+            has_solo_competitions = (
+                len(participant_data['segments']) > 0 or 
+                len(participant_data['competitions']) > 0
             )
-            logger.info(f"✓ Participant email task queued for {participant.id}")
             
-            # If team exists, send SEPARATE team email to all members
+            # ALWAYS send participant email if they have solo registrations
+            # OR if they are a team leader (so they get their personal QR)
+            if has_solo_competitions or is_team_leader:
+                logger.info(f"Queueing solo email for participant {participant.id} (team_leader={is_team_leader})")
+                
+                send_payment_verification_email_task.apply_async(
+                    args=[participant_data, is_team_leader],
+                    queue='emails',
+                    retry=True,
+                    retry_policy={
+                        'max_retries': 3,
+                        'interval_start': 60,
+                        'interval_step': 60,
+                        'interval_max': 180,
+                    }
+                )
+                emails_queued += 1
+                logger.info(f"✓ Solo email queued for {participant.id}")
+            
+            # Send team email if participant is part of a team
             if team:
-                logger.info(f"Queueing team emails for team {team.id}")
+                logger.info(f"Queueing team email for team {team.id}")
                 
-                # Fetch team members efficiently
-                team_members = list(team.members.all())
+                # Fetch all team members efficiently (single query)
+                team_members = list(
+                    team.members.values('id', 'f_name', 'l_name', 'email', 'is_leader')
+                )
                 
-                team_competitions = [
-                    comp.competition.competition 
-                    for comp in team.team_competition_registrations.select_related('competition').all()
-                ]
+                # Fetch team competitions (single query)
+                team_competitions = list(
+                    team.team_competition_registrations
+                    .select_related('competition')
+                    .values_list('competition__competition', flat=True)
+                )
                 
                 team_data = {
                     'id': team.id,
@@ -941,14 +1012,15 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
                 
                 team_members_data = [
                     {
-                        'id': m.id,
-                        'name': f"{m.f_name} {m.l_name}",
-                        'email': m.email,
+                        'id': m['id'],
+                        'name': f"{m['f_name']} {m['l_name']}",
+                        'email': m['email'],
+                        'is_leader': m['is_leader']
                     }
-                    for m in team_members if m.email
+                    for m in team_members if m.get('email')
                 ]
                 
-                # Use the correct task for team emails
+                # Queue team email (will use CC for all members)
                 send_team_payment_verification_emails_task.apply_async(
                     args=[team_data, team_members_data],
                     queue='emails',
@@ -960,18 +1032,234 @@ class PaymentVerificationViewSet(viewsets.ViewSet):
                         'interval_max': 180,
                     }
                 )
-                
-                logger.info(f"✓ Team email tasks queued for {len(team_members_data)} members")
+                emails_queued += 1
+                logger.info(f"✓ Team email queued for {team.id} ({len(team_members_data)} members via CC)")
             
+            logger.info(f"✓ Total {emails_queued} email task(s) queued for participant {participant.id}")
             return True
             
         except Exception as e:
-            logger.error(f"Failed to queue email task: {str(e)}", exc_info=True)
+            logger.error(f"Failed to queue email tasks: {str(e)}", exc_info=True)
             return False
 
 
 
 
+class CouponViewSet(viewsets.ModelViewSet):    
+    permission_classes = [IsAdminVolunteer]
+    serializer_class = CouponSerializer
+    queryset = Coupons.objects.all().order_by('id')
+    
+    def list(self, request, *args, **kwargs):
+        try:
+            queryset = Coupons.objects.all().order_by('id')
+            serializer = self.get_serializer(queryset, many=True)
+            
+            return Response({
+                'success': True,
+                'count': queryset.count(),
+                'data': serializer.data
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Error fetching coupons list: {str(e)}")
+            return Response({
+                'success': False,
+                'error': 'Failed to fetch coupons'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def create(self, request, *args, **kwargs):
+        try:
+            serializer = self.get_serializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({
+                    'success': True,
+                    'message': 'Coupon created successfully',
+                    'data': serializer.data
+                }, status=status.HTTP_201_CREATED)
+            else:
+                return Response({
+                    'success': False,
+                    'errors': serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger.error(f"Error creating coupon: {str(e)}")
+            return Response({
+                'success': False,
+                'error': 'Failed to create coupon'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def retrieve(self, request, *args, **kwargs):
+        try:
+            coupon = self.get_object()
+            serializer = self.get_serializer(coupon)
+            return Response({
+                'success': True,
+                'data': serializer.data
+            }, status=status.HTTP_200_OK)
+        except Coupons.DoesNotExist:
+            return Response({
+                'success': False,
+                'error': 'Coupon not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger.error(f"Error fetching coupon: {str(e)}")
+            return Response({
+                'success': False,
+                'error': 'Failed to fetch coupon'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+
+
+class TanvinAwardViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    ViewSet for Tanvin Award entries (GET only)
+    
+    Endpoints:
+    - GET /api/tanvin-award/ - List all Tanvin Award entries
+    - GET /api/tanvin-award/{id}/ - Retrieve specific entry with full details
+    - GET /api/tanvin-award/by-team/{team_id}/ - Get Tanvin Award by team ID
+    """
+    
+    permission_classes = [AllowAny]  # Change to IsAdminVolunteer if needed
+    
+    def get_queryset(self):
+        """Optimized queryset with prefetch_related"""
+        return TanvinAward.objects.select_related(
+            'team'
+        ).prefetch_related(
+            'team__members',
+            'team__team_competition_registrations__competition'
+        ).order_by('-id')
+    
+    def get_serializer_class(self):
+        """Use different serializers for list and detail views"""
+        if self.action == 'list':
+            return TanvinAwardListSerializer
+        return TanvinAwardDetailSerializer
+    
+    def list(self, request, *args, **kwargs):
+        """
+        List all Tanvin Award entries
+        GET /api/tanvin-award/
+        """
+        queryset = self.get_queryset()
+        
+        # Optional filtering by project type
+        project_type = request.query_params.get('project_type')
+        if project_type:
+            queryset = queryset.filter(project_type=project_type)
+        
+        # Optional filtering by team name (case-insensitive search)
+        team_name = request.query_params.get('team_name')
+        if team_name:
+            queryset = queryset.filter(team__team_name__icontains=team_name)
+        
+        serializer = self.get_serializer(queryset, many=True)
+        
+        return Response({
+            'success': True,
+            'count': queryset.count(),
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
+    
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Retrieve specific Tanvin Award entry with full details
+        GET /api/tanvin-award/{id}/
+        """
+        try:
+            instance = self.get_object()
+            serializer = self.get_serializer(instance)
+            
+            return Response({
+                'success': True,
+                'data': serializer.data
+            }, status=status.HTTP_200_OK)
+            
+        except TanvinAward.DoesNotExist:
+            return Response({
+                'success': False,
+                'error': 'Tanvin Award entry not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+    
+    @action(detail=False, methods=['get'], url_path='by-team/(?P<team_id>[0-9]+)')
+    def by_team(self, request, team_id=None):
+        """
+        Get Tanvin Award entry by team ID
+        GET /api/tanvin-award/by-team/{team_id}/
+        """
+        try:
+            tanvin_award = self.get_queryset().get(team_id=team_id)
+            serializer = TanvinAwardDetailSerializer(tanvin_award)
+            
+            return Response({
+                'success': True,
+                'data': serializer.data
+            }, status=status.HTTP_200_OK)
+            
+        except TanvinAward.DoesNotExist:
+            return Response({
+                'success': False,
+                'error': f'No Tanvin Award entry found for team ID {team_id}'
+            }, status=status.HTTP_404_NOT_FOUND)
+    
+    @action(detail=False, methods=['get'], url_path='project-types')
+    def project_types(self, request):
+        """
+        Get list of all available project types
+        GET /api/tanvin-award/project-types/
+        """
+        from participant.models import TanvinAward
+        
+        project_types = [
+            {'value': choice[0], 'label': choice[1]}
+            for choice in TanvinAward.TYPES
+        ]
+        
+        return Response({
+            'success': True,
+            'data': project_types
+        }, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['get'], url_path='stats')
+    def stats(self, request):
+        """
+        Get statistics about Tanvin Award submissions
+        GET /api/tanvin-award/stats/
+        """
+        from django.db.models import Count
+        
+        queryset = self.get_queryset()
+        
+        stats = {
+            'total_submissions': queryset.count(),
+            'by_project_type': dict(
+                queryset.values('project_type')
+                .annotate(count=Count('id'))
+                .values_list('project_type', 'count')
+            ),
+            'with_pitch_deck': queryset.exclude(pitch_deck='').count(),
+            'with_video_link': queryset.exclude(video_link='').count(),
+        }
+        
+        return Response({
+            'success': True,
+            'data': stats
+        }, status=status.HTTP_200_OK)
+
+
+
+
+
+
+
+
+
+# app views ********************************************************
 
 
 class RecordEntryViewSet(viewsets.ModelViewSet):

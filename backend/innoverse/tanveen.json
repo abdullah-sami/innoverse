@@ -1,0 +1,56 @@
+{
+  "participant": {
+    "full_name": "John Doe",
+    "gender": "M",
+    "email": "john@example.com",
+    "phone": "1234567890",
+    "grade": "12",
+    "institution": "Example University",
+    "guardian_phone": "1234567890",
+    "address": "123 Main St",
+    "t_shirt_size": "L"
+  },
+  "payment": {
+    "amount": "500.00",
+    "phone": "1234567890",
+    "method": "bkash",
+    "trx_id": "TRX123456789"
+  },
+  "team_competition": {
+    "team": {
+      "team_name": "Team Alpha",
+      "participant": [
+        {
+          "full_name": "Alice Johnson",
+          "gender": "F",
+          "email": "alice@example.com",
+          "phone": "9876543210",
+          "age": 21,
+          "institution": "Example University",
+          "address": "456 Elm St",
+          "t_shirt_size": "M"
+        }
+      ]
+    },
+    "competition": ["tanveen"]
+  },
+  "tanvin_award": {
+    "project_name": "Innovative Project",
+    "project_type": "cs",
+    "project_description": "A brief description of the innovative project.",
+    "pitch_deck": "http://example.com/pitchdeck.pdf",
+    "video_link": "http://example.com/presentation.mp4"
+  },
+  "coupon": {
+    "coupon_code": "SAVE20"
+  }
+}
+
+
+
+
+
+tui just team competition e "tanveen" eita patha
+bakita ami backend e dekhtisi
+
+normal participant der shathe eta mishleo pera na

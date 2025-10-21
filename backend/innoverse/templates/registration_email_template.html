@@ -56,6 +56,21 @@
             margin: 10px 0;
             padding-left: 20px;
         }
+        .info-box button {
+            /* font-size: 1vw; */
+            font-weight: bold;
+            margin: 10px 0;
+            color: white;
+            background: #1A8249;
+            border: none;
+            outline: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .info-box a{
+            text-decoration: none;
+            color: white;
+        }
         .warning-box {
             background-color: #fff3cd;
             border-left: 4px solid #ffc107;
@@ -172,7 +187,24 @@
                 <p><strong>Registered Solo Competitions:</strong></p>
                 <ul>
                     {% for competition in competitions %}
-                    <li>{{ competition }}</li>
+                        {% if competition == '3m-res' %}
+                            <li>3-Minute Research</li>
+                        {% elif competition == 'm_maestros' %}
+                            <li>Math Maestro</li>
+                        {% elif competition == 'r_article' %}
+                            <li>Research Article Contest</li>
+                        {% elif competition == 'programming' %}
+                            <li>Programming Contest</li>
+                        {% elif competition == 'sc_olym' %}
+                            <li>Science Olympiad</li>
+                        {% endif %}
+                    {% endfor %}
+                    {% for competition in competitions %}
+                        {% if competition == 'r_article' %}
+                        <button><a href="https://docs.google.com/forms/d/e/1FAIpQLSf0FHtlIL1wK-PHq9B5rDTD163yF_Gf9huqSmnRfTE4W8AyaA/viewform"> Click here to submit Research Article</a></button>
+                        {% elif competition == '3m-res' %}
+                        <button><a href="https://docs.google.com/forms/d/e/1FAIpQLScN2u984ndvl8TYJxHl9V5kaqie7dQezU3x9FXUezneAst-EA/viewform"> Click here to submit 3-minute Thesis Presentation </a></button>
+                        {% endif %}
                     {% endfor %}
                 </ul>
                 {% endif %}
@@ -249,8 +281,8 @@
                 <h3 style="margin-top: 0;">📞 Need Help?</h3>
                 <p>If you have any questions or concerns about your registration or payment verification, please contact us:</p>
                 <ul>
-                    <li><strong>Email:</strong> support@innoverse.com</li>
-                    <li><strong>Phone:</strong> +880 XXX-XXXXXXX</li>
+                    <li><strong>Email:</strong> innoversebangladesh@gmail.com</li>
+                    <li><strong>Phone:</strong> +880 1336 872870</li>
                 </ul>
                 <p>Please include your Participant ID ({{ participant_id }}) and Transaction ID ({{ trx_id }}) in your message.</p>
             </div>
@@ -260,7 +292,7 @@
 
         <div class="footer">
             <p><strong>Thank you for registering!</strong></p>
-            <p>If you have any questions, please contact us at support@innoverse.com</p>
+            <p>If you have any questions, please contact us at innoversebangladesh@gmail.com</p>
             <p>&copy; 2025 Innoverse. All rights reserved.</p>
         </div>
     </div>

@@ -1,7 +1,6 @@
 from django.urls import path, include
 from . import views
 from rest_framework import routers
-import participant.urls
 
 router = routers.DefaultRouter()
 router.register(r'participant', views.ParticipantViewSet, basename='participant')
@@ -9,6 +8,8 @@ router.register(r'team', views.TeamListViewSet, basename='team')
 router.register(r'segment', views.SegmentViewSet, basename='segment')
 router.register(r'competition', views.CompetitionViewSet, basename='competition')
 router.register(r'team-competition', views.TeamCompetitionViewSet, basename='team-competition')
+router.register(r'manage-coupon', views.CouponViewSet, basename='coupon')
+router.register(r'tanvin-award', views.TanvinAwardViewSet, basename='tanvin-award')
 
 
 urlpatterns = [
@@ -21,7 +22,9 @@ urlpatterns = [
          }), 
          name="register"),
 
-    path('coupon/<str:code>/', views.CouponValidationViewSet.as_view({'get': 'list'}), name='validate-coupon'),
+     
+
+     path('coupon/<str:code>/', views.CouponValidationViewSet.as_view({'get': 'list'}), name='validate-coupon'),
 
 
      path('payment/verify/', views.PaymentVerificationViewSet.as_view({'post': 'create'}), name='payment-verify'),

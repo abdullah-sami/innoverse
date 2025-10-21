@@ -14,7 +14,7 @@ DEBUG = False
 
 # ALLOWED_HOSTS = ['*']
 CORS_ALLOW_ALL_ORIGINS = True
-ALLOWED_HOSTS = ['www.innoversebd.bdix.cloud', '103.169.161.8', 'innoversebd.bdix.cloud', 'localhost', 'localhost:3000', '127.0.0.1:3000', '127.0.0.1', 'innoversebd.net', 'http://www.innoversebd.net', 'https://www.innoversebd.net', 'https://localhost:3000', 'https://innoverse-orcin.vercel.app']
+ALLOWED_HOSTS = ['www.innoversebd.bdix.cloud', '103.169.161.8', 'innoversebd.bdix.cloud', 'localhost', 'localhost:3000', '127.0.0.1:3000', '127.0.0.1', 'innoversebd.net', 'http://www.innoversebd.net', 'https://www.innoversebd.net', 'https://localhost:3000', 'https://innoverse-orcin.vercel.app', 'admin.innoversebd.net']
 
 
 
@@ -68,15 +68,19 @@ TEMPLATES = [
 WSGI_APPLICATION = 'innoverse.wsgi.application'
 
 # CSRF_TRUSTED_ORIGINS = ['*']
-CSRF_TRUSTED_ORIGINS = ['http://103.169.161.8', 'http://innoversebd.bdix.cloud', 'https://innoversebd.bdix.cloud', 'http://localhost:3000', 'http://127.0.0.1:3000', 'http://www.innoversebd.net', 'https://www.innoversebd.net', 'https://localhost:3000', 'https://127.0.0.1:3000', 'https://innoverse-orcin.vercel.app']
+CSRF_TRUSTED_ORIGINS = ['http://103.169.161.8', 'http://innoversebd.bdix.cloud', 'https://innoversebd.bdix.cloud', 'http://localhost:3000', 'http://127.0.0.1:3000', 'http://www.innoversebd.net', 'https://www.innoversebd.net', 'https://localhost:3000', 'https://127.0.0.1:3000', 'https://innoverse-orcin.vercel.app', 'https://admin.innoversebd.net', 'http://admin.innoversebd.net']
 
 
 
 # Trust proxy headers from Litespeed
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+X_FRAME_OPTIONS = 'DENY'
+
 # Force HTTPS redirect
 SECURE_SSL_REDIRECT = True
+
+
 
 # Secure cookies
 SESSION_COOKIE_SECURE = True
