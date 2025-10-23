@@ -1452,197 +1452,248 @@ GET /api/coupon/1
 
 ### 27. Manage Tanvin Award
 
-**Endpoint:** `GET /api/tanvin-award/`
+**Project Types:**
+- `robotics`: Robotics
+- `ai`: Artificial Intelligence
+- `cs`: Computer Science & Programming
+- `data_science`: Data Science & Analytics
+- `environment`: Environment & Sustainability
+- `health`: Health & Life Sciences
+- `engineering`: Engineering & Design
+- `education`: Education & Social Development
+- `media`: Media & Communication
+- `other`: Other
 
-**Description:** Get info about entries
+---
 
-**Authentication:** Required (Admin)
+## API Endpoints
 
-**Example:**
-```bash
-GET /api/tanvin-award/
-```
+## 1. List All Registrations
+**GET** `/api/tanvin-award/register/`
 
-**Response:**
-```bash
-{
-    "success": true,
-    "count": 1,
-    "data": [
-        {
-            "id": 2,
-            "team_id": 59,
-            "team_name": "Team Alpha 23",
-            "project_name": "Innovative Project",
-            "project_type": "cs",
-            "project_type_display": "Computer Science & Programming",
-            "member_count": 2
-        }
-    ]
-}
-```
-
-```bash
-GET /api/tanvin-award/2
-```
+**Query Parameters:**
+- `project_type` (optional): Filter by project type (e.g., `ai`, `robotics`)
+- `search` (optional): Search in team name or project name
 
 **Response:**
-```bash
+```json
 {
-    "success": true,
-    "data": {
-        "id": 2,
-        "team": {
-            "id": 59,
-            "team_name": "Team Alpha 23",
-            "payment_verified": false,
-            "member_count": 2,
-            "members": [
-                {
-                    "id": 146,
-                    "full_name": "John Doe",
-                    "f_name": "John",
-                    "l_name": "Doe",
-                    "gender": "M",
-                    "email": "rafidabdullahsami+6@gmail.com",
-                    "phone": "1234567890",
-                    "institution": "Example University",
-                    "grade": null,
-                    "t_shirt_size": "L",
-                    "is_leader": true
-                },
-                {
-                    "id": 147,
-                    "full_name": "Alice Johnson",
-                    "f_name": "Alice",
-                    "l_name": "Johnson",
-                    "gender": "F",
-                    "email": "abdullahsami4103+4@gmail.com",
-                    "phone": "9876543210",
-                    "institution": "Example University",
-                    "grade": null,
-                    "t_shirt_size": "M",
-                    "is_leader": false
-                }
-            ],
-            "competitions": [
-                "Shahid Tanvin Award"
-            ]
-        },
-        "project_name": "Innovative Project",
-        "project_type": "cs",
-        "project_type_display": "Computer Science & Programming",
-        "project_description": "A brief description of the innovative project.",
-        "pitch_deck": "http://example.com/pitchdeck.pdf",
-        "video_link": "http://example.com/presentation.mp4"
+  "success": true,
+  "count": 10,
+  "data": [
+    {
+      "id": 1,
+      "team_id": 1,
+      "team_name": "Team Innovators",
+      "project_name": "AI for Healthcare",
+      "project_type": "ai",
+      "project_type_display": "Artificial Intelligence",
+      "member_count": 3
     }
+  ]
 }
 ```
+---
 
+## 2. Get Registration Details
+**GET** `/api/tanvin-award/register/{id}/`
 
-**Endpoint:** `POST /api/register/`
-
-**Description:** Create new Tanvin Award entry
-
-**Authentication:** Required (Admin)
-
-```bash
+**Response:**
+```json
 {
-  "participant": {
-    "full_name": "John Doe",
-    "gender": "M",
-    "email": "rafidabdullahsami+6@gmail.com",
-    "phone": "1234567890",
-    "grade": "12",
-    "institution": "Example University",
-    "guardian_phone": "1234567890",
-    "address": "123 Main St",
-    "t_shirt_size": "L"
-  },
-  "payment": {
-    "amount": "500.00",
-    "phone": "1234567890",
-    "method": "bkash",
-    "trx_id": "TRX123456d7d89"
-  },
-  "team_competition": {
+  "success": true,
+  "data": {
+    "id": 1,
     "team": {
-      "team_name": "Team Alpha 23",
-      "participant": [
+      "id": 1,
+      "team_name": "Team Innovators",
+      "member_count": 3,
+      "members": [
         {
-          "full_name": "Alice Johnson",
-          "gender": "F",
-          "email": "abdullahsami4103+4@gmail.com",
-          "phone": "9876543210",
-          "age": 21,
-          "institution": "Example University",
-          "address": "456 Elm St",
-          "t_shirt_size": "M"
+          "id": 1,
+          "full_name": "John Doe",
+          "f_name": "John",
+          "l_name": "Doe",
+          "email": "john@example.com",
+          "phone": "01711111111",
+          "institution": "ABC School",
+          "grade": "10",
+          "t_shirt_size": "M",
+          "is_leader": true
         }
       ]
     },
-    "competition": ["tanvin"]
-  },
-  "tanvin_award": {
-    "project_name": "Innovative Project",
-    "project_type": "cs",
-    "project_description": "A brief description of the innovative project.",
-    "pitch_deck": "http://example.com/pitchdeck.pdf",
-    "video_link": "http://example.com/presentation.mp4"
-  },
-  "coupon": {
-    "coupon_code": "BUP10"
+    "project_name": "AI for Healthcare",
+    "project_type": "ai",
+    "project_type_display": "Artificial Intelligence",
+    "project_description": "An AI-powered healthcare solution...",
+    "pitch_deck": "https://...",
+    "video_link": "https://..."
   }
 }
 ```
 
-**Response:**
-```bash
+---
+
+## 3. Create New Registration
+**POST** `/api/tanvin-award/register/`
+
+**Request Body:**
+```json
 {
-    "success": true,
-    "message": "Registration completed successfully. Check your email for confirmation. If mail is not received within a few minutes, please check your spam folder. Confirmation email will be sent shortly.",
-    "data": {
-        "participant": {
-            "id": 113,
-            "name": "John Doe",
-            "email": "rafidabdullahsami+6@gmail.com",
-            "payment_verified": false
-        },
-        "payment": {
-            "coupon": "BUP10",
-            "discount": "10.0",
-            "trx_id": "TRX123456d7d89",
-            "amount": "500.00",
-            "method": "bkash"
-        },
-        "segments": [],
-        "competitions": [],
-        "team": {
-            "id": 59,
-            "name": "Team Alpha 23",
-            "payment_verified": false,
-            "members_count": 0,
-            "competitions": [
-                "tanvin"
-            ]
-        },
-        "team_payment": {
-            "trx_id": "TRX123456d7d89",
-            "amount": "500.00",
-            "method": "bkash"
-        }
-    },
-    "email_queued": true
+  "team": {
+    "team_name": "Team Innovators",
+    "members": [
+      {
+        "full_name": "John Doe",
+        "email": "john@example.com",
+        "phone": "01711111111",
+        "institution": "ABC School",
+        "grade": "10",
+        "t_shirt_size": "M"
+      },
+      {
+        "full_name": "Jane Smith",
+        "email": "jane@example.com",
+        "phone": "01722222222",
+        "institution": "ABC School",
+        "grade": "10",
+        "t_shirt_size": "S"
+      }
+    ]
+  },
+  "project": {
+    "project_name": "AI for Healthcare",
+    "project_type": "ai",
+    "project_description": "An innovative AI solution for healthcare...",
+    "pitch_deck": "https://drive.google.com/...",
+    "video_link": "https://youtube.com/..."
+  }
 }
 ```
 
+**Success Response (201 Created):**
+```json
+{
+  "success": true,
+  "message": "Tanvin Award registration completed successfully",
+  "email_queued": true,
+  "data": {
+    "registration_id": 1,
+    "team": {
+      "id": 1,
+      "name": "Team Innovators",
+      "member_count": 2,
+      "members": [
+        {
+          "id": 1,
+          "name": "John Doe",
+          "email": "john@example.com",
+          "institution": "ABC School",
+          "is_leader": true
+        },
+        {
+          "id": 2,
+          "name": "Jane Smith",
+          "email": "jane@example.com",
+          "institution": "ABC School",
+          "is_leader": false
+        }
+      ]
+    },
+    "project": {
+      "id": 1,
+      "name": "AI for Healthcare",
+      "type": "ai",
+      "type_display": "Artificial Intelligence"
+    }
+  }
+}
+```
+
+**Error Response (400 Bad Request):**
+```json
+{
+  "success": false,
+  "errors": {
+    "team": {
+      "team_name": ["Team name 'Team Innovators' is already registered"]
+    },
+    "project": {
+      "project_type": ["Invalid choice"]
+    }
+  }
+}
+```
+
+**Validation Rules:**
+- Team name must be unique across all Tanvin Award teams
+- Email addresses must be unique (no duplicate emails)
+- No duplicate emails within the same team
+- Project name must be unique
+- First member in the list becomes team leader automatically
+- Minimum 2 members, maximum 5 members
+
+---
+
+### 4. Get Project Types
+**GET** `/api/tanvin-award/register/project_types/`
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {"value": "robotics", "label": "Robotics"},
+    {"value": "ai", "label": "Artificial Intelligence"},
+    {"value": "cs", "label": "Computer Science & Programming"},
+    {"value": "data_science", "label": "Data Science & Analytics"},
+    {"value": "environment", "label": "Environment & Sustainability"},
+    {"value": "health", "label": "Health & Life Sciences"},
+    {"value": "engineering", "label": "Engineering & Design"},
+    {"value": "education", "label": "Education & Social Development"},
+    {"value": "media", "label": "Media & Communication"},
+    {"value": "other", "label": "Other"}
+  ]
+}
+```
+
+---
+
+### 5. Get Statistics
+**GET** `/api/tanvin-award/register/stats/`
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "total_registrations": 25,
+    "total_teams": 25,
+    "total_participants": 87,
+    "by_project_type": {
+      "ai": {
+        "label": "Artificial Intelligence",
+        "count": 8
+      },
+      "robotics": {
+        "label": "Robotics",
+        "count": 5
+      }
+    }
+  }
+}
+```
+
+---
 
 
 
 
 
 
-## Error Responses
+
+### Error Responses
 
 All endpoints may return the following error responses:
 
@@ -1792,5 +1843,5 @@ or
 
 
 
-**Version:** 1.5
-**Last Updated:** 21 October 2025
+**Version:** 1.6
+**Last Updated:** 23 October 2025
