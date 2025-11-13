@@ -23,18 +23,23 @@ export const TeamCompetitionScreen: React.FC = () => {
   const teamCompetitions: CompetitionItem[] = [
         {
       id: '1',
-      title: 'Robo Soccer',
-      onPress: () => openQRScanner('team', 'robo_soc')
+      title: 'RoboSoccer',
+      onPress: () => openQRScanner('team', 'robo_soccer')
     },
     {
       id: '2',
-      title: 'Science Quiz',
-      onPress: () => openQRScanner('team', 'sc_quiz')
+      title: 'Qwizard Mania',
+      onPress: () => openQRScanner('team', 'q_mania')
     },
     {
       id: '3',
       title: 'Project Showcasing',
       onPress: () => openQRScanner('team', 'pr_show')
+    },
+    {
+      id: '4',
+      title: 'Line Forwarding Robot',
+      onPress: () => openQRScanner('team', 'lfr')
     }
   ];
 

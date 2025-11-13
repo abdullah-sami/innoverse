@@ -28,7 +28,7 @@ export const QRScanner: React.FC = () => {
   
   const { page, segment = null } = route.params as { page: string; segment?: string | null };
 
-  console.log('QR Scanner - Page:', page, 'Segment:', segment);
+  // console.log('QR Scanner - Page:', page, 'Segment:', segment);
 
   useEffect(() => {
     getCameraPermissions();

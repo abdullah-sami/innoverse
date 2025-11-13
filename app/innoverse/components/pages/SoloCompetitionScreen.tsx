@@ -22,23 +22,23 @@ export const SoloCompetitionScreen: React.FC = () => {
   const soloCompetitions: CompetitionItem[] = [
     {
       id: '1',
+      title: 'Math Maestro',
+      onPress: () => openQRScanner('solo', 'math_maestro')
+    },
+    {
+      id: '12',
+      title: 'Research Article Contest',
+      onPress: () => openQRScanner('solo', 'r_article')
+    },
+    {
+      id: '3',
       title: 'Programming Contest',
       onPress: () => openQRScanner('solo', 'programming')
     },
     {
-      id: '12',
-      title: 'Math Auction',
-      onPress: () => openQRScanner('solo', 'm_auction')
-    },
-    {
-      id: '3',
-      title: 'Science Olympiad',
-      onPress: () => openQRScanner('solo', 'sc_olym')
-    },
-    {
       id: '4',
-      title: 'Research Abstract',      
-      onPress: () => openQRScanner('solo', 'res_abs')
+      title: 'Science Olympiad',      
+      onPress: () => openQRScanner('solo', 'sc_olym')
     },
     {
       id: '5',

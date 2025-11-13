@@ -29,11 +29,17 @@ const HomeScreen = () => {
       image: images.entry,
       onPress: () => openQRScanner('entry', 'entry'),
     },
+    // {
+    //   id: 2,
+    //   title: 'Segments',
+    //   image: images.segments,
+    //   onPress: () => navigation.navigate('Segments' as never),
+    // },
     {
-      id: 2,
-      title: 'Segments',
-      image: images.segments,
-      onPress: () => navigation.navigate('Segments' as never),
+      id: 6,
+      title: 'View Info',
+      image: images.participant_info,
+      onPress: () => openQRScanner('info', ''),
     },
     {
       id: 3,
@@ -52,12 +58,6 @@ const HomeScreen = () => {
       title: 'Gifts',
       image: images.gifts,
       onPress: () => openQRScanner('gifts', ''),
-    },
-    {
-      id: 6,
-      title: 'View Info',
-      image: images.participant_info,
-      onPress: () => openQRScanner('info', ''),
     },
   ];
 

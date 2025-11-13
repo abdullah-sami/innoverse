@@ -44,7 +44,7 @@ function AppNavigator() {
         <Stack.Screen name="qr_results_page" component={QRResultsPage}/>
         <Stack.Screen name="Solo" component={SoloCompetitionScreen}/>
         <Stack.Screen name="Team" component={TeamCompetitionScreen}/>
-        <Stack.Screen name="Segments" component={SegmentsScreen}/>
+        {/* <Stack.Screen name="Segments" component={SegmentsScreen}/> */}
 </>
         
       ) : (

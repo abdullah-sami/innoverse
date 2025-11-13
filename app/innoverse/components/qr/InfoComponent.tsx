@@ -13,9 +13,10 @@ interface Participant {
   l_name: string;
   email: string;
   phone: string;
-  age: number;
+  grade: number;
   institution: string;
   institution_id: string;
+  guardian_phone: string;
   address: string;
   payment_verified: boolean;
   segment_list: string[];
@@ -226,17 +227,15 @@ export const InfoComponent: React.FC<InfoComponentProps> = ({ qr_code_data }) =>
           <Text style={tw`text-lg font-bold text-textPrimary mb-3`}>Personal Information</Text>
           <InfoRow label="Email" value={p.email} />
           <InfoRow label="Phone" value={p.phone} />
-          <InfoRow label="Age" value={p.age} />
+          {
+            p.guardian_phone ? <InfoRow label="Guardian Phone" value={p.guardian_phone} /> : null
+            
+          }
           <InfoRow label="Address" value={p.address} />
+          <InfoRow label="Grade" value={p.grade} />
+          <InfoRow label="Institute" value={p.institution} />
         </View>
 
-
-        {/* Institution Information */}
-        <View style={tw`bg-white rounded-xl p-5 mb-4 shadow-sm`}>
-          <Text style={tw`text-lg font-bold text-textPrimary mb-3`}>Institution</Text>
-          <InfoRow label="Name" value={p.institution} />
-          <InfoRow label="ID" value={p.institution_id} />
-        </View>
 
 
         {/* Entry Status */}

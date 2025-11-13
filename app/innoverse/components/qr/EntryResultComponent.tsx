@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { create } from 'twrnc';
 import { INNOVERSE_API_CONFIG } from '@/services/api';
@@ -11,12 +11,35 @@ interface EntryResultProps {
   qr_code_data: string;
 }
 
+interface ParticipantData {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  institution: string;
+  guardian_phone: string | null;
+  payment_verified: boolean;
+}
+
+interface TeamMember {
+  name: string;
+  email: string;
+  is_leader: boolean;
+}
+
+interface TeamData {
+  id: number;
+  name: string;
+  member_count: number;
+  payment_verified: boolean;
+  members: TeamMember[];
+}
+
 interface EntryResponse {
   success: boolean;
-  data?: {
-    p_name?: string | null;
-    t_name?: string | null;
-  };
+  message?: string;
+  participant?: ParticipantData;
+  team?: TeamData;
   error?: string;
   errors?: { [key: string]: string[] };
 }
@@ -27,8 +50,8 @@ export const EntryResultComponent: React.FC<EntryResultProps> = ({ qr_code_data 
   const [error, setError] = useState<string | null>(null);
   const [entrySuccess, setEntrySuccess] = useState(false);
 
-  const [participantInfo, setParticipantInfo] = useState<string | null>(null);
-  const [teamInfo, setTeamInfo] = useState<string | null>(null);
+  const [participantData, setParticipantData] = useState<ParticipantData | null>(null);
+  const [teamData, setTeamData] = useState<TeamData | null>(null);
 
   const getHeaders = async () => {
     const token = await AsyncStorage.getItem("access_token");
@@ -61,12 +84,11 @@ export const EntryResultComponent: React.FC<EntryResultProps> = ({ qr_code_data 
   const recordEntry = async () => {
     setLoading(true);
     setError(null);
-    setParticipantInfo(null);
-    setTeamInfo(null);
+    setParticipantData(null);
+    setTeamData(null);
 
     try {
       const headers = await getHeaders();
-      console.log('Entry recording - Headers:', headers);
       console.log('Entry recording - URL:', `${INNOVERSE_API_CONFIG.BASE_URL}/api/recordentry/${qr_code_data}/`);
 
       const response = await fetch(
@@ -90,17 +112,16 @@ export const EntryResultComponent: React.FC<EntryResultProps> = ({ qr_code_data 
       const data: EntryResponse = await response.json();
       console.log('Entry recording - Response data:', data);
 
-      if (response.status === 201 && data.success) {
+      if ((response.status === 200 || response.status === 201) && data.success) {
         setEntrySuccess(true);
         setError(null);
         
-        if (data.data) {
-          if (data.data.p_name) {
-            setParticipantInfo(data.data.p_name);
-          }
-          if (data.data.t_name) {
-            setTeamInfo(data.data.t_name);
-          }
+        if (data.participant) {
+          setParticipantData(data.participant);
+        }
+        
+        if (data.team) {
+          setTeamData(data.team);
         }
       }
       else {
@@ -160,7 +181,7 @@ export const EntryResultComponent: React.FC<EntryResultProps> = ({ qr_code_data 
   }
 
   return (
-    <View style={tw`mx-4`}>
+    <ScrollView style={tw`flex-1`} contentContainerStyle={tw`mx-4 pb-6`}>
       {entrySuccess ? (
         <>
           <View style={tw`bg-green-100 rounded-2xl p-6 items-center border border-green-200`}>
@@ -189,26 +210,93 @@ export const EntryResultComponent: React.FC<EntryResultProps> = ({ qr_code_data 
             </View>
           </View>
 
-          {/* Participant/Team Info Section */}
-          {(participantInfo || teamInfo) && (
-            <View style={tw`bg-white rounded-2xl p-6 items-center border border-green-200 mt-5 shadow-sm`}>
+          {/* Participant Info Section */}
+          {participantData && (
+            <View style={tw`bg-white rounded-2xl p-6 border border-green-200 mt-5 shadow-sm mb-5`}>
               <Text style={tw`text-green-800 text-center mb-4 text-lg font-semibold`}>
-                Participant/Team Information
+                Participant Information
               </Text>
               
-              {participantInfo && (
-                <View style={tw`mb-3 w-full`}>
-                  <Text style={tw`text-gray-600 text-sm font-medium mb-1`}>Participant Name:</Text>
-                  <Text style={tw`text-gray-800 text-base font-semibold`}>{participantInfo}</Text>
+              <View style={tw`mb-3`}>
+                <Text style={tw`text-gray-600 text-sm font-medium mb-1`}>Name:</Text>
+                <Text style={tw`text-gray-800 text-base font-semibold`}>{participantData.name}</Text>
+              </View>
+              
+              <View style={tw`mb-3`}>
+                <Text style={tw`text-gray-600 text-sm font-medium mb-1`}>Email:</Text>
+                <Text style={tw`text-gray-800 text-base`}>{participantData.email}</Text>
+              </View>
+              
+              <View style={tw`mb-3`}>
+                <Text style={tw`text-gray-600 text-sm font-medium mb-1`}>Phone:</Text>
+                <Text style={tw`text-gray-800 text-base`}>{participantData.phone}</Text>
+              </View>
+              
+              <View style={tw`mb-3`}>
+                <Text style={tw`text-gray-600 text-sm font-medium mb-1`}>Institution:</Text>
+                <Text style={tw`text-gray-800 text-base`}>{participantData.institution}</Text>
+              </View>
+
+              {participantData.guardian_phone && (
+                <View style={tw`mb-3`}>
+                  <Text style={tw`text-gray-600 text-sm font-medium mb-1`}>Guardian Phone:</Text>
+                  <Text style={tw`text-gray-800 text-base`}>{participantData.guardian_phone}</Text>
                 </View>
               )}
               
-              {teamInfo && (
-                <View style={tw`w-full`}>
-                  <Text style={tw`text-gray-600 text-sm font-medium mb-1`}>Team Name:</Text>
-                  <Text style={tw`text-gray-800 text-base font-semibold`}>{teamInfo}</Text>
+              <View style={tw`mt-2 flex-row items-center`}>
+                <Text style={tw`text-gray-600 text-sm font-medium mr-2`}>Payment Status:</Text>
+                <View style={tw`${participantData.payment_verified ? 'bg-green-500' : 'bg-red-500'} px-3 py-1 rounded-full`}>
+                  <Text style={tw`text-white text-xs font-semibold`}>
+                    {participantData.payment_verified ? 'VERIFIED' : 'PENDING'}
+                  </Text>
                 </View>
-              )}
+              </View>
+            </View>
+          )}
+
+          {/* Team Info Section */}
+          {teamData && (
+            <View style={tw`bg-white rounded-2xl p-6 border border-green-200 mt-5 shadow-sm mb-5`}>
+              <Text style={tw`text-green-800 text-center mb-4 text-lg font-semibold`}>
+                Team Information
+              </Text>
+              
+              <View style={tw`mb-3`}>
+                <Text style={tw`text-gray-600 text-sm font-medium mb-1`}>Team Name:</Text>
+                <Text style={tw`text-gray-800 text-base font-semibold`}>{teamData.name}</Text>
+              </View>
+              
+              <View style={tw`mb-3`}>
+                <Text style={tw`text-gray-600 text-sm font-medium mb-1`}>Member Count:</Text>
+                <Text style={tw`text-gray-800 text-base`}>{teamData.member_count}</Text>
+              </View>
+              
+              <View style={tw`mb-4 flex-row items-center`}>
+                <Text style={tw`text-gray-600 text-sm font-medium mr-2`}>Payment Status:</Text>
+                <View style={tw`${teamData.payment_verified ? 'bg-green-500' : 'bg-red-500'} px-3 py-1 rounded-full`}>
+                  <Text style={tw`text-white text-xs font-semibold`}>
+                    {teamData.payment_verified ? 'VERIFIED' : 'PENDING'}
+                  </Text>
+                </View>
+              </View>
+
+              <View style={tw`border-t border-gray-200 pt-4`}>
+                <Text style={tw`text-gray-700 text-base font-semibold mb-3`}>Team Members:</Text>
+                {teamData.members.map((member, index) => (
+                  <View key={index} style={tw`mb-3 p-3 bg-gray-50 rounded-lg`}>
+                    <View style={tw`flex-row items-center justify-between mb-1`}>
+                      <Text style={tw`text-gray-800 text-base font-semibold`}>{member.name}</Text>
+                      {member.is_leader && (
+                        <View style={tw`bg-blue-500 px-2 py-1 rounded`}>
+                          <Text style={tw`text-white text-xs font-semibold`}>LEADER</Text>
+                        </View>
+                      )}
+                    </View>
+                    <Text style={tw`text-gray-600 text-sm`}>{member.email}</Text>
+                  </View>
+                ))}
+              </View>
             </View>
           )}
         </>
@@ -225,7 +313,7 @@ export const EntryResultComponent: React.FC<EntryResultProps> = ({ qr_code_data 
           </Text>
           <View style={tw`flex-row space-x-3`}>
             <TouchableOpacity
-              style={tw`bg-red-600 px-8 py-3 rounded-lg shadow-sm  mr-2`}
+              style={tw`bg-red-600 px-8 py-3 rounded-lg shadow-sm mr-2`}
               onPress={openQRScanner}
             >
               <Text style={tw`text-white font-semibold`}>SCAN AGAIN</Text>
@@ -239,6 +327,6 @@ export const EntryResultComponent: React.FC<EntryResultProps> = ({ qr_code_data 
           </View>
         </View>
       )}
-    </View>
+    </ScrollView>
   );
 };
